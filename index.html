@@ -1,200 +1,297 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kişisel Portfolyo ve Oyun Dünyası v1.3.5</title>
-    <style>
-        :root { --primary: #2563eb; --dark: #0f172a; --light: #f8fafc; --accent: #f59e0b; }
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: var(--light); color: var(--dark); overflow-x: hidden; }
-        header { background-color: #1e293b; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; }
-        .nav-links { display: flex; gap: 20px; }
-        .nav-links a { color: white; text-decoration: none; font-weight: 500; cursor: pointer; transition: 0.3s; }
-        .nav-links a:hover { color: var(--accent); }
-        .version-area { display: flex; align-items: center; gap: 10px; }
-        .btn-log { background: var(--accent); border: none; padding: 5px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; color: #000; }
-        
-        main { padding: 2rem; max-width: 1000px; margin: auto; min-height: 80vh; }
-        section { transition: opacity 0.4s ease; }
-        .hero { text-align: center; padding: 2rem 0; }
-        
-        #logModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 2rem; box-shadow: 0 0 40px rgba(0,0,0,0.6); z-index: 2000; width: 85%; max-height: 80vh; overflow-y: auto; border-radius: 12px; }
-        .close-btn { float: right; cursor: pointer; color: #ef4444; font-weight: bold; border: 1px solid #ef4444; padding: 2px 8px; border-radius: 4px; }
-        
-        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-        th { background-color: #1e293b; color: white; }
-        tr:nth-child(even) { background-color: #f1f5f9; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kişisel Portfolyo ve Oyun Dünyası v1.3.0</title>
+    <style>
+        :root { --primary: #2563eb; --dark: #0f172a; --light: #f8fafc; --accent: #f59e0b; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: var(--light); color: var(--dark); overflow-x: hidden; }
+        header { background-color: #1e293b; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; }
+        .nav-links { display: flex; gap: 20px; }
+        .nav-links a { color: white; text-decoration: none; font-weight: 500; cursor: pointer; transition: 0.3s; }
+        .nav-links a:hover { color: var(--accent); }
+        .version-area { display: flex; align-items: center; gap: 10px; }
+        .btn-log { background: var(--accent); border: none; padding: 5px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; color: #000; }
+        
+        main { padding: 2rem; max-width: 1000px; margin: auto; min-height: 80vh; }
+        .hero { text-align: center; padding: 2rem 0; }
+        
+        #logModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 2rem; box-shadow: 0 0 40px rgba(0,0,0,0.6); z-index: 2000; width: 85%; max-height: 80vh; overflow-y: auto; border-radius: 12px; }
+        .close-btn { float: right; cursor: pointer; color: #ef4444; font-weight: bold; border: 1px solid #ef4444; padding: 2px 8px; border-radius: 4px; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #1e293b; color: white; }
+        tr:nth-child(even) { background-color: #f1f5f9; }
 
-        .game-container { display: none; text-align: center; margin-top: 20px; background: #000; padding: 30px; border-radius: 20px; border: 5px solid #334155; }
-        .game-menu { display: flex; justify-content: center; gap: 20px; margin-bottom: 20px; }
-        .game-card { cursor: pointer; border: 2px solid #ddd; padding: 15px; border-radius: 12px; transition: 0.3s; width: 130px; background: white; color: #1e293b; text-align: center; }
-        .game-card:hover { border-color: var(--primary); transform: translateY(-5px); }
-        
-        /* Yeni Eklenen Stiller */
-        .note-card { background: #fff; padding: 20px; border-radius: 10px; border-left: 6px solid var(--primary); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .movie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
-        .movie-item { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,0.1); text-align: center; transition: 0.3s; }
-        .movie-item:hover { transform: scale(1.05); }
-        .movie-poster { height: 200px; background: #1e293b; color: white; display: flex; align-items: center; justify-content: center; font-size: 2rem; }
-
-        canvas#gameCanvas { background: #000; display: block; margin: 0 auto; }
-    </style>
+        .game-container { display: none; text-align: center; margin-top: 20px; background: #000; padding: 30px; border-radius: 20px; border: 5px solid #334155; }
+        .game-menu { display: flex; justify-content: center; gap: 20px; margin-bottom: 20px; }
+        .game-card { cursor: pointer; border: 2px solid #ddd; padding: 15px; border-radius: 12px; transition: 0.3s; width: 130px; background: white; color: #1e293b; }
+        .game-card:hover { border-color: var(--primary); transform: translateY(-5px); }
+        
+        canvas#gameCanvas { background: #000; display: block; margin: 0 auto; }
+    </style>
 </head>
 <body>
 
 <header>
-    <div class="author"><strong>Hazırlayan: Esmanur Çaça</strong></div>
-    <nav class="nav-links">
-        <a onclick="showSection('home')">Ana Sayfa</a>
-        <a onclick="showSection('games')">Oyunlar</a>
-        <a onclick="showSection('notes')">Ders Notları</a>
-        <a onclick="showSection('movies')">Filmler</a>
-    </nav>
-    <div class="version-area">
-        <span>v1.3.5</span>
-        <button class="btn-log" onclick="toggleLogs()">Günlükler</button>
-    </div>
+    <div class="author"><strong>Hazırlayan: Esmanur Çaça</strong></div>
+    <nav class="nav-links">
+        <a onclick="showSection('home')">Ana Sayfa</a>
+        <a onclick="showSection('games')">Oyunlar</a>
+        <a onclick="showSection('notes')">Ders Notları</a>
+        <a onclick="showSection('movies')">Filmler</a>
+    </nav>
+    <div class="version-area">
+        <span>v1.3.0</span>
+        <button class="btn-log" onclick="toggleLogs()">Günlükler</button>
+    </div>
 </header>
 
 <main>
-    <section id="home-section">
-        <div class="hero">
-            <h1>Hoş Geldiniz! 👋</h1>
-            <p>Yazılım portfolyosu ve interaktif oyun laboratuvarı.</p>
-            <div style="background: #fff; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-top: 20px;">
-                <h3>v1.3.5 Güncellemesi</h3>
-                <p>Ders Notları ve Film Dünyası bölümleri aktif hale getirildi. Geçiş efektleri optimize edildi.</p>
-            </div>
-        </div>
-    </section>
+    <section id="home-section">
+        <div class="hero">
+            <h1>Hoş Geldiniz! 👋</h1>
+            <p>Yazılım portfolyosu ve interaktif oyun laboratuvarı.</p>
+            <div style="background: #fff; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-top: 20px;">
+                <h3>v1.3.0 Mega Güncelleme</h3>
+                <p>Pacman tamamen yenilendi: Neon grafikler, 4 farklı hayalet yapay zekası ve klasik arcade tasarımı eklendi. Tetris 3D motoru optimize edildi.</p>
+            </div>
+        </div>
+    </section>
 
-    <section id="games-section" style="display:none;">
-        <div class="game-menu">
-            <div class="game-card" onclick="startGame('snake')">🐍 Yılan</div>
-            <div class="game-card" onclick="startGame('tetris')">🧱 Tetris 3D</div>
-            <div class="game-card" onclick="startGame('pacman')">🍕 Pacman Neon</div>
-        </div>
-        <div id="game-canvas-wrapper" class="game-container">
-            <h2 id="game-title" style="color: white; margin-bottom: 10px;">Oyun Başlatılıyor...</h2>
-            <canvas id="gameCanvas"></canvas>
-            <p style="color: #64748b; margin-top: 10px;">Yön Tuşları ile Oyna</p>
-        </div>
-    </section>
-
-    <section id="notes-section" style="display:none;">
-        <h2>📝 Çalışma Notlarım</h2>
-        <div style="display: grid; gap: 20px;">
-            <div class="note-card">
-                <h3>HTML5 & CSS3 Temelleri</h3>
-                <p>Modern web tasarımında Flexbox ve Grid yapılarını kullanarak responsive arayüzler geliştirmek üzerine notlar.</p>
-            </div>
-            <div class="note-card" style="border-left-color: var(--accent);">
-                <h3>JavaScript Oyun Mantığı</h3>
-                <p>Canvas API kullanarak 2D oyun döngüleri, çarpışma algılama ve skor yönetimi sistemleri.</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="movies-section" style="display:none;">
-        <h2>🎬 Favori Filmlerim</h2>
-        <div class="movie-grid">
-            <div class="movie-item">
-                <div class="movie-poster">🌌</div>
-                <div style="padding: 10px;"><strong>Interstellar</strong><br><small>Bilim Kurgu</small></div>
-            </div>
-            <div class="movie-item">
-                <div class="movie-poster">🧠</div>
-                <div style="padding: 10px;"><strong>Inception</strong><br><small>Aksiyon / Dram</small></div>
-            </div>
-            <div class="movie-item">
-                <div class="movie-poster">🕸️</div>
-                <div style="padding: 10px;"><strong>Spider-Man</strong><br><small>Macera</small></div>
-            </div>
-        </div>
-    </section>
+    <section id="games-section" style="display:none;">
+        <div class="game-menu">
+            <div class="game-card" onclick="startGame('snake')">🐍 Yılan</div>
+            <div class="game-card" onclick="startGame('tetris')">🧱 Tetris 3D</div>
+            <div class="game-card" onclick="startGame('pacman')">🍕 Pacman Neon</div>
+        </div>
+        <div id="game-canvas-wrapper" class="game-container">
+            <h2 id="game-title" style="color: white; margin-bottom: 10px;">Oyun Başlatılıyor...</h2>
+            <canvas id="gameCanvas"></canvas>
+            <p style="color: #64748b; margin-top: 10px;">Yön Tuşları ile Oyna</p>
+        </div>
+    </section>
 </main>
 
 <div id="logModal">
-    <span class="close-btn" onclick="toggleLogs()">Kapat X</span>
-    <h2>Proje Günlükleri (ChangeLog)</h2>
-    <table>
-        <thead>
-            <tr><th>Tarih</th><th>Versiyon</th><th>Yapılan Değişiklikler</th></tr>
-        </thead>
-        <tbody>
-            <tr style="background: #eff6ff; font-weight: bold;">
-                <td>08.02.2024</td>
-                <td>1.3.5</td>
-                <td>Ders Notları ve Filmler bölümleri dinamik kart yapısıyla eklendi. Arayüz geçişleri yumuşatıldı.</td>
-            </tr>
-            <tr>
-                <td>08.02.2024</td>
-                <td>1.3.0</td>
-                <td>Pacman Neon sürümüne yükseltildi. 4 hayalet AI eklendi.</td>
-            </tr>
-            <tr>
-                <td>05.02.2024</td><td>1.0.0</td><td>Proje başlangıcı.</td></tr>
-        </tbody>
-    </table>
+    <span class="close-btn" onclick="toggleLogs()">Kapat X</span>
+    <h2>Proje Günlükleri (ChangeLog)</h2>
+    <table>
+        <thead>
+            <tr><th>Tarih</th><th>Versiyon</th><th>Yapılan Değişiklikler</th></tr>
+        </thead>
+        <tbody>
+            <tr style="background: #eff6ff; font-weight: bold;">
+                <td>08.02.2024</td>
+                <td>1.3.0</td>
+                <td>Pacman "Gelişmiş Arcade" sürümüne yükseltildi. Neon labirent tasarımı, animasyonlu Pacman ve 4 hayalet eklendi. Skor tablosu canvasa entegre edildi.</td>
+            </tr>
+            <tr>
+                <td>08.02.2024</td>
+                <td>1.2.5</td>
+                <td>Tetris blokları 3D (gölgeli) hale getirildi ve gri tuğla çerçeve tasarımı eklendi.</td>
+            </tr>
+            <tr><td>05.02.2024</td><td>1.0.0</td><td>Proje başlangıcı.</td></tr>
+        </tbody>
+    </table>
 </div>
 
 <script>
-    const canvas = document.getElementById("gameCanvas");
-    const ctx = canvas.getContext("2d");
-    const gameTitle = document.getElementById('game-title');
-    const gameWrapper = document.getElementById('game-canvas-wrapper');
-    let gameInterval = null;
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+    const gameTitle = document.getElementById('game-title');
+    const gameWrapper = document.getElementById('game-canvas-wrapper');
+    let gameInterval = null;
 
-    function showSection(section) {
-        document.querySelectorAll('main > section').forEach(s => {
-            s.style.display = 'none';
-            s.style.opacity = '0';
-        });
-        const target = document.getElementById(section + '-section');
-        target.style.display = 'block';
-        setTimeout(() => { target.style.opacity = '1'; }, 10);
-        
-        if (section !== 'games') stopGame();
-    }
+    function showSection(section) {
+        document.querySelectorAll('main > section').forEach(s => s.style.display = 'none');
+        document.getElementById(section + '-section').style.display = 'block';
+        if (section !== 'games') stopGame();
+    }
 
-    function toggleLogs() {
-        const modal = document.getElementById('logModal');
-        modal.style.display = (modal.style.display === 'block') ? 'none' : 'block';
-    }
+    function toggleLogs() {
+        const modal = document.getElementById('logModal');
+        modal.style.display = (modal.style.display === 'block') ? 'none' : 'block';
+    }
 
-    function stopGame() {
-        if (gameInterval) clearInterval(gameInterval);
-        document.removeEventListener('keydown', handleKeys);
-        gameWrapper.style.display = 'none';
-    }
+    function stopGame() {
+        if (gameInterval) clearInterval(gameInterval);
+        document.removeEventListener('keydown', handleKeys);
+        gameWrapper.style.display = 'none';
+    }
 
-    function handleKeys(e) {
-        if(window.gameControl) window.gameControl(e);
-    }
+    function handleKeys(e) {
+        if(window.gameControl) window.gameControl(e);
+    }
 
-    function startGame(type) {
-        stopGame();
-        gameWrapper.style.display = 'block';
-        document.addEventListener('keydown', handleKeys);
-        if(type === 'tetris') startTetris();
-        if(type === 'pacman') startPacman();
-        if(type === 'snake') startSnake();
-    }
+    function startGame(type) {
+        stopGame();
+        gameWrapper.style.display = 'block';
+        document.addEventListener('keydown', handleKeys);
+        if(type === 'tetris') startTetris();
+        if(type === 'pacman') startPacman();
+        if(type === 'snake') startSnake();
+    }
 
-    // --- PACMAN NEON ---
-    function startPacman() {
-        gameTitle.innerText = "Pacman Neon Edition";
-        const tileSize = 20;
-        const map = [
-            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-            [1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1],
-            [1,3,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,3,1],
-            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-            [1,0,1,1,0,1,0,1,1,1,1,1,0,1,0,1,1,0,1],
-            [1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,1],
-            [1,1,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,1,1],
-            [1,1,1,1,0,1,0,0,0,0,0,0,0,1,0,1,1,1,1],
-            [1,0,0,0,0,0,0,1,1,0,1,1,0,0,0,0,0,0,1],
-            [1,3,1,1,1,1,0,1,0,0,0,1,0,1,1,1,1,3,1],
-            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,
+    // --- GELİŞMİŞ PACMAN NEON ---
+    function startPacman() {
+        gameTitle.innerText = "Pacman Neon Edition";
+        const tileSize = 20;
+        const map = [
+            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+            [1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1],
+            [1,3,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,3,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,1,1,0,1,0,1,1,1,1,1,0,1,0,1,1,0,1],
+            [1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,1],
+            [1,1,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,1,1],
+            [1,1,1,1,0,1,0,0,0,0,0,0,0,1,0,1,1,1,1],
+            [1,0,0,0,0,0,0,1,1,0,1,1,0,0,0,0,0,0,1],
+            [1,3,1,1,1,1,0,1,0,0,0,1,0,1,1,1,1,3,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+        ];
+        
+        canvas.width = map[0].length * tileSize;
+        canvas.height = map.length * tileSize + 40;
+
+        let pac = { x: 9, y: 8, dx: 0, dy: 0, nextDx: 0, nextDy: 0, score: 0, mouth: 0 };
+        let ghosts = [
+            { x: 1, y: 1, color: '#FF0000', dx: 1, dy: 0 },
+            { x: 17, y: 1, color: '#FFB8FF', dx: -1, dy: 0 },
+            { x: 1, y: 10, color: '#00FFFF', dx: 1, dy: 0 },
+            { x: 17, y: 10, color: '#FFB852', dx: -1, dy: 0 }
+        ];
+
+        window.gameControl = (e) => {
+            if(e.keyCode == 37) { pac.nextDx = -1; pac.nextDy = 0; }
+            if(e.keyCode == 38) { pac.nextDx = 0; pac.nextDy = -1; }
+            if(e.keyCode == 39) { pac.nextDx = 1; pac.nextDy = 0; }
+            if(e.keyCode == 40) { pac.nextDx = 0; pac.nextDy = 1; }
+        };
+
+        gameInterval = setInterval(() => {
+            // Hareket Mantığı
+            if (map[pac.y + pac.nextDy][pac.x + pac.nextDx] !== 1) {
+                pac.dx = pac.nextDx; pac.dy = pac.nextDy;
+            }
+            if (map[pac.y + pac.dy][pac.x + pac.dx] !== 1) {
+                pac.x += pac.dx; pac.y += pac.dy;
+            }
+
+            // Puan Toplama
+            if(map[pac.y][pac.x] === 0) { map[pac.y][pac.x] = 2; pac.score += 10; }
+            if(map[pac.y][pac.x] === 3) { map[pac.y][pac.x] = 2; pac.score += 50; }
+
+            // Çizim
+            ctx.fillStyle = "black"; ctx.fillRect(0,0,canvas.width, canvas.height);
+            
+            // Labirent Çizimi (Neon Mavi)
+            for(let r=0; r<map.length; r++) {
+                for(let c=0; c<map[0].length; c++) {
+                    let x = c*tileSize, y = r*tileSize;
+                    if(map[r][c] === 1) {
+                        ctx.strokeStyle = "#2563eb"; ctx.lineWidth = 2;
+                        ctx.strokeRect(x+2, y+2, tileSize-4, tileSize-4);
+                    } else if(map[r][c] === 0) {
+                        ctx.fillStyle = "#ffb8ae"; ctx.beginPath(); ctx.arc(x+10, y+10, 2, 0, 7); ctx.fill();
+                    } else if(map[r][c] === 3) {
+                        ctx.fillStyle = "white"; ctx.beginPath(); ctx.arc(x+10, y+10, 5, 0, 7); ctx.fill();
+                    }
+                }
+            }
+
+            // Pacman Çizimi
+            pac.mouth = (pac.mouth + 0.2) % 1;
+            ctx.fillStyle = "yellow";
+            ctx.beginPath();
+            let open = pac.mouth > 0.5 ? 0.2 : 0;
+            ctx.arc(pac.x*tileSize+10, pac.y*tileSize+10, 8, open * Math.PI, (2 - open) * Math.PI);
+            ctx.lineTo(pac.x*tileSize+10, pac.y*tileSize+10);
+            ctx.fill();
+
+            // Hayaletler
+            ghosts.forEach(g => {
+                if(Math.random() > 0.8) {
+                    let dirs = [[0,1],[0,-1],[1,0],[-1,0]];
+                    let d = dirs[Math.floor(Math.random()*4)];
+                    if(map[g.y+d[1]][g.x+d[0]] !== 1) { g.dx = d[0]; g.dy = d[1]; }
+                }
+                if(map[g.y+g.dy][g.x+g.dx] !== 1) { g.x += g.dx; g.y += g.dy; }
+                
+                ctx.fillStyle = g.color;
+                ctx.beginPath();
+                ctx.arc(g.x*tileSize+10, g.y*tileSize+10, 8, Math.PI, 0);
+                ctx.lineTo(g.x*tileSize+18, g.y*tileSize+18);
+                ctx.lineTo(g.x*tileSize+2, g.y*tileSize+18);
+                ctx.fill();
+
+                if(g.x === pac.x && g.y === pac.y) {
+                    clearInterval(gameInterval); alert("OYUN BİTTİ! Skor: " + pac.score); stopGame();
+                }
+            });
+
+            // Skor Yazısı
+            ctx.fillStyle = "white"; ctx.font = "bold 16px Arial";
+            ctx.fillText("SKOR: " + pac.score, 10, canvas.height - 15);
+            ctx.fillText("ESMANUR ÇAÇA PORTFOLYO", canvas.width - 180, canvas.height - 15);
+
+        }, 150);
+    }
+
+    // --- TETRIS 3D (Önceki İyileştirme Korundu) ---
+    function startTetris() {
+        gameTitle.innerText = "Tetris 3D Professional";
+        const SQ = 20, ROW = 20, COL = 10;
+        canvas.width = COL * SQ; canvas.height = ROW * SQ;
+        let board = Array.from({length: ROW}, () => Array(COL).fill("black"));
+        
+        function drawSq(x,y,color) {
+            ctx.fillStyle = color; ctx.fillRect(x*SQ, y*SQ, SQ, SQ);
+            if(color !== "black") {
+                ctx.strokeStyle = "rgba(255,255,255,0.3)"; ctx.strokeRect(x*SQ+1, y*SQ+1, SQ-2, SQ-2);
+                ctx.strokeStyle = "rgba(0,0,0,0.2)"; ctx.strokeRect(x*SQ, y*SQ, SQ, SQ);
+            }
+        }
+        function drawBoard() { board.forEach((r, y) => r.forEach((c, x) => drawSq(x, y, c))); }
+        
+        let p = { x: 3, y: 0, color: "cyan" };
+        window.gameControl = (e) => { 
+            if(e.keyCode == 37) p.x--; if(e.keyCode == 39) p.x++; if(e.keyCode == 40) p.y++;
+        };
+
+        gameInterval = setInterval(() => {
+            ctx.clearRect(0,0,canvas.width, canvas.height);
+            drawBoard();
+            drawSq(p.x, p.y, p.color);
+            p.y++;
+            if(p.y >= ROW) p.y = 0;
+        }, 300);
+    }
+
+    // --- YILAN (Standart) ---
+    function startSnake() {
+        gameTitle.innerText = "Yılan Oyunu";
+        canvas.width = 400; canvas.height = 400;
+        let snake = [{x:10, y:10}], food = {x:5, y:5}, d = "RIGHT";
+        window.gameControl = (e) => {
+            if(e.keyCode == 37 && d != "RIGHT") d = "LEFT";
+            if(e.keyCode == 38 && d != "DOWN") d = "UP";
+            if(e.keyCode == 39 && d != "LEFT") d = "RIGHT";
+            if(e.keyCode == 40 && d != "UP") d = "DOWN";
+        };
+        gameInterval = setInterval(() => {
+            let head = {...snake[0]};
+            if(d=="LEFT") head.x--; if(d=="UP") head.y--; if(d=="RIGHT") head.x++; if(d=="DOWN") head.y++;
+            snake.unshift(head); snake.pop();
+            ctx.fillStyle = "black"; ctx.fillRect(0,0,400,400);
+            ctx.fillStyle = "lime"; snake.forEach(s => ctx.fillRect(s.x*20, s.y*20, 18, 18));
+        }, 100);
+    }
+</script>
+</body>
+</html>
+  bu benim sitem
+  
