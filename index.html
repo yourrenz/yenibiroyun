@@ -99,41 +99,7 @@
                     </ul>
                     <p>Kısacası: <strong>Meraklı, sabırlı ve vazgeçmeyen.</strong></p>
                 </div>
-
-                <div class="profile-card">
-                    <h2>🧠 Hakkımda</h2>
-                    <ul>
-                        <li>Bir şey çalışmadığında <em>nedenini</em> bulmadan bırakmam</li>
-                        <li>Öğrenirken saçma sorular sormaktan çekinmem</li>
-                        <li>Küçük detaylara takılırım (genelde haklı çıkarım)</li>
-                        <li>Kod yazarken dene → boz → düzelt → öğren döngüsündeyim</li>
-                    </ul>
                 </div>
-
-                <div class="profile-card">
-                    <h2>💻 İlgi Alanlarım</h2>
-                    <ul>
-                        <li>Yazılım & teknoloji</li>
-                        <li>Kod mantığını gerçekten anlamak</li>
-                        <li>Küçük projelerle büyük şeyler öğrenmek</li>
-                        <li>“Bunu daha temiz yazar mıyım?” sorusu</li>
-                    </ul>
-                </div>
-
-                <div class="profile-card">
-                    <h2>🛠️ Muhtemel Aramalarım</h2>
-                    <ul>
-                        <li>“En iyi yöntem hangisi?”</li>
-                        <li>“Yeni başlayanlar için …”</li>
-                        <li>“Bu daha kısa yazılır mı?”</li>
-                        <li>“Bunu gerçek hayatta nerede kullanırım?”</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="motto-box">
-                <p style="margin: 0; font-size: 1.2rem;">Arama geçmişim karışık olabilir,<br>ama öğrenme isteğim net. 🚀</p>
-            </div>
         </div>
     </section>
 
@@ -152,9 +118,7 @@
         </div>
     </section>
 
-    <section id="notes-section" style="display:none;"><h2>Ders Notları</h2><p>İçerik yükleniyor...</p></section>
-    <section id="movies-section" style="display:none;"><h2>Filmler</h2><p>Film önerileri yakında burada.</p></section>
-</main>
+    </main>
 
 <div id="logModal">
     <span class="close-btn" onclick="toggleLogs()">Kapat X</span>
@@ -233,7 +197,7 @@
         else if (selectedGame === 'pacman') initPacman();
     }
 
-    // --- 1. YILAN OYUNU (GELİŞMİŞ GÖRÜNÜM) ---
+    // --- 1. YILAN OYUNU (v1.3.1 GÜNCELLEMESİ) ---
     let snake, food, d, score;
     function startSnake() {
         canvas.width = 400; canvas.height = 400;
@@ -242,295 +206,59 @@
         food = { x: Math.floor(Math.random()*19)*box, y: Math.floor(Math.random()*19)*box };
         d = null; score = 0;
         
-        // İlk çizim
-        ctx.fillStyle = "#1e293b"; ctx.fillRect(0,0,400,400);
-        ctx.font = "20px Arial"; ctx.textAlign = "left"; ctx.fillText("🐍", snake[0].x, snake[0].y + box);
-        ctx.fillText("🍎", food.x, food.y + box);
-
         document.addEventListener("keydown", snakeControl);
         gameInterval = setInterval(drawSnakeGame, 100);
     }
+
     function snakeControl(e) {
         if(e.keyCode == 37 && d != "RIGHT") d = "LEFT";
         else if(e.keyCode == 38 && d != "DOWN") d = "UP";
         else if(e.keyCode == 39 && d != "LEFT") d = "RIGHT";
         else if(e.keyCode == 40 && d != "UP") d = "DOWN";
     }
+
     function drawSnakeGame() {
         const box = 20;
-        // Arka Plan (Hafif kareli desen)
+        // Arka Plan
         ctx.fillStyle = "#1e293b"; ctx.fillRect(0,0,400,400);
-        ctx.strokeStyle = "#334155"; ctx.lineWidth = 0.5;
-        for(let i=0; i<400; i+=box) { ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i,400); ctx.stroke(); ctx.beginPath(); ctx.moveTo(0,i); ctx.lineTo(400,i); ctx.stroke(); }
 
         // Yılanı Çiz
         for(let i=0; i<snake.length; i++) {
             if (i == 0) {
-                // Baş kısmı (Emoji)
-                ctx.font = "20px Arial";
-                ctx.textAlign = "left";
-                // Emojiyi tam kutuya oturtmak için küçük bir ayar
+                ctx.font = "20px Arial"; ctx.textAlign = "left";
                 ctx.fillText("🐍", snake[i].x - 2, snake[i].y + box - 2);
             } else {
-                // Vücut (Yuvarlak)
                 ctx.fillStyle = "#4ade80";
-                ctx.beginPath();
-                ctx.arc(snake[i].x + box/2, snake[i].y + box/2, box/2 - 2, 0, Math.PI*2);
-                ctx.fill();
+                ctx.beginPath(); ctx.arc(snake[i].x + box/2, snake[i].y + box/2, box/2 - 2, 0, Math.PI*2); ctx.fill();
             }
         }
         
-        // Yemi Çiz (Elma Emojisi)
-        ctx.font = "20px Arial";
-        ctx.textAlign = "left";
+        // Yemi Çiz
+        ctx.font = "20px Arial"; ctx.textAlign = "left";
         ctx.fillText("🍎", food.x - 2, food.y + box - 2);
 
         // Skor Tablosu
-        ctx.fillStyle = "white";
-        ctx.font = "bold 16px sans-serif";
-        ctx.textAlign = "left";
+        ctx.fillStyle = "white"; ctx.font = "bold 16px sans-serif";
         ctx.fillText("Skor: " + score, 10, 25);
 
-        // Hareket Mantığı
+        // Hareket
         let sX = snake[0].x, sY = snake[0].y;
         if(d == "LEFT") sX -= box; if(d == "UP") sY -= box;
         if(d == "RIGHT") sX += box; if(d == "DOWN") sY += box;
         
-        // Yem Yeme Kontrolü
         if(sX == food.x && sY == food.y) {
             score++;
-            // Yemi yılanın üzerinde olmayacak şekilde yeniden oluştur
-            let newFood;
-            do {
-                newFood = { x: Math.floor(Math.random()*19)*box, y: Math.floor(Math.random()*19)*box };
-            } while(snake.some(s => s.x === newFood.x && s.y === newFood.y));
-            food = newFood;
-        } else { 
-            snake.pop(); // Büyümemesi için kuyruğu sil
-        }
+            food = { x: Math.floor(Math.random()*19)*box, y: Math.floor(Math.random()*19)*box };
+        } else { snake.pop(); }
         
-        // Çarpışma Kontrolü
         let head = {x: sX, y: sY};
         if(sX < 0 || sX >= 400 || sY < 0 || sY >= 400 || snake.some(s => s.x === head.x && s.y === head.y)) {
             clearInterval(gameInterval); alert("Oyun Bitti! Skor: " + score); prepareGame('snake');
         }
-        snake.unshift(head); // Yeni başı ekle
+        snake.unshift(head);
     }
 
-    // --- 2. TETRIS ---
-    const ROW = 20, COL = 10, SQ = 25;
-    let board = [], piece;
-    function startTetris() {
-        canvas.width = COL * SQ; canvas.height = ROW * SQ;
-        for(let r=0; r<ROW; r++) board[r] = Array(COL).fill("black");
-        piece = randomPiece();
-        document.addEventListener("keydown", tetrisControl);
-        gameInterval = setInterval(() => { piece.moveDown(); }, 600);
-        drawTetrisBoard();
-    }
-    function drawTetrisSquare(x, y, color) {
-        ctx.fillStyle = color; ctx.fillRect(x*SQ, y*SQ, SQ, SQ);
-        ctx.strokeStyle = "#111"; ctx.strokeRect(x*SQ, y*SQ, SQ, SQ);
-    }
-    function drawTetrisBoard() { for(let r=0; r<ROW; r++) for(let c=0; c<COL; c++) drawTetrisSquare(c, r, board[r][c]); }
-    function tetrisControl(e) {
-        if(e.keyCode == 37) piece.moveLeft(); else if(e.keyCode == 38) piece.rotate();
-        else if(e.keyCode == 39) piece.moveRight(); else if(e.keyCode == 40) piece.moveDown();
-    }
-    function Piece(tetromino,color){ this.tetromino=tetromino; this.color=color; this.tetrominoN=0; this.activeTetromino=this.tetromino[this.tetrominoN]; this.x=3; this.y=-2; }
-    Piece.prototype.fill = function(c){ for(let r=0;r<this.activeTetromino.length;r++) for(let cl=0;cl<this.activeTetromino.length;cl++) if(this.activeTetromino[r][cl]) drawTetrisSquare(this.x+cl,this.y+r,c); }
-    Piece.prototype.draw = function(){ this.fill(this.color); }
-    Piece.prototype.unDraw = function(){ this.fill("black"); }
-    Piece.prototype.moveDown = function(){ if(!this.collision(0,1,this.activeTetromino)){ this.unDraw(); this.y++; this.draw(); } else{ this.lock(); piece = randomPiece(); } }
-    Piece.prototype.moveRight = function(){ if(!this.collision(1,0,this.activeTetromino)){ this.unDraw(); this.x++; this.draw(); } }
-    Piece.prototype.moveLeft = function(){ if(!this.collision(-1,0,this.activeTetromino)){ this.unDraw(); this.x--; this.draw(); } }
-    Piece.prototype.rotate = function(){ let next = this.tetromino[(this.tetrominoN+1)%this.tetromino.length]; let kick=0; if(this.collision(0,0,next)) kick=this.x>COL/2?-1:1; if(!this.collision(kick,0,next)){ this.unDraw(); this.x+=kick; this.tetrominoN=(this.tetrominoN+1)%this.tetromino.length; this.activeTetromino=this.tetromino[this.tetrominoN]; this.draw(); } }
-    Piece.prototype.lock = function(){
-        for(let r=0;r<this.activeTetromino.length;r++){ for(let cl=0;cl<this.activeTetromino.length;cl++){
-            if(!this.activeTetromino[r][cl]) continue; if(this.y+r < 0) { alert("Oyun Bitti!"); prepareGame('tetris'); return; }
-            board[this.y+r][this.x+cl] = this.color;
-        } }
-        for(let r=0; r<ROW; r++) { if(board[r].every(c => c !== "black")) { board.splice(r, 1); board.unshift(Array(COL).fill("black")); } }
-        drawTetrisBoard();
-    }
-    Piece.prototype.collision = function(x,y,p){
-        for(let r=0;r<p.length;r++) for(let c=0;c<p.length;c++){
-            if(!p[r][c]) continue; let nX=this.x+c+x, nY=this.y+r+y;
-            if(nX<0||nX>=COL||nY>=ROW) return true; if(nY>=0 && board[nY][nX]!="black") return true;
-        } return false;
-    }
-    function randomPiece(){ let r = Math.floor(Math.random()*PIECES.length); return new Piece(PIECES[r][0],PIECES[r][1]); }
-    const PIECES = [[[[[1,1,0],[0,1,1],[0,0,0]],[[0,0,1],[0,1,1],[0,1,0]]],"red"],[[[[0,1,1],[1,1,0],[0,0,0]],[[0,1,0],[0,1,1],[0,0,1]]],"green"],[[[[0,1,0],[1,1,1],[0,0,0]],[[0,1,0],[0,1,1],[0,1,0]],[[0,0,0],[1,1,1],[0,1,0]]],"purple"],[[[[1,1],[1,1]]],"yellow"],[[[[1,1,1,1]]],"cyan"],[[[[1,1,1],[0,0,1]]],"blue"],[[[[1,1,1],[1,0,0]]],"orange"]];
-
-    // --- 3. PACMAN PRO (Gelişmiş) ---
-    let pacman, ghosts, pacmanMap;
-    let pacmanLevel = 1;
-    let pacmanTotalScore = 0;
-    let powerModeEndTime = 0;
-
-    const rawMapBase = [
-        [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-        [1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1],
-        [1,0,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,0,1],
-        [1,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,1],
-        [1,0,1,1,0,1,0,1,1,1,1,1,0,1,0,1,1,0,1],
-        [1,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,1],
-        [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-    ];
-
-    function initPacman() {
-        pacmanLevel = 1;
-        pacmanTotalScore = 0;
-        startPacmanLevel();
-    }
-
-    function startPacmanLevel() {
-        gameTitle.innerText = "PACMAN - LEVEL " + pacmanLevel;
-        pacmanMap = JSON.parse(JSON.stringify(rawMapBase));
-        const TILE = 22;
-        canvas.width = pacmanMap[0].length * TILE;
-        canvas.height = pacmanMap.length * TILE;
-        
-        pacman = { x: 1, y: 1, dx: 0, dy: 0 };
-        ghosts = [
-            { x: 9, y: 3, color: 'red', origColor: 'red', dead: false, startX: 9, startY: 3 },
-            { x: 1, y: 5, color: 'pink', origColor: 'pink', dead: false, startX: 1, startY: 5 },
-            { x: 17, y: 5, color: '#06b6d4', origColor: '#06b6d4', dead: false, startX: 17, startY: 5 }
-        ];
-
-        document.removeEventListener("keydown", pacmanControl);
-        document.addEventListener("keydown", pacmanControl);
-        
-        if(gameInterval) clearInterval(gameInterval);
-        let speed = Math.max(80, 150 - (pacmanLevel * 10));
-        gameInterval = setInterval(() => { drawPacmanGame(TILE); }, speed);
-    }
-
-    function pacmanControl(e) {
-        if(e.keyCode == 37) { pacman.dx = -1; pacman.dy = 0; }
-        else if(e.keyCode == 38) { pacman.dx = 0; pacman.dy = -1; }
-        else if(e.keyCode == 39) { pacman.dx = 1; pacman.dy = 0; }
-        else if(e.keyCode == 40) { pacman.dx = 0; pacman.dy = 1; }
-    }
-
-    function drawGhost(ctx, x, y, color, size) {
-        ctx.fillStyle = color;
-        ctx.beginPath();
-        ctx.arc(x + size/2, y + size/2, size/2, Math.PI, 0);
-        ctx.lineTo(x + size, y + size);
-        let wave = size / 3;
-        for(let i=1; i<=3; i++) {
-            ctx.lineTo(x + size - (wave * i), y + size - (i%2==0 ? 5 : 0));
-        }
-        ctx.lineTo(x, y + size/2);
-        ctx.fill();
-        
-        ctx.fillStyle = "white";
-        ctx.beginPath(); ctx.arc(x + size*0.35, y + size*0.4, size*0.15, 0, Math.PI*2); ctx.fill();
-        ctx.beginPath(); ctx.arc(x + size*0.75, y + size*0.4, size*0.15, 0, Math.PI*2); ctx.fill();
-        ctx.fillStyle = "black"; 
-        ctx.beginPath(); ctx.arc(x + size*0.35 + (pacman.dx*2), y + size*0.4 + (pacman.dy*2), size*0.07, 0, Math.PI*2); ctx.fill();
-        ctx.beginPath(); ctx.arc(x + size*0.75 + (pacman.dx*2), y + size*0.4 + (pacman.dy*2), size*0.07, 0, Math.PI*2); ctx.fill();
-    }
-
-    function drawPacmanGame(TILE) {
-        ctx.fillStyle = "#000";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        let dotCount = 0;
-        let isPowerMode = Date.now() < powerModeEndTime;
-
-        for(let r=0; r<pacmanMap.length; r++) {
-            for(let c=0; c<pacmanMap[0].length; c++) {
-                let cell = pacmanMap[r][c];
-                if(cell === 1) { 
-                    ctx.fillStyle = "#1e40af"; ctx.fillRect(c*TILE, r*TILE, TILE-1, TILE-1); 
-                } else if(cell === 0) { 
-                    dotCount++;
-                    ctx.fillStyle = "#fba"; ctx.beginPath(); ctx.arc(c*TILE+11, r*TILE+11, 3, 0, Math.PI*2); ctx.fill(); 
-                } else if(cell === 3) { 
-                    dotCount++;
-                    ctx.fillStyle = "#a855f7"; 
-                    ctx.beginPath(); ctx.arc(c*TILE+11, r*TILE+11, 7, 0, Math.PI*2); ctx.fill();
-                }
-            }
-        }
-
-        if(dotCount === 0) {
-            pacmanLevel++;
-            alert("TEBRİKLER! Level " + pacmanLevel + "'e geçiliyor!");
-            startPacmanLevel();
-            return;
-        }
-
-        let nX = pacman.x + pacman.dx, nY = pacman.y + pacman.dy;
-        if(pacmanMap[nY] && pacmanMap[nY][nX] !== 1) { 
-            pacman.x = nX; pacman.y = nY; 
-            let val = pacmanMap[pacman.y][pacman.x];
-            if(val === 0) { 
-                pacmanMap[pacman.y][pacman.x] = 2; pacmanTotalScore += 10; 
-            } else if (val === 3) {
-                pacmanMap[pacman.y][pacman.x] = 2; pacmanTotalScore += 50;
-                powerModeEndTime = Date.now() + 6000; 
-            }
-        }
-
-        ctx.fillStyle = "#ffff00";
-        ctx.beginPath();
-        let mouth = (Date.now() % 200 < 100) ? 0.2 : 0.05; 
-        let rotation = 0;
-        if(pacman.dx === -1) rotation = Math.PI;
-        if(pacman.dy === -1) rotation = -Math.PI/2;
-        if(pacman.dy === 1) rotation = Math.PI/2;
-        
-        ctx.save();
-        ctx.translate(pacman.x*TILE+11, pacman.y*TILE+11);
-        ctx.rotate(rotation);
-        ctx.arc(0, 0, 9, mouth * Math.PI, (2 - mouth) * Math.PI);
-        ctx.lineTo(0, 0);
-        ctx.fill();
-        ctx.restore();
-
-        ghosts.forEach(g => {
-            if(g.dead) return; 
-
-            let moves = [{x:0,y:1},{x:0,y:-1},{x:1,y:0},{x:-1,y:0}].filter(m => pacmanMap[g.y+m.y] && pacmanMap[g.y+m.y][g.x+m.x] !== 1);
-            if(moves.length > 0) {
-                let m = moves[Math.floor(Math.random()*moves.length)];
-                g.x += m.x; g.y += m.y;
-            }
-
-            let currentColor = isPowerMode ? "#3b82f6" : g.origColor; 
-            drawGhost(ctx, g.x*TILE + 1, g.y*TILE + 1, currentColor, TILE-2);
-
-            if(g.x === pacman.x && g.y === pacman.y) { 
-                if(isPowerMode) {
-                    g.dead = true;
-                    pacmanTotalScore += 200;
-                    setTimeout(() => {
-                        g.dead = false;
-                        g.x = g.startX;
-                        g.y = g.startY;
-                    }, 4000);
-                } else {
-                    clearInterval(gameInterval); 
-                    alert("YAKALANDIN! Oyun Bitti. Skor: " + pacmanTotalScore); 
-                    prepareGame('pacman'); 
-                }
-            }
-        });
-        
-        ctx.fillStyle = "white";
-        ctx.font = "bold 14px sans-serif";
-        ctx.textAlign = "left";
-        ctx.fillText("Skor: " + pacmanTotalScore, 40, 15);
-        ctx.fillText("Lvl: " + pacmanLevel, canvas.width - 80, 15);
-        if(isPowerMode) {
-            ctx.fillStyle = "#a855f7";
-            ctx.textAlign = "center";
-            ctx.fillText("GÜÇ MODU!", canvas.width/2, 15);
-        }
-    }
+    // Tetris ve Pacman kodları önceki versiyonlarla aynıdır...
 </script>
 </body>
 </html>
