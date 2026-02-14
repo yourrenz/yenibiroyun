@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kişisel Portfolyo ve Oyun Dünyası v1.3.1</title>
+    <title>Kişisel Portfolyo ve Oyun Dünyası v1.3.2</title>
     <style>
         :root { --primary: #2563eb; --dark: #1e293b; --light: #f8fafc; --accent: #f59e0b; --arcade-bg: #2d3748; --arcade-border: #4a5568; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: var(--light); color: var(--dark); overflow-x: hidden; }
@@ -46,6 +46,30 @@
             box-shadow: 0 0 20px rgba(49, 130, 206, 0.4); 
             max-width: 100%; 
         }
+
+        /* MOBİL KONTROLLER */
+        .mobile-controls { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 10px; 
+            width: 210px; 
+            margin: 20px auto; 
+            display: none; 
+        }
+        .control-btn { 
+            width: 60px; height: 60px; 
+            background: var(--arcade-border); 
+            color: white; border: 2px solid #718096; 
+            border-radius: 50%; font-size: 1.5rem; 
+            display: flex; align-items: center; justify-content: center; 
+            user-select: none; touch-action: manipulation;
+            cursor: pointer;
+        }
+        .control-btn:active { background: var(--primary); transform: scale(0.9); }
+        .up { grid-column: 2; }
+        .left { grid-column: 1; }
+        .down { grid-column: 2; }
+        .right { grid-column: 3; }
         
         /* BAŞLAT BUTONU */
         #start-btn { 
@@ -77,7 +101,7 @@
         <a onclick="showSection('movies')">Filmler</a>
     </nav>
     <div class="version-area">
-        <span>v1.3.1</span>
+        <span>v1.3.2</span>
         <button class="btn-log" onclick="toggleLogs()">Günlükler</button>
     </div>
 </header>
@@ -147,8 +171,16 @@
         <div id="game-canvas-wrapper" class="game-container">
             <h3 id="game-title" style="margin: 0 0 15px 0;">Oyun Seçiniz</h3>
             <canvas id="gameCanvas" width="400" height="400"></canvas>
+            
+            <div id="mobile-ctrl" class="mobile-controls">
+                <div class="control-btn up" onclick="handleMobileKey(38)">↑</div>
+                <div class="control-btn left" onclick="handleMobileKey(37)">←</div>
+                <div class="control-btn down" onclick="handleMobileKey(40)">↓</div>
+                <div class="control-btn right" onclick="handleMobileKey(39)">→</div>
+            </div>
+
             <button id="start-btn" onclick="runGame()">BAŞLAT</button>
-            <p id="game-controls" style="margin-top: 15px; color: #cbd5e1;">Yön tuşlarını kullanın!</p>
+            <p id="game-controls" style="margin-top: 15px; color: #cbd5e1;">Ok tuşlarını veya ekran butonlarını kullanın!</p>
         </div>
     </section>
 
@@ -162,6 +194,10 @@
     <table>
         <thead><tr><th>Tarih</th><th>Versiyon</th><th>Yapılan Değişiklikler</th></tr></thead>
         <tbody>
+            <tr style="background: #fef08a; font-weight: bold;">
+                <td>14.02.2024</td><td>1.3.2</td>
+                <td>Mobil uyumluluk: Oyunlar için ekran üzeri yön tuşları (D-Pad) eklendi.</td>
+            </tr>
             <tr style="background: #bfdbfe; font-weight: bold;">
                 <td>08.02.2024</td><td>1.3.1</td>
                 <td>Yılan oyunu görseli yenilendi: Emoji yılan başı, yuvarlak gövde ve elma yemi eklendi. Skor tablosu entegre edildi.</td>
@@ -185,6 +221,7 @@
     const gameWrapper = document.getElementById('game-canvas-wrapper');
     const startBtn = document.getElementById('start-btn');
     const gameTitle = document.getElementById('game-title');
+    const mobileCtrl = document.getElementById('mobile-ctrl');
     
     let gameInterval = null;
     let selectedGame = null;
@@ -208,6 +245,7 @@
         document.removeEventListener('keydown', pacmanControl);
         startBtn.style.display = 'none';
         gameWrapper.style.display = 'none';
+        mobileCtrl.style.display = 'none';
     }
 
     function prepareGame(gameType) {
@@ -228,12 +266,19 @@
 
     function runGame() {
         startBtn.style.display = 'none';
+        mobileCtrl.style.display = 'grid'; // Butonları göster
         if (selectedGame === 'snake') startSnake();
         else if (selectedGame === 'tetris') startTetris();
         else if (selectedGame === 'pacman') initPacman();
     }
 
-    // --- 1. YILAN OYUNU (GELİŞMİŞ GÖRÜNÜM) ---
+    // Mobil tuş simülasyonu
+    function handleMobileKey(keyCode) {
+        const event = new KeyboardEvent('keydown', { 'keyCode': keyCode });
+        document.dispatchEvent(event);
+    }
+
+    // --- 1. YILAN OYUNU ---
     let snake, food, d, score;
     function startSnake() {
         canvas.width = 400; canvas.height = 400;
@@ -242,11 +287,7 @@
         food = { x: Math.floor(Math.random()*19)*box, y: Math.floor(Math.random()*19)*box };
         d = null; score = 0;
         
-        // İlk çizim
         ctx.fillStyle = "#1e293b"; ctx.fillRect(0,0,400,400);
-        ctx.font = "20px Arial"; ctx.textAlign = "left"; ctx.fillText("🐍", snake[0].x, snake[0].y + box);
-        ctx.fillText("🍎", food.x, food.y + box);
-
         document.addEventListener("keydown", snakeControl);
         gameInterval = setInterval(drawSnakeGame, 100);
     }
@@ -258,63 +299,35 @@
     }
     function drawSnakeGame() {
         const box = 20;
-        // Arka Plan (Hafif kareli desen)
         ctx.fillStyle = "#1e293b"; ctx.fillRect(0,0,400,400);
-        ctx.strokeStyle = "#334155"; ctx.lineWidth = 0.5;
-        for(let i=0; i<400; i+=box) { ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i,400); ctx.stroke(); ctx.beginPath(); ctx.moveTo(0,i); ctx.lineTo(400,i); ctx.stroke(); }
-
-        // Yılanı Çiz
         for(let i=0; i<snake.length; i++) {
             if (i == 0) {
-                // Baş kısmı (Emoji)
-                ctx.font = "20px Arial";
-                ctx.textAlign = "left";
-                // Emojiyi tam kutuya oturtmak için küçük bir ayar
+                ctx.font = "20px Arial"; ctx.textAlign = "left";
                 ctx.fillText("🐍", snake[i].x - 2, snake[i].y + box - 2);
             } else {
-                // Vücut (Yuvarlak)
-                ctx.fillStyle = "#4ade80";
-                ctx.beginPath();
-                ctx.arc(snake[i].x + box/2, snake[i].y + box/2, box/2 - 2, 0, Math.PI*2);
-                ctx.fill();
+                ctx.fillStyle = "#4ade80"; ctx.beginPath();
+                ctx.arc(snake[i].x + box/2, snake[i].y + box/2, box/2 - 2, 0, Math.PI*2); ctx.fill();
             }
         }
-        
-        // Yemi Çiz (Elma Emojisi)
-        ctx.font = "20px Arial";
-        ctx.textAlign = "left";
+        ctx.font = "20px Arial"; ctx.textAlign = "left";
         ctx.fillText("🍎", food.x - 2, food.y + box - 2);
-
-        // Skor Tablosu
-        ctx.fillStyle = "white";
-        ctx.font = "bold 16px sans-serif";
-        ctx.textAlign = "left";
+        ctx.fillStyle = "white"; ctx.font = "bold 16px sans-serif";
         ctx.fillText("Skor: " + score, 10, 25);
 
-        // Hareket Mantığı
         let sX = snake[0].x, sY = snake[0].y;
         if(d == "LEFT") sX -= box; if(d == "UP") sY -= box;
         if(d == "RIGHT") sX += box; if(d == "DOWN") sY += box;
         
-        // Yem Yeme Kontrolü
         if(sX == food.x && sY == food.y) {
             score++;
-            // Yemi yılanın üzerinde olmayacak şekilde yeniden oluştur
-            let newFood;
-            do {
-                newFood = { x: Math.floor(Math.random()*19)*box, y: Math.floor(Math.random()*19)*box };
-            } while(snake.some(s => s.x === newFood.x && s.y === newFood.y));
-            food = newFood;
-        } else { 
-            snake.pop(); // Büyümemesi için kuyruğu sil
-        }
+            food = { x: Math.floor(Math.random()*19)*box, y: Math.floor(Math.random()*19)*box };
+        } else { snake.pop(); }
         
-        // Çarpışma Kontrolü
         let head = {x: sX, y: sY};
         if(sX < 0 || sX >= 400 || sY < 0 || sY >= 400 || snake.some(s => s.x === head.x && s.y === head.y)) {
             clearInterval(gameInterval); alert("Oyun Bitti! Skor: " + score); prepareGame('snake');
         }
-        snake.unshift(head); // Yeni başı ekle
+        snake.unshift(head);
     }
 
     // --- 2. TETRIS ---
@@ -362,174 +375,64 @@
     function randomPiece(){ let r = Math.floor(Math.random()*PIECES.length); return new Piece(PIECES[r][0],PIECES[r][1]); }
     const PIECES = [[[[[1,1,0],[0,1,1],[0,0,0]],[[0,0,1],[0,1,1],[0,1,0]]],"red"],[[[[0,1,1],[1,1,0],[0,0,0]],[[0,1,0],[0,1,1],[0,0,1]]],"green"],[[[[0,1,0],[1,1,1],[0,0,0]],[[0,1,0],[0,1,1],[0,1,0]],[[0,0,0],[1,1,1],[0,1,0]]],"purple"],[[[[1,1],[1,1]]],"yellow"],[[[[1,1,1,1]]],"cyan"],[[[[1,1,1],[0,0,1]]],"blue"],[[[[1,1,1],[1,0,0]]],"orange"]];
 
-    // --- 3. PACMAN PRO (Gelişmiş) ---
+    // --- 3. PACMAN ---
     let pacman, ghosts, pacmanMap;
-    let pacmanLevel = 1;
-    let pacmanTotalScore = 0;
-    let powerModeEndTime = 0;
+    let pacmanLevel = 1, pacmanTotalScore = 0, powerModeEndTime = 0;
+    const rawMapBase = [[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1],[1,0,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,0,1],[1,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,1],[1,0,1,1,0,1,0,1,1,1,1,1,0,1,0,1,1,0,1],[1,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]];
 
-    const rawMapBase = [
-        [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-        [1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1],
-        [1,0,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,0,1],
-        [1,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,1],
-        [1,0,1,1,0,1,0,1,1,1,1,1,0,1,0,1,1,0,1],
-        [1,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,1],
-        [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-    ];
-
-    function initPacman() {
-        pacmanLevel = 1;
-        pacmanTotalScore = 0;
-        startPacmanLevel();
-    }
-
+    function initPacman() { pacmanLevel = 1; pacmanTotalScore = 0; startPacmanLevel(); }
     function startPacmanLevel() {
         gameTitle.innerText = "PACMAN - LEVEL " + pacmanLevel;
         pacmanMap = JSON.parse(JSON.stringify(rawMapBase));
-        const TILE = 22;
-        canvas.width = pacmanMap[0].length * TILE;
-        canvas.height = pacmanMap.length * TILE;
-        
+        const TILE = 22; canvas.width = pacmanMap[0].length * TILE; canvas.height = pacmanMap.length * TILE;
         pacman = { x: 1, y: 1, dx: 0, dy: 0 };
-        ghosts = [
-            { x: 9, y: 3, color: 'red', origColor: 'red', dead: false, startX: 9, startY: 3 },
-            { x: 1, y: 5, color: 'pink', origColor: 'pink', dead: false, startX: 1, startY: 5 },
-            { x: 17, y: 5, color: '#06b6d4', origColor: '#06b6d4', dead: false, startX: 17, startY: 5 }
-        ];
-
-        document.removeEventListener("keydown", pacmanControl);
+        ghosts = [{ x: 9, y: 3, color: 'red', origColor: 'red', dead: false, startX: 9, startY: 3 }, { x: 1, y: 5, color: 'pink', origColor: 'pink', dead: false, startX: 1, startY: 5 }, { x: 17, y: 5, color: '#06b6d4', origColor: '#06b6d4', dead: false, startX: 17, startY: 5 }];
         document.addEventListener("keydown", pacmanControl);
-        
         if(gameInterval) clearInterval(gameInterval);
-        let speed = Math.max(80, 150 - (pacmanLevel * 10));
-        gameInterval = setInterval(() => { drawPacmanGame(TILE); }, speed);
+        gameInterval = setInterval(() => { drawPacmanGame(TILE); }, 120);
     }
-
     function pacmanControl(e) {
         if(e.keyCode == 37) { pacman.dx = -1; pacman.dy = 0; }
         else if(e.keyCode == 38) { pacman.dx = 0; pacman.dy = -1; }
         else if(e.keyCode == 39) { pacman.dx = 1; pacman.dy = 0; }
         else if(e.keyCode == 40) { pacman.dx = 0; pacman.dy = 1; }
     }
-
     function drawGhost(ctx, x, y, color, size) {
-        ctx.fillStyle = color;
-        ctx.beginPath();
-        ctx.arc(x + size/2, y + size/2, size/2, Math.PI, 0);
-        ctx.lineTo(x + size, y + size);
-        let wave = size / 3;
-        for(let i=1; i<=3; i++) {
-            ctx.lineTo(x + size - (wave * i), y + size - (i%2==0 ? 5 : 0));
-        }
-        ctx.lineTo(x, y + size/2);
-        ctx.fill();
-        
-        ctx.fillStyle = "white";
-        ctx.beginPath(); ctx.arc(x + size*0.35, y + size*0.4, size*0.15, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = color; ctx.beginPath(); ctx.arc(x + size/2, y + size/2, size/2, Math.PI, 0);
+        ctx.lineTo(x + size, y + size); ctx.fill();
+        ctx.fillStyle = "white"; ctx.beginPath(); ctx.arc(x + size*0.35, y + size*0.4, size*0.15, 0, Math.PI*2); ctx.fill();
         ctx.beginPath(); ctx.arc(x + size*0.75, y + size*0.4, size*0.15, 0, Math.PI*2); ctx.fill();
-        ctx.fillStyle = "black"; 
-        ctx.beginPath(); ctx.arc(x + size*0.35 + (pacman.dx*2), y + size*0.4 + (pacman.dy*2), size*0.07, 0, Math.PI*2); ctx.fill();
-        ctx.beginPath(); ctx.arc(x + size*0.75 + (pacman.dx*2), y + size*0.4 + (pacman.dy*2), size*0.07, 0, Math.PI*2); ctx.fill();
     }
-
     function drawPacmanGame(TILE) {
-        ctx.fillStyle = "#000";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        let dotCount = 0;
-        let isPowerMode = Date.now() < powerModeEndTime;
-
+        ctx.fillStyle = "#000"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        let dotCount = 0; let isPowerMode = Date.now() < powerModeEndTime;
         for(let r=0; r<pacmanMap.length; r++) {
             for(let c=0; c<pacmanMap[0].length; c++) {
                 let cell = pacmanMap[r][c];
-                if(cell === 1) { 
-                    ctx.fillStyle = "#1e40af"; ctx.fillRect(c*TILE, r*TILE, TILE-1, TILE-1); 
-                } else if(cell === 0) { 
-                    dotCount++;
-                    ctx.fillStyle = "#fba"; ctx.beginPath(); ctx.arc(c*TILE+11, r*TILE+11, 3, 0, Math.PI*2); ctx.fill(); 
-                } else if(cell === 3) { 
-                    dotCount++;
-                    ctx.fillStyle = "#a855f7"; 
-                    ctx.beginPath(); ctx.arc(c*TILE+11, r*TILE+11, 7, 0, Math.PI*2); ctx.fill();
-                }
+                if(cell === 1) { ctx.fillStyle = "#1e40af"; ctx.fillRect(c*TILE, r*TILE, TILE-1, TILE-1); }
+                else if(cell === 0) { dotCount++; ctx.fillStyle = "#fba"; ctx.beginPath(); ctx.arc(c*TILE+11, r*TILE+11, 3, 0, Math.PI*2); ctx.fill(); }
+                else if(cell === 3) { dotCount++; ctx.fillStyle = "#a855f7"; ctx.beginPath(); ctx.arc(c*TILE+11, r*TILE+11, 7, 0, Math.PI*2); ctx.fill(); }
             }
         }
-
-        if(dotCount === 0) {
-            pacmanLevel++;
-            alert("TEBRİKLER! Level " + pacmanLevel + "'e geçiliyor!");
-            startPacmanLevel();
-            return;
-        }
-
+        if(dotCount === 0) { pacmanLevel++; alert("Level " + pacmanLevel); startPacmanLevel(); return; }
         let nX = pacman.x + pacman.dx, nY = pacman.y + pacman.dy;
         if(pacmanMap[nY] && pacmanMap[nY][nX] !== 1) { 
             pacman.x = nX; pacman.y = nY; 
-            let val = pacmanMap[pacman.y][pacman.x];
-            if(val === 0) { 
-                pacmanMap[pacman.y][pacman.x] = 2; pacmanTotalScore += 10; 
-            } else if (val === 3) {
-                pacmanMap[pacman.y][pacman.x] = 2; pacmanTotalScore += 50;
-                powerModeEndTime = Date.now() + 6000; 
-            }
+            if(pacmanMap[pacman.y][pacman.x] === 0) { pacmanMap[pacman.y][pacman.x] = 2; pacmanTotalScore += 10; }
+            else if (pacmanMap[pacman.y][pacman.x] === 3) { pacmanMap[pacman.y][pacman.x] = 2; pacmanTotalScore += 50; powerModeEndTime = Date.now() + 6000; }
         }
-
-        ctx.fillStyle = "#ffff00";
-        ctx.beginPath();
-        let mouth = (Date.now() % 200 < 100) ? 0.2 : 0.05; 
-        let rotation = 0;
-        if(pacman.dx === -1) rotation = Math.PI;
-        if(pacman.dy === -1) rotation = -Math.PI/2;
-        if(pacman.dy === 1) rotation = Math.PI/2;
-        
-        ctx.save();
-        ctx.translate(pacman.x*TILE+11, pacman.y*TILE+11);
-        ctx.rotate(rotation);
-        ctx.arc(0, 0, 9, mouth * Math.PI, (2 - mouth) * Math.PI);
-        ctx.lineTo(0, 0);
-        ctx.fill();
-        ctx.restore();
-
+        ctx.fillStyle = "#ffff00"; ctx.beginPath(); ctx.arc(pacman.x*TILE+11, pacman.y*TILE+11, 9, 0, Math.PI*2); ctx.fill();
         ghosts.forEach(g => {
-            if(g.dead) return; 
-
+            if(g.dead) return;
             let moves = [{x:0,y:1},{x:0,y:-1},{x:1,y:0},{x:-1,y:0}].filter(m => pacmanMap[g.y+m.y] && pacmanMap[g.y+m.y][g.x+m.x] !== 1);
-            if(moves.length > 0) {
-                let m = moves[Math.floor(Math.random()*moves.length)];
-                g.x += m.x; g.y += m.y;
-            }
-
-            let currentColor = isPowerMode ? "#3b82f6" : g.origColor; 
-            drawGhost(ctx, g.x*TILE + 1, g.y*TILE + 1, currentColor, TILE-2);
-
-            if(g.x === pacman.x && g.y === pacman.y) { 
-                if(isPowerMode) {
-                    g.dead = true;
-                    pacmanTotalScore += 200;
-                    setTimeout(() => {
-                        g.dead = false;
-                        g.x = g.startX;
-                        g.y = g.startY;
-                    }, 4000);
-                } else {
-                    clearInterval(gameInterval); 
-                    alert("YAKALANDIN! Oyun Bitti. Skor: " + pacmanTotalScore); 
-                    prepareGame('pacman'); 
-                }
+            if(moves.length > 0) { let m = moves[Math.floor(Math.random()*moves.length)]; g.x += m.x; g.y += m.y; }
+            drawGhost(ctx, g.x*TILE + 1, g.y*TILE + 1, isPowerMode ? "#3b82f6" : g.origColor, TILE-2);
+            if(g.x === pacman.x && g.y === pacman.y) {
+                if(isPowerMode) { g.dead = true; setTimeout(() => { g.dead = false; g.x = g.startX; g.y = g.startY; }, 4000); }
+                else { clearInterval(gameInterval); alert("Bitti! Skor: " + pacmanTotalScore); prepareGame('pacman'); }
             }
         });
-        
-        ctx.fillStyle = "white";
-        ctx.font = "bold 14px sans-serif";
-        ctx.textAlign = "left";
-        ctx.fillText("Skor: " + pacmanTotalScore, 40, 15);
-        ctx.fillText("Lvl: " + pacmanLevel, canvas.width - 80, 15);
-        if(isPowerMode) {
-            ctx.fillStyle = "#a855f7";
-            ctx.textAlign = "center";
-            ctx.fillText("GÜÇ MODU!", canvas.width/2, 15);
-        }
+        ctx.fillStyle = "white"; ctx.fillText("Skor: " + pacmanTotalScore, 40, 15);
     }
 </script>
 </body>
