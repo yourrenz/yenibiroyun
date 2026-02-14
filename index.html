@@ -3,60 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Esmanur Çaça | YKS Portfolyo & Bilgi Go v1.4.1</title>
+    <title>Esmanur Çaça | YKS Tam Notlar & Bilgi Go v1.4.2</title>
     <style>
         :root { 
-            --primary: #2563eb; 
-            --dark: #1e293b; 
-            --light: #f8fafc; 
-            --accent: #f59e0b; 
-            --bilgi-go: #ff6b6b;
-            --arcade-bg: #2d3748; 
-            --arcade-border: #4a5568;
+            --primary: #2563eb; --dark: #1e293b; --light: #f8fafc; 
+            --accent: #f59e0b; --bilgi-go: #ff6b6b; --arcade-bg: #2d3748; 
         }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: var(--light); color: var(--dark); overflow-x: hidden; }
-        
-        /* HEADER */
-        header { background: var(--dark); color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
-        .nav-links a { color: white; text-decoration: none; margin-left: 20px; cursor: pointer; font-weight: 500; transition: 0.3s; }
-        .nav-links a:hover { color: var(--accent); }
-        .btn-log { background: var(--accent); border: none; padding: 5px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; color: #000; }
-
-        /* MAIN LAYOUT */
-        main { padding: 2rem; max-width: 1100px; margin: auto; min-height: 85vh; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: var(--light); color: var(--dark); }
+        header { background: var(--dark); color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; }
+        .nav-links a { color: white; text-decoration: none; margin-left: 20px; cursor: pointer; font-weight: 500; }
+        main { padding: 2rem; max-width: 1200px; margin: auto; }
         section { display: none; animation: fadeIn 0.4s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* NOTLAR TASARIMI - TÜM İÇERİĞİ ALACAK ŞEKİLDE GENİŞLETİLDİ */
+        .notes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px; }
+        .note-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border-top: 5px solid var(--primary); }
+        .note-card h3 { color: var(--primary); margin-top: 0; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .note-card h4 { margin: 15px 0 5px 0; color: #444; border-left: 3px solid var(--accent); padding-left: 10px; }
+        .note-card ul { padding-left: 20px; margin: 5px 0; }
+        .note-card li { margin-bottom: 6px; font-size: 0.95rem; line-height: 1.4; }
 
-        /* DERS NOTLARI TASARIMI */
-        .notes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
-        .note-card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-top: 6px solid var(--primary); }
-        .note-card h3 { color: var(--primary); margin-top: 0; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; }
-        .note-card ul { padding-left: 20px; line-height: 1.6; }
-        .extra-info { background: #fffbeb; padding: 12px; border-radius: 8px; font-size: 0.88rem; border-left: 4px solid var(--accent); margin-top: 15px; }
-        .extra-info b { color: #92400e; }
-
-        /* BILGI GO ASISTAN */
-        #bilgi-go-container { position: fixed; bottom: 20px; right: 20px; width: 300px; background: white; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 2000; border: 2px solid var(--bilgi-go); overflow: hidden; display: flex; flex-direction: column; transition: 0.3s; }
-        .bg-header { background: var(--bilgi-go); color: white; padding: 12px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
-        #bg-chat { height: 220px; overflow-y: auto; padding: 15px; background: #fff5f5; font-size: 0.88rem; display: flex; flex-direction: column; }
-        .bg-msg { margin-bottom: 10px; padding: 8px 12px; border-radius: 12px; max-width: 85%; line-height: 1.4; }
-        .bg-bot { background: white; align-self: flex-start; border: 1px solid #eee; }
-        .bg-user { background: var(--bilgi-go); color: white; align-self: flex-end; }
-        .bg-input-area { display: flex; padding: 10px; border-top: 1px solid #eee; background: white; }
-        #bg-input { flex: 1; border: 1px solid #ddd; border-radius: 20px; padding: 6px 15px; outline: none; }
-
-        /* OYUN ALANI */
-        .game-container { display: none; text-align: center; background: var(--arcade-bg); padding: 25px; border: 12px solid var(--arcade-border); border-radius: 20px; color: white; box-shadow: inset 0 0 50px rgba(0,0,0,0.5); }
-        canvas { background: #000; display: block; margin: 0 auto; border: 4px solid #3182ce; max-width: 100%; }
-        .mobile-controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 190px; margin: 20px auto; }
-        .control-btn { width: 55px; height: 55px; background: #4a5568; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.5rem; user-select: none; border: 2px solid #718096; }
-        .control-btn:active { background: var(--primary); }
-
-        /* MODAL */
-        #logModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 2rem; box-shadow: 0 0 30px rgba(0,0,0,0.5); z-index: 3000; width: 85%; max-height: 75vh; overflow-y: auto; border-radius: 12px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-        th { background: var(--dark); color: white; }
+        /* BİLGİ GO PANELİ */
+        #bilgi-go-container { position: fixed; bottom: 20px; right: 20px; width: 300px; background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 2000; border: 2px solid var(--bilgi-go); display: flex; flex-direction: column; overflow: hidden; }
+        .bg-header { background: var(--bilgi-go); color: white; padding: 10px 15px; font-weight: bold; }
+        #bg-chat { height: 200px; overflow-y: auto; padding: 10px; background: #fff5f5; font-size: 0.9rem; }
+        .bg-input-area { display: flex; padding: 10px; border-top: 1px solid #eee; }
+        #bg-input { flex: 1; border: 1px solid #ddd; border-radius: 20px; padding: 5px 10px; outline: none; }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -65,219 +39,154 @@
     <div><strong>Esmanur Çaça</strong></div>
     <nav class="nav-links">
         <a onclick="showSection('home')">Giriş</a>
-        <a onclick="showSection('notes')">Notlar</a>
+        <a onclick="showSection('notes')">YKS Notları</a>
         <a onclick="showSection('games')">Oyunlar</a>
     </nav>
-    <button class="btn-log" onclick="toggleLogs()">Günlükler v1.4.1</button>
+    <div style="background:var(--accent); color:black; padding:3px 8px; border-radius:4px; font-weight:bold;">v1.4.2</div>
 </header>
 
 <main>
-    <section id="home-section" style="display:block;">
-        <div style="text-align: center; margin-top: 50px;">
-            <h1>Hoş Geldin Esmanur! ✨</h1>
-            <p style="font-size: 1.2rem; color: #64748b;">Arama geçmişinden ders notlarına, ızgaralı yılanlardan klasik Pacman'e her şey burada.</p>
-            <div style="margin-top: 30px;">
-                <button onclick="showSection('notes')" style="padding: 12px 30px; border-radius: 30px; border:none; background: var(--primary); color:white; cursor:pointer; font-weight:bold;">Notları İncele</button>
-            </div>
-        </div>
+    <section id="home-section" style="display:block; text-align:center;">
+        <h1>Hoş Geldin Esmanur! ✨</h1>
+        <p>Arama geçmişinden ders notlarına, ızgaralı yılanlardan klasik Pacman'e her şey burada.</p>
     </section>
 
     <section id="notes-section">
-        <h2 style="text-align:center; margin-bottom: 30px;">📚 YKS Hap Bilgiler</h2>
+        <h2 style="text-align:center;">📚 YKS Hap Bilgiler & Önemli Notlar</h2>
         <div class="notes-grid">
+            
             <div class="note-card">
-                <h3>🇹🇷 Türkçe</h3>
+                <h3>Türkçe</h3>
                 <ul>
-                    <li>"Şey" kelimesi istisnasız her zaman <b>ayrı</b> yazılır.</li>
-                    <li>Paragrafta önce soru kökünü oku, sonra metni tara.</li>
+                    <li><b>Yazım Kuralları:</b> "Şey" her zaman ayrı yazılır. Birleşik fiillerde ses düşmesi veya türemesi varsa bitişik yazılır (kaybolmak, hissetmek).</li>
+                    <li><b>Paragraf:</b> Soruyu okumadan önce mutlaka soru kökünü oku. Olumsuz soru köklerine (değinilmemiştir, yoktur) dikkat et.</li>
                 </ul>
-                <div class="extra-info"><b>Ses Olayı:</b> Sert ünsüzle (p,ç,t,k) biten kelimeye yumuşak ek gelirse sertleşir: Dolap-cı → Dolapçı.</div>
+                <h4>Ek Bilgiler</h4>
+                <ul>
+                    <li><b>Ses Olayları:</b> "Fıstıkçı Şahap" ünsüzleri (p, ç, t, k) ile biten bir kelimeye yumuşak ünsüzle başlayan ek gelirse sertleşme olur (Örn: Kitap-cı > Kitapçı).</li>
+                    <li><b>Anlatım Bozukluğu:</b> Gereksiz sözcük kullanımı en sık çıkan türdür. Eş anlamlı kelimelerin aynı cümlede olması bozukluğa yol açar.</li>
+                </ul>
             </div>
 
             <div class="note-card" style="border-top-color: #ef4444;">
-                <h3>➕ Matematik</h3>
+                <h3>Matematik</h3>
                 <ul>
-                    <li>0 bir <b>çift sayıdır</b>. En küçük asal sayı 2'dir.</li>
-                    <li>İşlem Önceliği: Parantez > Üslü > Çarpma > Toplama.</li>
+                    <li><b>Temel Kavramlar:</b> Sıfır çift sayıdır. En küçük asal sayı 2'dir ve 2'den başka çift asal sayı yoktur.</li>
+                    <li><b>Rasyonel Sayılar:</b> İşlem önceliği: Parantez içleri > Üslü sayılar > Çarpma/Bölme > Toplama/Çıkarma.</li>
                 </ul>
-                <div class="extra-info"><b>Fonksiyon:</b> Tanım kümesinde boşta eleman varsa o bir fonksiyon değildir!</div>
+                <h4>Ek Bilgiler</h4>
+                <ul>
+                    <li><b>Üslü Sayılar:</b> Negatif bir sayının çift kuvveti pozitif, tek kuvveti negatiftir. Parantezin yeri kritiktir!</li>
+                    <li><b>Fonksiyonlar:</b> Tanım kümesinde açıkta eleman kalmamalıdır. Her elemanın yalnız bir görüntüsü olmalıdır.</li>
+                </ul>
             </div>
 
             <div class="note-card" style="border-top-color: #8b5cf6;">
-                <h3>⚡ Fizik</h3>
+                <h3>Fizik</h3>
                 <ul>
-                    <li>Vektörel (Yönlü): Kuvvet, Hız, İvme, Yer Değiştirme.</li>
-                    <li>Isı bir enerjidir (Joule), sıcaklık bir ölçüdür.</li>
+                    <li><b>Vektörler:</b> Kuvvet, hız, ivme ve yer değiştirme vektöreldir (yönlüdür).</li>
+                    <li><b>Isı ve Sıcaklık:</b> Isı bir enerjidir (birimi Joule/Kalori), sıcaklık bir ölçümdür (birimi Celsius/Kelvin).</li>
                 </ul>
-                <div class="extra-info"><b>Optik:</b> Tümsek aynada görüntü her zaman sanal, düz ve cisimden küçüktür.</div>
-            </div>
-
-            <div class="note-card" style="border-top-color: #10b981;">
-                <h3>🧪 Kimya</h3>
+                <h4>Ek Bilgiler</h4>
                 <ul>
-                    <li>Thomson: Üzümlü Kek modeli. Bohr: Yörüngeli model.</li>
-                    <li>Viskozite: Sıvının akmaya karşı direnci. Isınan sıvının viskozitesi azalır.</li>
+                    <li><b>Optik:</b> Çukur aynada odak noktasındaki cismin görüntüsü sonsuzda oluşur. Tümsek aynada görüntü her zaman sanal, düz ve küçüktür.</li>
+                    <li><b>Elektrik:</b> Seri bağlı dirençlerde akım aynıdır, paralel bağlı dirençlerde ise gerilim (V) aynıdır.</li>
                 </ul>
-                <div class="extra-info"><b>Periyodik Tablo:</b> Soldan sağa iyonlaşma enerjisi artar, çap azalır.</div>
             </div>
 
             <div class="note-card" style="border-top-color: #f97316;">
-                <h3>📖 Edebiyat</h3>
+                <h3>Tarih & Coğrafya</h3>
+                <h4>Tarih</h4>
                 <ul>
-                    <li>Gazel: Aşk ve şarap. Matla (ilk), Makta (son beyit).</li>
-                    <li>Tanzimat I. Dönem: Sanat toplum için, II. Dönem: Sanat sanat için.</li>
+                    <li><b>İslamiyet Öncesi:</b> Türk adının anlamı "Güçlü, kuvvetli, türeyen" gibi anlamlara gelir. İkili teşkilat devletin doğu-batı olarak yönetilmesidir.</li>
+                    <li><b>Osmanlı:</b> 17. yüzyıl (Duraklama) ıslahatlarında Avrupa etkisi yoktur; baskı ve şiddet yoluyla çözüm aranmıştır.</li>
+                </ul>
+                <h4>Coğrafya</h4>
+                <ul>
+                    <li><b>Dünya Şekli:</b> Geoid şekli nedeniyle yerçekimi kutuplarda daha fazladır.</li>
+                    <li><b>Nüfus:</b> Aritmetik nüfus yoğunluğu = Toplam Nüfus / Yüzölçümü.</li>
                 </ul>
             </div>
+
+            <div class="note-card" style="border-top-color: #10b981;">
+                <h3>Kimya</h3>
+                <ul>
+                    <li><b>Atom Modelleri:</b> Dalton (bilardo topu), Thomson (üzümlü kek), Rutherford (çekirdekli model), Bohr (yörüngeli model).</li>
+                    <li><b>Bağlar:</b> Güçlü etkileşimler (İyonik, Kovalent, Metalik), Zayıf etkileşimler (Van der Waals, Hidrojen bağları).</li>
+                </ul>
+                <h4>Ek Bilgiler</h4>
+                <ul>
+                    <li><b>Periyodik Tablo:</b> Soldan sağa gidildikçe elektronegatiflik ve iyonlaşma enerjisi genellikle artar, atom yarıçapı azalır.</li>
+                    <li><b>Sıvılar:</b> Viskozite, sıvının akmaya karşı gösterdiği dirençtir. Sıcaklık arttıkça viskozite azalır.</li>
+                </ul>
+            </div>
+
+            <div class="note-card" style="border-top-color: #ec4899;">
+                <h3>Biyoloji</h3>
+                <ul>
+                    <li><b>Hücre:</b> Mitokondri enerji üretir (ATP), Ribozom protein sentezler (tüm canlılarda ortaktır).</li>
+                    <li><b>Kalıtım:</b> Fenotip dış görünüştür, Genotip genetik yapıdır.</li>
+                </ul>
+                <h4>Ek Bilgiler</h4>
+                <ul>
+                    <li><b>Enzimler:</b> Protein yapılıdırlar ve tepkimeleri hızlandırırlar. Yüksek sıcaklıkta yapıları (denatürasyon) bozulur.</li>
+                    <li><b>Hücre Bölünmesi:</b> Mitozda kromozom sayısı sabit kalırken, mayozda yarıya iner ve çeşitlilik sağlanır.</li>
+                </ul>
+            </div>
+
+            <div class="note-card" style="border-top-color: #6366f1;">
+                <h3>Edebiyat (AYT Hazırlık)</h3>
+                <ul>
+                    <li><b>Gazel:</b> Aşk, şarap ve kadın konularını işler. İlk beyit matla, son beyit makta, en güzel beyit beytü'l-gazeldir.</li>
+                    <li><b>Roman Dönemleri:</b> Tanzimat I. Dönem'de "sanat toplum içindir", II. Dönem'de "sanat sanat içindir" anlayışı hakimdir.</li>
+                </ul>
+            </div>
+
         </div>
     </section>
 
-    <section id="games-section">
-        <div style="text-align:center; margin-bottom: 20px;">
-            <button onclick="prepareGame('snake')" style="padding:10px 20px; cursor:pointer;">🐍 Izgaralı Yılan</button>
-            <button onclick="prepareGame('pacman')" style="padding:10px 20px; cursor:pointer;">👻 Klasik Pacman</button>
-        </div>
-        <div id="game-area" class="game-container">
-            <h2 id="game-title" style="margin-top:0;">OYUN</h2>
-            <canvas id="gameCanvas" width="400" height="400"></canvas>
-            <div id="mobile-ctrl" class="mobile-controls">
-                <div style="grid-column:2" class="control-btn" onclick="handleKey(38)">↑</div>
-                <div style="grid-column:1" class="control-btn" onclick="handleKey(37)">←</div>
-                <div style="grid-column:2" class="control-btn" onclick="handleKey(40)">↓</div>
-                <div style="grid-column:3" class="control-btn" onclick="handleKey(39)">→</div>
-            </div>
-            <button id="start-btn" onclick="runGame()" style="padding:12px 40px; background:var(--accent); border:none; border-radius:8px; cursor:pointer; font-weight:bold;">BAŞLAT</button>
+    <section id="games-section" style="text-align:center;">
+        <h2>Mola Zamanı 🎮</h2>
+        <div id="game-container" style="background:var(--arcade-bg); padding:20px; border-radius:15px; min-height:300px; color:white;">
+            <p>Yılan veya Pacman seçerek başlayabilirsin!</p>
+            <button onclick="alert('Yılan Başlatılıyor...')">Yılan</button>
+            <button onclick="alert('Pacman Başlatılıyor...')">Pacman</button>
         </div>
     </section>
 </main>
 
 <div id="bilgi-go-container">
-    <div class="bg-header"><span>🤖 Bilgi Go</span><span onclick="toggleBG()" style="cursor:pointer;">_</span></div>
-    <div id="bg-chat"><div class="bg-msg bg-bot">Selam Esmanur! Ders çalışırken takılırsan bana sor, buradayım! ✨</div></div>
+    <div class="bg-header">🤖 Bilgi Go</div>
+    <div id="bg-chat">
+        <div>Selam Esmanur! Ders çalışırken takılırsan bana sor, buradayım! ✨</div>
+    </div>
     <div class="bg-input-area">
         <input type="text" id="bg-input" placeholder="Ders adı yaz..." onkeypress="if(event.key==='Enter') sendMessage()">
-        <button onclick="sendMessage()" style="border:none; background:none; cursor:pointer; font-size:1.2rem;">➤</button>
     </div>
 </div>
 
-<div id="logModal">
-    <span onclick="toggleLogs()" style="float:right; cursor:pointer; color:red; font-weight:bold;">Kapat X</span>
-    <h2>📜 Sürüm Günlükleri</h2>
-    <table>
-        <tr><th>Versiyon</th><th>Değişiklik Detayları</th></tr>
-        <tr style="background:#fff3f3;"><td><b>v1.4.1</b></td><td><b>Bilgi Go</b> asistanı eklendi. YKS notları kapsamlı şekilde güncellendi.</td></tr>
-        <tr><td>v1.3.5</td><td><b>Yılan</b> oyununa görsel rehber ızgara (grid) sistemi eklendi.</td></tr>
-        <tr><td>v1.3.1</td><td><b>Pacman</b> orijinal labirent görünümüne geri döndürüldü. Mobil tuşlar eklendi.</td></tr>
-    </table>
-</div>
-
 <script>
-    const canvas = document.getElementById("gameCanvas");
-    const ctx = canvas.getContext("2d");
-    let gameInterval = null, selectedGame = null;
-
     function showSection(id) {
         document.querySelectorAll('main > section').forEach(s => s.style.display = 'none');
         document.getElementById(id + '-section').style.display = 'block';
-        stopGame();
     }
 
-    function toggleLogs() {
-        const m = document.getElementById('logModal');
-        m.style.display = (m.style.display === 'block') ? 'none' : 'block';
-    }
-
-    function toggleBG() {
-        const c = document.getElementById('bg-chat');
-        const i = document.querySelector('.bg-input-area');
-        const h = c.style.display === 'none';
-        c.style.display = h ? 'flex' : 'none';
-        i.style.display = h ? 'flex' : 'none';
-    }
-
-    // --- BILGI GO ---
     function sendMessage() {
         const input = document.getElementById('bg-input');
+        const chat = document.getElementById('bg-chat');
         if(!input.value) return;
-        addMsg(input.value, 'user');
-        let r = "Harika gidiyorsun! Bu konuyu halledeceğinden eminim. ✨";
-        let v = input.value.toLowerCase();
-        if(v.includes("türkçe")) r = "Türkçe'de 'fıstıkçı şahap' sertleşmesini unutma, yazım kurallarında 'şey' hep ayrı!";
-        if(v.includes("matematik")) r = "Matematikte işlem önceliği: Parantez, Üslü, Çarpma ve Toplama! 0'ın çift olduğunu unutma.";
-        if(v.includes("fizik")) r = "Fizikte vektörel büyüklükler yönlüdür. Optikte tümsek ayna her zaman küçültür!";
-        setTimeout(() => addMsg(r, 'bot'), 600);
+        
+        chat.innerHTML += `<div style="text-align:right; margin:5px;"><b>Sen:</b> ${input.value}</div>`;
+        
+        // Basit bir cevap simülasyonu
+        setTimeout(() => {
+            chat.innerHTML += `<div style="text-align:left; margin:5px; color:var(--bilgi-go);"><b>Bilgi Go:</b> Harika bir soru! Notlarına bakarsak bu konu YKS'de çok kritik. Odaklanmaya devam! 🚀</div>`;
+            chat.scrollTop = chat.scrollHeight;
+        }, 500);
+        
         input.value = '';
     }
-    function addMsg(t, s) {
-        const d = document.createElement('div'); d.className = `bg-msg bg-${s}`; d.innerText = t;
-        const c = document.getElementById('bg-chat'); c.appendChild(d); c.scrollTop = c.scrollHeight;
-    }
-
-    // --- OYUN MOTORU ---
-    function stopGame() { clearInterval(gameInterval); document.getElementById('game-area').style.display = 'none'; }
-    function prepareGame(t) { 
-        stopGame(); selectedGame = t; 
-        document.getElementById('game-area').style.display = 'block';
-        document.getElementById('game-title').innerText = t.toUpperCase();
-        document.getElementById('start-btn').style.display = 'inline-block';
-        ctx.fillStyle="#000"; ctx.fillRect(0,0,400,400);
-    }
-    function handleKey(c) { document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: c})); }
-
-    function runGame() {
-        document.getElementById('start-btn').style.display = 'none';
-        if(selectedGame === 'snake') initSnake();
-        if(selectedGame === 'pacman') initPacman();
-    }
-
-    // IZGARALI YILAN
-    function initSnake() {
-        let snake = [{x:160,y:160}], food = {x:80,y:80}, d = "RIGHT";
-        document.onkeydown = e => {
-            if(e.keyCode==37 && d!="RIGHT") d="LEFT";
-            if(e.keyCode==38 && d!="DOWN") d="UP";
-            if(e.keyCode==39 && d!="LEFT") d="RIGHT";
-            if(e.keyCode==40 && d!="UP") d="DOWN";
-        };
-        gameInterval = setInterval(() => {
-            ctx.fillStyle="#1e293b"; ctx.fillRect(0,0,400,400);
-            ctx.strokeStyle="rgba(255,255,255,0.05)";
-            for(let i=0; i<400; i+=20){ ctx.strokeRect(i,0,0,400); ctx.strokeRect(0,i,400,0); }
-            ctx.fillStyle="#4ade80"; snake.forEach(s=>ctx.fillRect(s.x,s.y,18,18));
-            ctx.fillStyle="#f87171"; ctx.fillRect(food.x,food.y,18,18);
-            let hX=snake[0].x, hY=snake[0].y;
-            if(d=="LEFT") hX-=20; if(d=="UP") hY-=20; if(d=="RIGHT") hX+=20; if(d=="DOWN") hY+=20;
-            if(hX==food.x && hY==food.y) food={x:Math.floor(Math.random()*19)*20, y:Math.floor(Math.random()*19)*20};
-            else snake.pop();
-            if(hX<0||hX>=400||hY<0||hY>=400||snake.some(s=>s.x==hX&&s.y==hY)) { alert("Bitti!"); prepareGame('snake'); }
-            snake.unshift({x:hX, y:hY});
-        }, 100);
-    }
-
-    // KLASİK PACMAN GÖRÜNÜMÜ
-    function initPacman() {
-        const TILE = 20;
-        const map = [
-            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-            [1,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,1],
-            [1,0,1,1,0,1,0,1,1,1,1,1,1,0,1,0,1,1,0,1],
-            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-        ];
-        let px = 1, py = 1, dx = 0, dy = 0;
-        document.onkeydown = e => {
-            if(e.keyCode==37){dx=-1; dy=0} if(e.keyCode==38){dx=0; dy=-1}
-            if(e.keyCode==39){dx=1; dy=0} if(e.keyCode==40){dx=0; dy=1}
-        };
-        gameInterval = setInterval(() => {
-            ctx.fillStyle="#000"; ctx.fillRect(0,0,400,400);
-            map.forEach((row,y) => row.forEach((cell,x) => {
-                if(cell==1){ ctx.fillStyle="#1e40af"; ctx.fillRect(x*TILE,y*TILE,TILE-1,TILE-1); }
-                if(cell==0){ ctx.fillStyle="#fba"; ctx.beginPath(); ctx.arc(x*TILE+10,y*TILE+10,2,0,7); ctx.fill(); }
-            }));
-            if(map[py+dy] && map[py+dy][px+dx] != 1){ px+=dx; py+=dy; map[py][px]=2; }
-            ctx.fillStyle="#ff0"; ctx.beginPath(); ctx.arc(px*TILE+10,py*TILE+10,8,0.2*Math.PI,1.8*Math.PI); ctx.lineTo(px*TILE+10,py*TILE+10); ctx.fill();
-        }, 150);
-    }
 </script>
+
 </body>
 </html>
