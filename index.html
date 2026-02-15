@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Esmanur Çaça | Dashboard v1.7.8</title>
+    <title>Esmanur Çaça | Dashboard v1.7.9</title>
     <style>
         :root { 
             --primary: #2563eb; --dark: #1e293b; --light: #f8fafc; 
@@ -71,20 +71,12 @@
         .game-card { cursor: pointer; background: white; color: var(--dark); padding: 12px; border-radius: 10px; font-weight: bold; width: 100px; transition: 0.2s; display: flex; flex-direction: column; align-items: center; gap: 5px;}
         .game-card:hover { transform: scale(1.05); background: var(--accent); }
         
-        /* Canvas ve Overlay Hizalama */
         canvas { background: #2d3748; border: 4px solid #4a5568; display: block; }
         
-        /* OVERLAY BAŞLAT BUTONU */
         #game-overlay { 
-            position: absolute; 
-            top: 0; left: 0; 
-            width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.85); 
-            display: none; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-            z-index: 50; 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.85); display: none; flex-direction: column; 
+            justify-content: center; align-items: center; z-index: 50; 
         }
         #overlay-start-btn { 
             font-size: 2.5rem; color: var(--accent); background: none; border: 3px solid var(--accent); 
@@ -97,15 +89,28 @@
         .control-btn { width: 55px; height: 55px; background: #4a5568; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; user-select: none; }
         #char-switch-btn { display: none; margin: 10px auto; padding: 10px; background: #6b21a8; color: white; border: none; border-radius: 8px; width: 200px; font-weight: bold; cursor: pointer; }
 
-        /* BILGI GO ASISTAN */
-        #bilgi-go-container { position: fixed; bottom: 20px; right: 20px; width: 320px; background: white; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 2000; border: 2px solid var(--bilgi-go); overflow: hidden; display: flex; flex-direction: column; }
-        .bg-header { background: var(--bilgi-go); color: white; padding: 12px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
-        #bg-chat { height: 250px; overflow-y: auto; padding: 12px; background: #fff5f5; font-size: 0.85rem; display: flex; flex-direction: column; }
+        /* BILGI GO ASISTAN (GÜNCELLENDİ: Taşınabilir & Küçük) */
+        #bilgi-go-container { 
+            position: fixed; bottom: 20px; right: 20px; 
+            width: 270px; /* Küçültüldü */
+            background: white; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
+            z-index: 2000; border: 2px solid var(--bilgi-go); overflow: hidden; display: flex; flex-direction: column; 
+        }
+        .bg-header { 
+            background: var(--bilgi-go); color: white; padding: 10px; font-weight: bold; 
+            display: flex; justify-content: space-between; align-items: center; 
+            cursor: move; /* Taşıma ikonu */
+            user-select: none;
+        }
+        #bg-chat { 
+            height: 200px; /* Küçültüldü */
+            overflow-y: auto; padding: 10px; background: #fff5f5; font-size: 0.85rem; display: flex; flex-direction: column; 
+        }
         .bg-msg { margin-bottom: 8px; padding: 8px 12px; border-radius: 12px; max-width: 85%; word-wrap: break-word; }
         .bg-bot { background: white; align-self: flex-start; border: 1px solid #eee; color: #333; }
         .bg-user { background: var(--bilgi-go); color: white; align-self: flex-end; }
         .bg-input-area { display: flex; padding: 10px; border-top: 1px solid #eee; background: white; }
-        #bg-input { flex: 1; border: 1px solid #ddd; border-radius: 20px; padding: 8px 12px; outline: none; }
+        #bg-input { flex: 1; border: 1px solid #ddd; border-radius: 20px; padding: 8px 12px; outline: none; font-size: 0.85rem; }
         .bg-send-btn { background: none; border: none; cursor: pointer; color: var(--bilgi-go); font-size: 1.2rem; margin-left: 5px; }
 
         /* MODAL */
@@ -122,7 +127,7 @@
         <a onclick="showSection('movies')">Filmler</a>
         <a onclick="showSection('games')">Oyunlar</a>
     </nav>
-    <div><span style="margin-right:10px; font-size:0.8rem; opacity:0.7;">v1.7.8</span><button class="btn-log" onclick="toggleLogs()">Günlükler</button></div>
+    <div><span style="margin-right:10px; font-size:0.8rem; opacity:0.7;">v1.7.9</span><button class="btn-log" onclick="toggleLogs()">Günlükler</button></div>
 </header>
 
 <main>
@@ -163,7 +168,7 @@
     </section>
 
     <section id="games-section">
-        <h2 style="text-align:center;">Oyun Salonu (v1.7.8)</h2>
+        <h2 style="text-align:center;">Oyun Salonu (v1.7.9)</h2>
         <div class="game-menu">
             <div class="game-card" onclick="prepareGame('snake')">🐍 Yılan</div>
             <div class="game-card" onclick="prepareGame('pacman')">👻 Pacman</div>
@@ -200,10 +205,10 @@
         <span style="cursor:pointer;" onclick="toggleChat()">_</span>
     </div>
     <div id="bg-chat">
-        <div class="bg-msg bg-bot">Selam Esmanur! Kapıların altındaki blokları kaldırdım ve Ateş'in geçebilmesi için bir alt kata özel bir yol yaptım. İyi şanslar! 🔥💧</div>
+        <div class="bg-msg bg-bot">Selam Esmanur! Beni küçülttüm ve artık taşınabilirim. Başlığımdan tutup beni istediğin yere sürükle! 🚀</div>
     </div>
     <div class="bg-input-area">
-        <input type="text" id="bg-input" placeholder="Ders sor (Örn: Türev, Lozan)..." onkeypress="if(event.key==='Enter') sendMessage()">
+        <input type="text" id="bg-input" placeholder="Ders sor..." onkeypress="if(event.key==='Enter') sendMessage()">
         <button class="bg-send-btn" onclick="sendMessage()">➤</button>
     </div>
 </div>
@@ -211,8 +216,8 @@
 <div id="logModal">
     <span onclick="toggleLogs()" style="float:right; cursor:pointer; color:red; font-weight:bold;">Kapat X</span>
     <h2>📜 Günlükler</h2>
-    <p><strong>v1.7.8:</strong> Kapı altındaki bloklar temizlendi, Ateş için alt kata yol platformları eklendi.</p>
-    <p><strong>v1.7.7:</strong> Başlat ekranı ve oyun hizalaması düzeltildi.</p>
+    <p><strong>v1.7.9:</strong> Bilgi Go asistanı küçültüldü ve sürüklenebilir (taşınabilir) yapıldı.</p>
+    <p><strong>v1.7.8:</strong> Ateş ve Su haritası güncellendi.</p>
 </div>
 
 <script>
@@ -239,6 +244,35 @@
     function sendMessage() { const input = document.getElementById('bg-input'); const text = input.value.trim().toLocaleLowerCase('tr'); if(!text) return; addMsg(input.value, 'user'); input.value = ''; if(text.includes('motivasyon') || text.includes('sıkıldım')) { setTimeout(() => addMsg("Sen mühendis kafalı bir sanatçısın Esmanur, bu konular senin için çocuk oyuncağı! 🚀", 'bot'), 500); return; } let found = []; YKS_DATA.forEach(course => { course.topics.forEach(topic => { if(topic.toLocaleLowerCase('tr').includes(text)) { found.push(`<b>${course.subject}:</b> ${topic}`); } }); }); setTimeout(() => { if(found.length > 0) addMsg(`Bunu senin için buldum: <br><br> ${found.slice(0,3).join('<br><br>')}`, 'bot'); else addMsg("Notlarında bulamadım ama sen yaparsın! 😉", 'bot'); }, 600); }
     function addMsg(t, s) { const d=document.createElement('div'); d.className=`bg-msg bg-${s}`; d.innerHTML=t; document.getElementById('bg-chat').appendChild(d); }
     function toggleChat() { const c=document.getElementById('bg-chat'); c.style.display = c.style.display==='none'?'flex':'none'; }
+
+    // --- BİLGİ GO DRAG & DROP ÖZELLİĞİ (YENİ) ---
+    const bgContainer = document.getElementById('bilgi-go-container');
+    const bgHeader = document.querySelector('.bg-header');
+    let isDragging = false;
+    let startX, startY, initialLeft, initialTop;
+
+    bgHeader.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        const rect = bgContainer.getBoundingClientRect();
+        initialLeft = rect.left;
+        initialTop = rect.top;
+        bgContainer.style.bottom = 'auto'; // Sabit pozisyonu kaldır
+        bgContainer.style.right = 'auto';
+        bgContainer.style.left = initialLeft + 'px';
+        bgContainer.style.top = initialTop + 'px';
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        bgContainer.style.left = (initialLeft + dx) + 'px';
+        bgContainer.style.top = (initialTop + dy) + 'px';
+    });
+
+    document.addEventListener('mouseup', () => { isDragging = false; });
 
     // --- 3. OYUN MOTORU ---
     const canvas = document.getElementById("gameCanvas");
@@ -310,136 +344,40 @@
     const SHAPES = [[[1,1,1,1]],[[1,1,1],[0,1,0]],[[1,1,1],[1,0,0]],[[1,1,1],[0,0,1]],[[1,1],[1,1]],[[1,1,0],[0,1,1]],[[0,1,1],[1,1,0]]]; const COLORS = [null, '#00f0f0', '#a000f0', '#f0a000', '#0000f0', '#f0f000', '#f00000', '#00f000'];
     function startTetris() { const ROW=20, COL=10, SQ=20; let board=Array.from({length:ROW},()=>Array(COL).fill(0)); let piece=randomPiece(); function randomPiece(){let r=Math.floor(Math.random()*SHAPES.length);return{shape:SHAPES[r],color:COLORS[r+1],x:3,y:0};} function drawSquare(x,y,color){ctx.fillStyle=color;ctx.fillRect(x*SQ,y*SQ,SQ,SQ);ctx.strokeStyle="#333";ctx.strokeRect(x*SQ,y*SQ,SQ,SQ);} function draw(){ctx.fillStyle="#1e293b";ctx.fillRect(0,0,400,400);for(let r=0;r<ROW;r++)for(let c=0;c<COL;c++)if(board[r][c])drawSquare(c+5,r,board[r][c]);piece.shape.forEach((row,r)=>{row.forEach((val,c)=>{if(val)drawSquare(piece.x+c+5,piece.y+r,piece.color);});});} function collision(nx,ny,nShape){for(let r=0;r<nShape.length;r++)for(let c=0;c<nShape[r].length;c++){if(!nShape[r][c])continue;let newX=nx+c;let newY=ny+r;if(newX<0||newX>=COL||newY>=ROW)return true;if(newY>=0&&board[newY][newX])return true;}return false;} function lock(){piece.shape.forEach((row,r)=>{row.forEach((val,c)=>{if(val)board[piece.y+r][piece.x+c]=piece.color;});});for(let r=0;r<ROW;r++)if(board[r].every(x=>x)){board.splice(r,1);board.unshift(Array(COL).fill(0));}piece=randomPiece();if(collision(piece.x,piece.y,piece.shape)){clearInterval(gameInterval);alert("Oyun Bitti!");prepareGame('tetris');}} document.addEventListener("keydown",e=>{if(selectedGame!=='tetris')return;if(e.keyCode==37&&!collision(piece.x-1,piece.y,piece.shape))piece.x--;else if(e.keyCode==39&&!collision(piece.x+1,piece.y,piece.shape))piece.x++;else if(e.keyCode==40&&!collision(piece.x,piece.y+1,piece.shape))piece.y++;else if(e.keyCode==38){let rotated=piece.shape[0].map((_,i)=>piece.shape.map(row=>row[i]).reverse());if(!collision(piece.x,piece.y,rotated))piece.shape=rotated;}draw();}); gameInterval=setInterval(()=>{if(!collision(piece.x,piece.y+1,piece.shape))piece.y++;else lock();draw();},500); }
 
-    // --- YENİ ATEŞ VE SU (GÜNCELLENMİŞ HARİTA: KAPI ALTI BOŞ) ---
+    // --- ATEŞ VE SU (KORUNDU) ---
     function startFireWaterPlatform() {
         const TILE = 20;
-        
-        const mapBase = [
-            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-            [1,0,0,0,0,0,0,0,0,0,0,0,1,2,3,1,0,0,0,1], // Kapılar
-            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], // Kapı altı boşaltıldı! (Row 2)
-            [1,0,0,1,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0,1], // Yeni Yol: Bir alt kata platform eklendi (Row 3)
-            [1,1,1,0,0,1,1,1,0,0,0,0,1,1,1,0,0,1,1,1], 
-            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-            [1,0,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,0,1], 
-            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-            [1,0,0,1,4,4,4,1,0,0,0,0,1,5,5,5,1,0,0,1], 
-            [1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1], 
-            [1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1], 
-        ];
-
+        const mapBase = [[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,0,0,0,0,0,0,0,0,0,0,0,1,2,3,1,0,0,0,1],[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],[1,0,0,1,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0,1],[1,1,1,0,0,1,1,1,0,0,0,0,1,1,1,0,0,1,1,1],[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],[1,0,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,0,1],[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],[1,0,0,1,4,4,4,1,0,0,0,0,1,5,5,5,1,0,0,1],[1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1]];
         let elevator = { x: 9*TILE, y: 9*TILE, w: 2*TILE, h: TILE/2, dy: -2, minY: 4*TILE, maxY: 9*TILE };
-
         let boy = { x: 2*TILE, y: 7*TILE, w: 16, h: 22, color: 'red', symbol: '🔥', label:'Ateş', dx:0, dy:0, onGround:false, keyL:37, keyR:39, keyJ:38 };
         let girl = { x: 16*TILE, y: 7*TILE, w: 16, h: 22, color: 'blue', symbol: '💧', label:'Su', dx:0, dy:0, onGround:false, keyL:65, keyR:68, keyJ:87 };
-        
-        let keys = {};
-        document.addEventListener('keydown', e => keys[e.keyCode] = true);
-        document.addEventListener('keyup', e => keys[e.keyCode] = false);
-
+        let keys = {}; document.addEventListener('keydown', e => keys[e.keyCode] = true); document.addEventListener('keyup', e => keys[e.keyCode] = false);
         function updateChar(c) {
-            if(keys[c.keyL]) c.dx = -3;
-            else if(keys[c.keyR]) c.dx = 3;
-            else c.dx = 0;
-
+            if(keys[c.keyL]) c.dx = -3; else if(keys[c.keyR]) c.dx = 3; else c.dx = 0;
             if(keys[c.keyJ] && c.onGround) { c.dy = -8; c.onGround = false; }
-
-            c.dy += 0.4;
-            c.x += c.dx;
-            checkWall(c, 'x');
-            c.y += c.dy;
-            c.onGround = false;
-            checkWall(c, 'y');
-            checkElevator(c);
-
+            c.dy += 0.4; c.x += c.dx; checkWall(c, 'x'); c.y += c.dy; c.onGround = false; checkWall(c, 'y'); checkElevator(c);
             if(c.y > 400) resetLevel("Düştün!");
         }
-
         function checkWall(c, axis) {
-            let startR = Math.floor(c.y/TILE);
-            let endR = Math.floor((c.y + c.h)/TILE);
-            let startC = Math.floor(c.x/TILE);
-            let endC = Math.floor((c.x + c.w)/TILE);
-
-            for(let r=startR; r<=endR; r++) {
-                for(let col=startC; col<=endC; col++) {
-                    let tile = mapBase[r] && mapBase[r][col];
-                    if(tile === 1) { // Duvar
-                        if(axis === 'x') {
-                            if(c.dx > 0) c.x = col*TILE - c.w - 0.1;
-                            else if(c.dx < 0) c.x = (col+1)*TILE + 0.1;
-                        } else {
-                            if(c.dy > 0) { c.y = r*TILE - c.h - 0.1; c.dy = 0; c.onGround = true; }
-                            else if(c.dy < 0) { c.y = (r+1)*TILE + 0.1; c.dy = 0; }
-                        }
-                    } else if(tile === 4 && c.label === 'Su') resetLevel("Su Kız buharlaştı!");
-                    else if(tile === 5 && c.label === 'Ateş') resetLevel("Ateş Çocuk söndü!");
-                }
+            let startR = Math.floor(c.y/TILE); let endR = Math.floor((c.y + c.h)/TILE); let startC = Math.floor(c.x/TILE); let endC = Math.floor((c.x + c.w)/TILE);
+            for(let r=startR; r<=endR; r++) for(let col=startC; col<=endC; col++) {
+                let tile = mapBase[r] && mapBase[r][col];
+                if(tile === 1) { if(axis === 'x') { if(c.dx > 0) c.x = col*TILE - c.w - 0.1; else if(c.dx < 0) c.x = (col+1)*TILE + 0.1; } else { if(c.dy > 0) { c.y = r*TILE - c.h - 0.1; c.dy = 0; c.onGround = true; } else if(c.dy < 0) { c.y = (r+1)*TILE + 0.1; c.dy = 0; } } }
+                else if(tile === 4 && c.label === 'Su') resetLevel("Su Kız buharlaştı!"); else if(tile === 5 && c.label === 'Ateş') resetLevel("Ateş Çocuk söndü!");
             }
         }
-
-        function checkElevator(c) {
-            if(c.x < elevator.x + elevator.w && c.x + c.w > elevator.x &&
-               c.y + c.h >= elevator.y && c.y + c.h <= elevator.y + elevator.h + 5 && c.dy >= 0) {
-                c.y = elevator.y - c.h;
-                c.dy = 0;
-                c.onGround = true;
-                c.y += elevator.dy; 
-            }
-        }
-
-        function resetLevel(msg) {
-            clearInterval(gameInterval);
-            alert(msg);
-            prepareGame('firewater');
-        }
-
-        function drawChar(c) {
-            ctx.fillStyle = c.color;
-            ctx.beginPath();
-            ctx.moveTo(c.x + c.w/2, c.y); 
-            ctx.quadraticCurveTo(c.x + c.w, c.y + c.h/2, c.x + c.w/2, c.y + c.h);
-            ctx.quadraticCurveTo(c.x, c.y + c.h/2, c.x + c.w/2, c.y);
-            ctx.fill();
-            ctx.fillStyle = "white";
-            ctx.fillRect(c.x + 3, c.y + 6, 4, 4); ctx.fillRect(c.x + 9, c.y + 6, 4, 4);
-            ctx.fillStyle = "black";
-            ctx.fillRect(c.x + 4, c.y + 7, 2, 2); ctx.fillRect(c.x + 10, c.y + 7, 2, 2);
-            ctx.fillStyle = "white"; ctx.font = "10px Arial"; ctx.fillText(c.label, c.x-2, c.y-5);
-        }
-
+        function checkElevator(c) { if(c.x < elevator.x + elevator.w && c.x + c.w > elevator.x && c.y + c.h >= elevator.y && c.y + c.h <= elevator.y + elevator.h + 5 && c.dy >= 0) { c.y = elevator.y - c.h; c.dy = 0; c.onGround = true; c.y += elevator.dy; } }
+        function resetLevel(msg) { clearInterval(gameInterval); alert(msg); prepareGame('firewater'); }
+        function drawChar(c) { ctx.fillStyle = c.color; ctx.beginPath(); ctx.moveTo(c.x + c.w/2, c.y); ctx.quadraticCurveTo(c.x + c.w, c.y + c.h/2, c.x + c.w/2, c.y + c.h); ctx.quadraticCurveTo(c.x, c.y + c.h/2, c.x + c.w/2, c.y); ctx.fill(); ctx.fillStyle = "white"; ctx.fillRect(c.x + 3, c.y + 6, 4, 4); ctx.fillRect(c.x + 9, c.y + 6, 4, 4); ctx.fillStyle = "black"; ctx.fillRect(c.x + 4, c.y + 7, 2, 2); ctx.fillRect(c.x + 10, c.y + 7, 2, 2); ctx.fillStyle = "white"; ctx.font = "10px Arial"; ctx.fillText(c.label, c.x-2, c.y-5); }
         gameInterval = setInterval(() => {
-            elevator.y += elevator.dy;
-            if(elevator.y <= elevator.minY || elevator.y >= elevator.maxY) elevator.dy *= -1;
-
-            updateChar(boy);
-            updateChar(girl);
-
+            elevator.y += elevator.dy; if(elevator.y <= elevator.minY || elevator.y >= elevator.maxY) elevator.dy *= -1;
+            updateChar(boy); updateChar(girl);
             ctx.fillStyle = "#2d3748"; ctx.fillRect(0,0,400,400); 
-            
-            for(let r=0; r<mapBase.length; r++) {
-                for(let c=0; c<mapBase[0].length; c++) {
-                    let t = mapBase[r][c];
-                    if(t===1) { ctx.fillStyle = "#334155"; ctx.fillRect(c*TILE, r*TILE, TILE, TILE); ctx.strokeStyle="#1e293b"; ctx.strokeRect(c*TILE, r*TILE, TILE, TILE); }
-                    else if(t===4) { ctx.fillStyle = "orange"; ctx.fillRect(c*TILE, r*TILE+10, TILE, 10); } 
-                    else if(t===5) { ctx.fillStyle = "cyan"; ctx.fillRect(c*TILE, r*TILE+10, TILE, 10); } 
-                }
-            }
-
-            ctx.fillStyle = "red"; ctx.fillRect(13*TILE, 1*TILE, 20, 30); ctx.strokeStyle="white"; ctx.strokeRect(13*TILE, 1*TILE, 20, 30);
-            ctx.fillStyle = "blue"; ctx.fillRect(14*TILE, 1*TILE, 20, 30); ctx.strokeStyle="white"; ctx.strokeRect(14*TILE, 1*TILE, 20, 30);
-
-            ctx.fillStyle = "#64748b"; ctx.fillRect(elevator.x, elevator.y, elevator.w, elevator.h);
-            ctx.strokeStyle = "#f59e0b"; ctx.strokeRect(elevator.x, elevator.y, elevator.w, elevator.h);
-
-            drawChar(boy);
-            drawChar(girl);
-
-            if(Math.abs(boy.x - 13*TILE) < 10 && Math.abs(boy.y - 1*TILE) < 10 &&
-               Math.abs(girl.x - 14*TILE) < 10 && Math.abs(girl.y - 1*TILE) < 10) {
-                   resetLevel("TEBRİKLER! Bölüm Tamamlandı! 🎉");
-            }
-
+            for(let r=0; r<mapBase.length; r++) for(let c=0; c<mapBase[0].length; c++) { let t = mapBase[r][c]; if(t===1) { ctx.fillStyle = "#334155"; ctx.fillRect(c*TILE, r*TILE, TILE, TILE); ctx.strokeStyle="#1e293b"; ctx.strokeRect(c*TILE, r*TILE, TILE, TILE); } else if(t===4) { ctx.fillStyle = "orange"; ctx.fillRect(c*TILE, r*TILE+10, TILE, 10); } else if(t===5) { ctx.fillStyle = "cyan"; ctx.fillRect(c*TILE, r*TILE+10, TILE, 10); } }
+            ctx.fillStyle = "red"; ctx.fillRect(13*TILE, 1*TILE, 20, 30); ctx.strokeStyle="white"; ctx.strokeRect(13*TILE, 1*TILE, 20, 30); ctx.fillStyle = "blue"; ctx.fillRect(14*TILE, 1*TILE, 20, 30); ctx.strokeStyle="white"; ctx.strokeRect(14*TILE, 1*TILE, 20, 30);
+            ctx.fillStyle = "#64748b"; ctx.fillRect(elevator.x, elevator.y, elevator.w, elevator.h); ctx.strokeStyle = "#f59e0b"; ctx.strokeRect(elevator.x, elevator.y, elevator.w, elevator.h);
+            drawChar(boy); drawChar(girl);
+            if(Math.abs(boy.x - 13*TILE) < 10 && Math.abs(boy.y - 1*TILE) < 10 && Math.abs(girl.x - 14*TILE) < 10 && Math.abs(girl.y - 1*TILE) < 10) { resetLevel("TEBRİKLER! Bölüm Tamamlandı! 🎉"); }
         }, 30);
     }
 </script>
