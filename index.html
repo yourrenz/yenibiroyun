@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Esmanur Çaça | Dashboard v1.7.5</title>
+    <title>Esmanur Çaça | Dashboard v1.7.6</title>
     <style>
         :root { 
             --primary: #2563eb; --dark: #1e293b; --light: #f8fafc; 
@@ -70,7 +70,7 @@
         .game-menu { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
         .game-card { cursor: pointer; background: white; color: var(--dark); padding: 12px; border-radius: 10px; font-weight: bold; width: 100px; transition: 0.2s; display: flex; flex-direction: column; align-items: center; gap: 5px;}
         .game-card:hover { transform: scale(1.05); background: var(--accent); }
-        canvas { background: #000; border: 4px solid #3182ce; max-width: 100%; display: block; margin: 0 auto; }
+        canvas { background: #2d3748; border: 4px solid #4a5568; max-width: 100%; display: block; margin: 0 auto; } /* Arka plan rengi değiştirildi */
         
         .mobile-controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 180px; margin: 20px auto; }
         .control-btn { width: 55px; height: 55px; background: #4a5568; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; user-select: none; }
@@ -121,7 +121,7 @@
         <a onclick="showSection('movies')">Filmler</a>
         <a onclick="showSection('games')">Oyunlar</a>
     </nav>
-    <div><span style="margin-right:10px; font-size:0.8rem; opacity:0.7;">v1.7.5</span><button class="btn-log" onclick="toggleLogs()">Günlükler</button></div>
+    <div><span style="margin-right:10px; font-size:0.8rem; opacity:0.7;">v1.7.6</span><button class="btn-log" onclick="toggleLogs()">Günlükler</button></div>
 </header>
 
 <main>
@@ -162,7 +162,7 @@
     </section>
 
     <section id="games-section">
-        <h2 style="text-align:center;">Oyun Salonu (v1.7.5)</h2>
+        <h2 style="text-align:center;">Oyun Salonu (v1.7.6)</h2>
         <div class="game-menu">
             <div class="game-card" onclick="prepareGame('snake')">🐍 Yılan</div>
             <div class="game-card" onclick="prepareGame('pacman')">👻 Pacman</div>
@@ -198,7 +198,7 @@
         <span style="cursor:pointer;" onclick="toggleChat()">_</span>
     </div>
     <div id="bg-chat">
-        <div class="bg-msg bg-bot">Selam Esmanur! Kapıların altına zemin ekledim, artık havada kalmıyorlar. İkiniz de aynı anda hareket edebilirsiniz! İyi eğlenceler! 🚀</div>
+        <div class="bg-msg bg-bot">Selam Esmanur! Haritayı çizimine göre güncelledim. Yeni bloklar ve basamaklar eklendi. Renkler daha modern! Asansör hala çalışıyor. İyi eğlenceler! 🚀</div>
     </div>
     <div class="bg-input-area">
         <input type="text" id="bg-input" placeholder="Ders sor (Örn: Türev, Lozan)..." onkeypress="if(event.key==='Enter') sendMessage()">
@@ -209,8 +209,8 @@
 <div id="logModal">
     <span onclick="toggleLogs()" style="float:right; cursor:pointer; color:red; font-weight:bold;">Kapat X</span>
     <h2>📜 Günlükler</h2>
+    <p><strong>v1.7.6:</strong> Ateş ve Su haritası kullanıcının çizimine göre güncellendi. Yeni bloklar ve basamaklar eklendi. Blok ve arka plan renkleri değiştirildi.</p>
     <p><strong>v1.7.5:</strong> Ateş ve Su oyununda kapıların altına platform eklendi. Eş zamanlı hareket iyileştirildi.</p>
-    <p><strong>v1.7.4:</strong> Ateş ve Su Platform modu, Mor tema, Dev başlat butonu.</p>
 </div>
 
 <script>
@@ -276,7 +276,7 @@
         stopGame(); selectedGame = type;
         gameWrapper.style.display = 'block';
         document.getElementById('game-title').innerText = type.toUpperCase();
-        ctx.fillStyle = "#000"; ctx.fillRect(0,0,400,400);
+        ctx.fillStyle = "#2d3748"; ctx.fillRect(0,0,400,400); /* Yeni arka plan rengi */
         overlay.style.display = 'flex';
         if(type === 'firewater') {
             instructions.innerHTML = "ATEŞ: Ok Tuşları | SU: W,A,D<br>Asansörü kullan, kapılara ulaş!";
@@ -308,29 +308,30 @@
     const SHAPES = [[[1,1,1,1]],[[1,1,1],[0,1,0]],[[1,1,1],[1,0,0]],[[1,1,1],[0,0,1]],[[1,1],[1,1]],[[1,1,0],[0,1,1]],[[0,1,1],[1,1,0]]]; const COLORS = [null, '#00f0f0', '#a000f0', '#f0a000', '#0000f0', '#f0f000', '#f00000', '#00f000'];
     function startTetris() { const ROW=20, COL=10, SQ=20; let board=Array.from({length:ROW},()=>Array(COL).fill(0)); let piece=randomPiece(); function randomPiece(){let r=Math.floor(Math.random()*SHAPES.length);return{shape:SHAPES[r],color:COLORS[r+1],x:3,y:0};} function drawSquare(x,y,color){ctx.fillStyle=color;ctx.fillRect(x*SQ,y*SQ,SQ,SQ);ctx.strokeStyle="#333";ctx.strokeRect(x*SQ,y*SQ,SQ,SQ);} function draw(){ctx.fillStyle="#1e293b";ctx.fillRect(0,0,400,400);for(let r=0;r<ROW;r++)for(let c=0;c<COL;c++)if(board[r][c])drawSquare(c+5,r,board[r][c]);piece.shape.forEach((row,r)=>{row.forEach((val,c)=>{if(val)drawSquare(piece.x+c+5,piece.y+r,piece.color);});});} function collision(nx,ny,nShape){for(let r=0;r<nShape.length;r++)for(let c=0;c<nShape[r].length;c++){if(!nShape[r][c])continue;let newX=nx+c;let newY=ny+r;if(newX<0||newX>=COL||newY>=ROW)return true;if(newY>=0&&board[newY][newX])return true;}return false;} function lock(){piece.shape.forEach((row,r)=>{row.forEach((val,c)=>{if(val)board[piece.y+r][piece.x+c]=piece.color;});});for(let r=0;r<ROW;r++)if(board[r].every(x=>x)){board.splice(r,1);board.unshift(Array(COL).fill(0));}piece=randomPiece();if(collision(piece.x,piece.y,piece.shape)){clearInterval(gameInterval);alert("Oyun Bitti!");prepareGame('tetris');}} document.addEventListener("keydown",e=>{if(selectedGame!=='tetris')return;if(e.keyCode==37&&!collision(piece.x-1,piece.y,piece.shape))piece.x--;else if(e.keyCode==39&&!collision(piece.x+1,piece.y,piece.shape))piece.x++;else if(e.keyCode==40&&!collision(piece.x,piece.y+1,piece.shape))piece.y++;else if(e.keyCode==38){let rotated=piece.shape[0].map((_,i)=>piece.shape.map(row=>row[i]).reverse());if(!collision(piece.x,piece.y,rotated))piece.shape=rotated;}draw();}); gameInterval=setInterval(()=>{if(!collision(piece.x,piece.y+1,piece.shape))piece.y++;else lock();draw();},500); }
 
-    // --- YENİ ATEŞ VE SU (PLATFORMER MODU + GÜNCELLENMİŞ HARİTA) ---
+    // --- YENİ ATEŞ VE SU (PLATFORMER MODU + GÜNCELLENMİŞ HARİTA VE RENKLER) ---
     function startFireWaterPlatform() {
         const TILE = 20;
         
         // 0:Boş, 1:Duvar/Zemin, 2:Ateş Kapı, 3:Su Kapı, 4:Lav, 5:Su
+        // Çizime göre güncellenmiş harita
         const mapBase = [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [1,0,0,0,0,0,0,0,0,0,0,0,1,2,3,1,0,0,0,1], // Kapılar
-            [1,0,0,1,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0,1], // **YENİ: Kapıların Altı Dolu**
+            [1,0,0,1,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0,1], // Kapı altı platformu
             [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-            [1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1], // Sol ve Sağ platformlar
+            [1,1,1,0,0,1,1,1,0,0,0,0,1,1,1,0,0,1,1,1], // Orta ve yan platformlar
             [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-            [1,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,1], // Orta küçük platform
+            [1,0,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,0,1], // Alt-orta platform
             [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-            [1,0,0,4,4,4,0,0,0,0,0,0,0,0,5,5,5,0,0,1], // Lav ve Su çukurları
-            [1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1], // Alt zemin
-            [1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1], // En alt
+            [1,0,0,1,4,4,4,1,0,0,0,0,1,5,5,5,1,0,0,1], // Lav ve Su çukurları + Kenarlıklar
+            [1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1], // Alt zemin, asansör girişi
+            [1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1], // En alt (asansör kuyusu)
         ];
 
         let elevator = { x: 9*TILE, y: 9*TILE, w: 2*TILE, h: TILE/2, dy: -2, minY: 4*TILE, maxY: 9*TILE };
 
-        let boy = { x: 2*TILE, y: 8*TILE, w: 16, h: 22, color: 'red', symbol: '🔥', label:'Ateş', dx:0, dy:0, onGround:false, keyL:37, keyR:39, keyJ:38 };
-        let girl = { x: 16*TILE, y: 8*TILE, w: 16, h: 22, color: 'blue', symbol: '💧', label:'Su', dx:0, dy:0, onGround:false, keyL:65, keyR:68, keyJ:87 };
+        let boy = { x: 2*TILE, y: 7*TILE, w: 16, h: 22, color: 'red', symbol: '🔥', label:'Ateş', dx:0, dy:0, onGround:false, keyL:37, keyR:39, keyJ:38 };
+        let girl = { x: 16*TILE, y: 7*TILE, w: 16, h: 22, color: 'blue', symbol: '💧', label:'Su', dx:0, dy:0, onGround:false, keyL:65, keyR:68, keyJ:87 };
         
         let keys = {};
         document.addEventListener('keydown', e => keys[e.keyCode] = true);
@@ -411,16 +412,16 @@
             elevator.y += elevator.dy;
             if(elevator.y <= elevator.minY || elevator.y >= elevator.maxY) elevator.dy *= -1;
 
-            // Eş zamanlı hareket için ikisini de güncelle
             updateChar(boy);
             updateChar(girl);
 
-            ctx.fillStyle = "#333"; ctx.fillRect(0,0,400,400); 
+            ctx.fillStyle = "#2d3748"; ctx.fillRect(0,0,400,400); /* Yeni arka plan rengi */
             
             for(let r=0; r<mapBase.length; r++) {
                 for(let c=0; c<mapBase[0].length; c++) {
                     let t = mapBase[r][c];
-                    if(t===1) { ctx.fillStyle = "#555"; ctx.fillRect(c*TILE, r*TILE, TILE, TILE); ctx.strokeStyle="#222"; ctx.strokeRect(c*TILE, r*TILE, TILE, TILE); }
+                    /* Yeni blok rengi ve kenarlığı */
+                    if(t===1) { ctx.fillStyle = "#334155"; ctx.fillRect(c*TILE, r*TILE, TILE, TILE); ctx.strokeStyle="#1e293b"; ctx.strokeRect(c*TILE, r*TILE, TILE, TILE); }
                     else if(t===4) { ctx.fillStyle = "orange"; ctx.fillRect(c*TILE, r*TILE+10, TILE, 10); } 
                     else if(t===5) { ctx.fillStyle = "cyan"; ctx.fillRect(c*TILE, r*TILE+10, TILE, 10); } 
                 }
@@ -429,8 +430,8 @@
             ctx.fillStyle = "red"; ctx.fillRect(13*TILE, 1*TILE, 20, 30); ctx.strokeStyle="white"; ctx.strokeRect(13*TILE, 1*TILE, 20, 30);
             ctx.fillStyle = "blue"; ctx.fillRect(14*TILE, 1*TILE, 20, 30); ctx.strokeStyle="white"; ctx.strokeRect(14*TILE, 1*TILE, 20, 30);
 
-            ctx.fillStyle = "#888"; ctx.fillRect(elevator.x, elevator.y, elevator.w, elevator.h);
-            ctx.strokeStyle = "yellow"; ctx.strokeRect(elevator.x, elevator.y, elevator.w, elevator.h);
+            ctx.fillStyle = "#64748b"; ctx.fillRect(elevator.x, elevator.y, elevator.w, elevator.h);
+            ctx.strokeStyle = "#f59e0b"; ctx.strokeRect(elevator.x, elevator.y, elevator.w, elevator.h);
 
             drawChar(boy);
             drawChar(girl);
