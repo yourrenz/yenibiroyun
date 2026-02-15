@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Esmanur Çaça | Dashboard v1.7.6</title>
+    <title>Esmanur Çaça | Dashboard v1.7.8</title>
     <style>
         :root { 
             --primary: #2563eb; --dark: #1e293b; --light: #f8fafc; 
@@ -70,22 +70,21 @@
         .game-menu { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
         .game-card { cursor: pointer; background: white; color: var(--dark); padding: 12px; border-radius: 10px; font-weight: bold; width: 100px; transition: 0.2s; display: flex; flex-direction: column; align-items: center; gap: 5px;}
         .game-card:hover { transform: scale(1.05); background: var(--accent); }
-        canvas { background: #2d3748; border: 4px solid #4a5568; max-width: 100%; display: block; margin: 0 auto; } /* Arka plan rengi değiştirildi */
         
-        .mobile-controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 180px; margin: 20px auto; }
-        .control-btn { width: 55px; height: 55px; background: #4a5568; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; user-select: none; }
+        /* Canvas ve Overlay Hizalama */
+        canvas { background: #2d3748; border: 4px solid #4a5568; display: block; }
         
         /* OVERLAY BAŞLAT BUTONU */
         #game-overlay { 
-            position: absolute; top: 0; left: 50%; transform: translateX(-50%); 
-            width: 400px; height: 400px; 
+            position: absolute; 
+            top: 0; left: 0; 
+            width: 100%; height: 100%; 
             background: rgba(0,0,0,0.85); 
             display: none; 
             flex-direction: column; 
             justify-content: center; 
             align-items: center; 
             z-index: 50; 
-            margin-top: 65px; 
         }
         #overlay-start-btn { 
             font-size: 2.5rem; color: var(--accent); background: none; border: 3px solid var(--accent); 
@@ -94,6 +93,8 @@
         }
         #overlay-start-btn:hover { background: var(--accent); color: black; }
         
+        .mobile-controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 180px; margin: 20px auto; }
+        .control-btn { width: 55px; height: 55px; background: #4a5568; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; user-select: none; }
         #char-switch-btn { display: none; margin: 10px auto; padding: 10px; background: #6b21a8; color: white; border: none; border-radius: 8px; width: 200px; font-weight: bold; cursor: pointer; }
 
         /* BILGI GO ASISTAN */
@@ -121,7 +122,7 @@
         <a onclick="showSection('movies')">Filmler</a>
         <a onclick="showSection('games')">Oyunlar</a>
     </nav>
-    <div><span style="margin-right:10px; font-size:0.8rem; opacity:0.7;">v1.7.6</span><button class="btn-log" onclick="toggleLogs()">Günlükler</button></div>
+    <div><span style="margin-right:10px; font-size:0.8rem; opacity:0.7;">v1.7.8</span><button class="btn-log" onclick="toggleLogs()">Günlükler</button></div>
 </header>
 
 <main>
@@ -162,7 +163,7 @@
     </section>
 
     <section id="games-section">
-        <h2 style="text-align:center;">Oyun Salonu (v1.7.6)</h2>
+        <h2 style="text-align:center;">Oyun Salonu (v1.7.8)</h2>
         <div class="game-menu">
             <div class="game-card" onclick="prepareGame('snake')">🐍 Yılan</div>
             <div class="game-card" onclick="prepareGame('pacman')">👻 Pacman</div>
@@ -173,12 +174,13 @@
         <div id="game-canvas-wrapper" class="game-container">
             <h3 id="game-title">Oyun Seçiniz</h3>
             
-            <div id="game-overlay">
-                <button id="overlay-start-btn" onclick="runGame()">BAŞLAT</button>
-                <p style="color:white; margin-top:10px; font-size:0.9rem;" id="game-instructions">...</p>
+            <div style="position: relative; width: 400px; height: 400px; margin: 0 auto;">
+                <div id="game-overlay">
+                    <button id="overlay-start-btn" onclick="runGame()">BAŞLAT</button>
+                    <p style="color:white; margin-top:10px; font-size:0.9rem;" id="game-instructions">...</p>
+                </div>
+                <canvas id="gameCanvas" width="400" height="400" style="margin:0;"></canvas>
             </div>
-
-            <canvas id="gameCanvas" width="400" height="400"></canvas>
             
             <button id="char-switch-btn" onclick="toggleMobileChar()">Kontrol: ATEŞ 🔥</button>
             
@@ -198,7 +200,7 @@
         <span style="cursor:pointer;" onclick="toggleChat()">_</span>
     </div>
     <div id="bg-chat">
-        <div class="bg-msg bg-bot">Selam Esmanur! Haritayı çizimine göre güncelledim. Yeni bloklar ve basamaklar eklendi. Renkler daha modern! Asansör hala çalışıyor. İyi eğlenceler! 🚀</div>
+        <div class="bg-msg bg-bot">Selam Esmanur! Kapıların altındaki blokları kaldırdım ve Ateş'in geçebilmesi için bir alt kata özel bir yol yaptım. İyi şanslar! 🔥💧</div>
     </div>
     <div class="bg-input-area">
         <input type="text" id="bg-input" placeholder="Ders sor (Örn: Türev, Lozan)..." onkeypress="if(event.key==='Enter') sendMessage()">
@@ -209,8 +211,8 @@
 <div id="logModal">
     <span onclick="toggleLogs()" style="float:right; cursor:pointer; color:red; font-weight:bold;">Kapat X</span>
     <h2>📜 Günlükler</h2>
-    <p><strong>v1.7.6:</strong> Ateş ve Su haritası kullanıcının çizimine göre güncellendi. Yeni bloklar ve basamaklar eklendi. Blok ve arka plan renkleri değiştirildi.</p>
-    <p><strong>v1.7.5:</strong> Ateş ve Su oyununda kapıların altına platform eklendi. Eş zamanlı hareket iyileştirildi.</p>
+    <p><strong>v1.7.8:</strong> Kapı altındaki bloklar temizlendi, Ateş için alt kata yol platformları eklendi.</p>
+    <p><strong>v1.7.7:</strong> Başlat ekranı ve oyun hizalaması düzeltildi.</p>
 </div>
 
 <script>
@@ -276,7 +278,7 @@
         stopGame(); selectedGame = type;
         gameWrapper.style.display = 'block';
         document.getElementById('game-title').innerText = type.toUpperCase();
-        ctx.fillStyle = "#2d3748"; ctx.fillRect(0,0,400,400); /* Yeni arka plan rengi */
+        ctx.fillStyle = "#2d3748"; ctx.fillRect(0,0,400,400); 
         overlay.style.display = 'flex';
         if(type === 'firewater') {
             instructions.innerHTML = "ATEŞ: Ok Tuşları | SU: W,A,D<br>Asansörü kullan, kapılara ulaş!";
@@ -308,24 +310,22 @@
     const SHAPES = [[[1,1,1,1]],[[1,1,1],[0,1,0]],[[1,1,1],[1,0,0]],[[1,1,1],[0,0,1]],[[1,1],[1,1]],[[1,1,0],[0,1,1]],[[0,1,1],[1,1,0]]]; const COLORS = [null, '#00f0f0', '#a000f0', '#f0a000', '#0000f0', '#f0f000', '#f00000', '#00f000'];
     function startTetris() { const ROW=20, COL=10, SQ=20; let board=Array.from({length:ROW},()=>Array(COL).fill(0)); let piece=randomPiece(); function randomPiece(){let r=Math.floor(Math.random()*SHAPES.length);return{shape:SHAPES[r],color:COLORS[r+1],x:3,y:0};} function drawSquare(x,y,color){ctx.fillStyle=color;ctx.fillRect(x*SQ,y*SQ,SQ,SQ);ctx.strokeStyle="#333";ctx.strokeRect(x*SQ,y*SQ,SQ,SQ);} function draw(){ctx.fillStyle="#1e293b";ctx.fillRect(0,0,400,400);for(let r=0;r<ROW;r++)for(let c=0;c<COL;c++)if(board[r][c])drawSquare(c+5,r,board[r][c]);piece.shape.forEach((row,r)=>{row.forEach((val,c)=>{if(val)drawSquare(piece.x+c+5,piece.y+r,piece.color);});});} function collision(nx,ny,nShape){for(let r=0;r<nShape.length;r++)for(let c=0;c<nShape[r].length;c++){if(!nShape[r][c])continue;let newX=nx+c;let newY=ny+r;if(newX<0||newX>=COL||newY>=ROW)return true;if(newY>=0&&board[newY][newX])return true;}return false;} function lock(){piece.shape.forEach((row,r)=>{row.forEach((val,c)=>{if(val)board[piece.y+r][piece.x+c]=piece.color;});});for(let r=0;r<ROW;r++)if(board[r].every(x=>x)){board.splice(r,1);board.unshift(Array(COL).fill(0));}piece=randomPiece();if(collision(piece.x,piece.y,piece.shape)){clearInterval(gameInterval);alert("Oyun Bitti!");prepareGame('tetris');}} document.addEventListener("keydown",e=>{if(selectedGame!=='tetris')return;if(e.keyCode==37&&!collision(piece.x-1,piece.y,piece.shape))piece.x--;else if(e.keyCode==39&&!collision(piece.x+1,piece.y,piece.shape))piece.x++;else if(e.keyCode==40&&!collision(piece.x,piece.y+1,piece.shape))piece.y++;else if(e.keyCode==38){let rotated=piece.shape[0].map((_,i)=>piece.shape.map(row=>row[i]).reverse());if(!collision(piece.x,piece.y,rotated))piece.shape=rotated;}draw();}); gameInterval=setInterval(()=>{if(!collision(piece.x,piece.y+1,piece.shape))piece.y++;else lock();draw();},500); }
 
-    // --- YENİ ATEŞ VE SU (PLATFORMER MODU + GÜNCELLENMİŞ HARİTA VE RENKLER) ---
+    // --- YENİ ATEŞ VE SU (GÜNCELLENMİŞ HARİTA: KAPI ALTI BOŞ) ---
     function startFireWaterPlatform() {
         const TILE = 20;
         
-        // 0:Boş, 1:Duvar/Zemin, 2:Ateş Kapı, 3:Su Kapı, 4:Lav, 5:Su
-        // Çizime göre güncellenmiş harita
         const mapBase = [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [1,0,0,0,0,0,0,0,0,0,0,0,1,2,3,1,0,0,0,1], // Kapılar
-            [1,0,0,1,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0,1], // Kapı altı platformu
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], // Kapı altı boşaltıldı! (Row 2)
+            [1,0,0,1,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0,1], // Yeni Yol: Bir alt kata platform eklendi (Row 3)
+            [1,1,1,0,0,1,1,1,0,0,0,0,1,1,1,0,0,1,1,1], 
             [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-            [1,1,1,0,0,1,1,1,0,0,0,0,1,1,1,0,0,1,1,1], // Orta ve yan platformlar
+            [1,0,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,0,1], 
             [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-            [1,0,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,0,1], // Alt-orta platform
-            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-            [1,0,0,1,4,4,4,1,0,0,0,0,1,5,5,5,1,0,0,1], // Lav ve Su çukurları + Kenarlıklar
-            [1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1], // Alt zemin, asansör girişi
-            [1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1], // En alt (asansör kuyusu)
+            [1,0,0,1,4,4,4,1,0,0,0,0,1,5,5,5,1,0,0,1], 
+            [1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1], 
+            [1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1], 
         ];
 
         let elevator = { x: 9*TILE, y: 9*TILE, w: 2*TILE, h: TILE/2, dy: -2, minY: 4*TILE, maxY: 9*TILE };
@@ -415,12 +415,11 @@
             updateChar(boy);
             updateChar(girl);
 
-            ctx.fillStyle = "#2d3748"; ctx.fillRect(0,0,400,400); /* Yeni arka plan rengi */
+            ctx.fillStyle = "#2d3748"; ctx.fillRect(0,0,400,400); 
             
             for(let r=0; r<mapBase.length; r++) {
                 for(let c=0; c<mapBase[0].length; c++) {
                     let t = mapBase[r][c];
-                    /* Yeni blok rengi ve kenarlığı */
                     if(t===1) { ctx.fillStyle = "#334155"; ctx.fillRect(c*TILE, r*TILE, TILE, TILE); ctx.strokeStyle="#1e293b"; ctx.strokeRect(c*TILE, r*TILE, TILE, TILE); }
                     else if(t===4) { ctx.fillStyle = "orange"; ctx.fillRect(c*TILE, r*TILE+10, TILE, 10); } 
                     else if(t===5) { ctx.fillStyle = "cyan"; ctx.fillRect(c*TILE, r*TILE+10, TILE, 10); } 
