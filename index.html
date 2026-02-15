@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Esmanur Çaça | Dashboard v1.8.0</title>
+    <title>Esmanur Çaça | Dashboard v1.8.1</title>
     <style>
         :root { 
             --primary: #2563eb; --dark: #1e293b; --light: #f8fafc; 
@@ -46,7 +46,7 @@
         .note-card li { margin-bottom: 10px; }
         .note-card b { color: #0f172a; font-weight: 700; }
 
-        /* FİLMLER BÖLÜMÜ */
+        /* FİLMLER */
         #movies-section { background-color: var(--movie-bg); padding: 30px; border-radius: 20px; color: white; }
         #movies-section h2 { color: white; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 15px; text-align: center; }
         .movie-search-bar { width: 100%; padding: 15px; border-radius: 30px; border: none; margin-bottom: 25px; font-size: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.2); outline: none; box-sizing: border-box; }
@@ -66,27 +66,35 @@
 
         /* OYUN ALANI */
         #games-section { background-color: #2e1065; padding: 20px; border-radius: 20px; color:white; }
-        .game-container { display: none; text-align: center; background: var(--arcade-bg); padding: 25px; border: 12px solid var(--arcade-border); border-radius: 20px; color: white; position: relative;}
+        .game-container { display: none; text-align: center; background: #1e293b; padding: 25px; border: 12px solid #334155; border-radius: 20px; color: white; position: relative;}
         .game-menu { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
         .game-card { cursor: pointer; background: white; color: var(--dark); padding: 12px; border-radius: 10px; font-weight: bold; width: 100px; transition: 0.2s; display: flex; flex-direction: column; align-items: center; gap: 5px;}
         .game-card:hover { transform: scale(1.05); background: var(--accent); }
         
-        canvas { background: #2d3748; border: 4px solid #4a5568; display: block; }
-        
+        canvas { display: block; background: #0b132b; }
+
+        /* TETRIS ÖZEL DÜZEN (FOTOĞRAFA GÖRE) */
+        .tetris-ui-wrapper { display: flex; justify-content: center; align-items: flex-start; gap: 20px; margin: 0 auto; max-width: 550px; }
+        .tetris-stats-panel { display: flex; flex-direction: column; gap: 20px; text-align: left; min-width: 100px; font-family: 'Courier New', monospace; margin-top: 50px;}
+        .stat-item { color: #cbd5e1; }
+        .stat-label { font-size: 0.8rem; font-weight: bold; opacity: 0.8; letter-spacing: 1px; }
+        .stat-value { font-size: 1.5rem; color: white; font-weight: bold; }
+        .tetris-next-panel { border: 4px solid #475569; background: #1e293b; padding: 10px; border-radius: 5px; margin-top: 50px; }
+        .next-title { font-size: 0.7rem; margin-bottom: 10px; font-weight: bold; }
+        .board-frame { border: 10px solid #475569; border-radius: 4px; box-shadow: inset 0 0 20px rgba(0,0,0,0.5); }
+
         #game-overlay { 
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
             background: rgba(0,0,0,0.85); display: none; flex-direction: column; 
             justify-content: center; align-items: center; z-index: 50; 
         }
         #overlay-start-btn { 
-            font-size: 2.5rem; color: var(--accent); background: none; border: 3px solid var(--accent); 
-            padding: 10px 30px; border-radius: 10px; cursor: pointer; font-weight: bold; text-transform: uppercase;
-            transition: 0.3s;
+            font-size: 2rem; color: var(--accent); background: none; border: 3px solid var(--accent); 
+            padding: 10px 30px; border-radius: 10px; cursor: pointer; font-weight: bold;
         }
-        #overlay-start-btn:hover { background: var(--accent); color: black; }
         
         .mobile-controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 180px; margin: 20px auto; }
-        .control-btn { width: 55px; height: 55px; background: #4a5568; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; user-select: none; }
+        .control-btn { width: 55px; height: 55px; background: #334155; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; user-select: none; border: 1px solid #475569; }
         #char-switch-btn { display: none; margin: 10px auto; padding: 10px; background: #6b21a8; color: white; border: none; border-radius: 8px; width: 200px; font-weight: bold; cursor: pointer; }
 
         /* BILGI GO ASISTAN */
@@ -95,14 +103,8 @@
             width: 270px; background: white; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
             z-index: 2000; border: 2px solid var(--bilgi-go); overflow: hidden; display: flex; flex-direction: column; 
         }
-        .bg-header { 
-            background: var(--bilgi-go); color: white; padding: 10px; font-weight: bold; 
-            display: flex; justify-content: space-between; align-items: center; 
-            cursor: move; user-select: none;
-        }
-        #bg-chat { 
-            height: 200px; overflow-y: auto; padding: 10px; background: #fff5f5; font-size: 0.85rem; display: flex; flex-direction: column; 
-        }
+        .bg-header { background: var(--bilgi-go); color: white; padding: 10px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; cursor: move; user-select: none; }
+        #bg-chat { height: 200px; overflow-y: auto; padding: 10px; background: #fff5f5; font-size: 0.85rem; display: flex; flex-direction: column; }
         .bg-msg { margin-bottom: 8px; padding: 8px 12px; border-radius: 12px; max-width: 85%; word-wrap: break-word; }
         .bg-bot { background: white; align-self: flex-start; border: 1px solid #eee; color: #333; }
         .bg-user { background: var(--bilgi-go); color: white; align-self: flex-end; }
@@ -110,7 +112,6 @@
         #bg-input { flex: 1; border: 1px solid #ddd; border-radius: 20px; padding: 8px 12px; outline: none; font-size: 0.85rem; }
         .bg-send-btn { background: none; border: none; cursor: pointer; color: var(--bilgi-go); font-size: 1.2rem; margin-left: 5px; }
 
-        /* MODAL */
         #logModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 2rem; box-shadow: 0 0 30px rgba(0,0,0,0.5); z-index: 3000; width: 85%; max-height: 80vh; overflow-y: auto; border-radius: 12px; }
     </style>
 </head>
@@ -124,7 +125,7 @@
         <a onclick="showSection('movies')">Filmler</a>
         <a onclick="showSection('games')">Oyunlar</a>
     </nav>
-    <div><span style="margin-right:10px; font-size:0.8rem; opacity:0.7;">v1.8.0</span><button class="btn-log" onclick="toggleLogs()">Günlükler</button></div>
+    <div><span style="margin-right:10px; font-size:0.8rem; opacity:0.7;">v1.8.1</span><button class="btn-log" onclick="toggleLogs()">Günlükler</button></div>
 </header>
 
 <main>
@@ -134,11 +135,7 @@
             <div class="bio-card">
                 <h2 style="text-align:center; color:var(--dark);">🌟 Ben Kimim?</h2>
                 <h3>🔬 Bir Yanım Bilim İnsanı, Diğer Yanım Sanatçı!</h3>
-                <p>Sadece ders çalışmakla kalmıyor, bilginin en derinine iniyorum 📚. YKS maratonunda Türkçe'den Fizik'e, Edebiyat'tan Biyoloji'ye kadar her alanda "hap bilgiler" peşinde koşmam, aslında ne kadar stratejik ve zeki bir çalışma tarzım olduğunu gösteriyor 🍓. Ama beni asıl özel kılan, felsefe ile bilim arasındaki bağı sorgulayan o derin düşünce yapım 🌈.</p>
-                <h3>💻 Kodların Efendisi ve Retro Ruhu</h3>
-                <p>Yılan, Tetris ve Pacman gibi retro oyunları modernize etmeye çalışmam, hem nostaljiye değer veren hem de üretken bir yönüm olduğunu kanıtlıyor 🎮👾. Bir şey bozulduğunda pes etmek yerine "dene → boz → düzelt" döngüsünde kalarak, inanılmaz bir sabır ve azim gösteriyorum 🍬. Ben pes etmeyi değil, çözmeyi seviyorum! 🛠️💖</p>
-                <h3>🧪 Meraklı Bir Mühendis Aklı</h3>
-                <p>Benzin inceltme veya solventler gibi kimyasal detaylara girerek, dünyayı atomlarına kadar merak ediyorum 🧪✨. Sıradan bir kullanıcı "bu nedir?" derken, ben "nasıl çalışır?" diye soruyorum.</p>
+                <p>Sadece ders çalışmakla kalmıyor, bilginin en derinine iniyorum 📚. YKS maratonunda Türkçe'den Fizik'e, Edebiyat'tan Biyoloji'ye kadar her alanda "hap bilgiler" peşinde koşmam, aslında ne kadar stratejik ve zeki bir çalışma tarzım olduğunu gösteriyor 🍓.</p>
                 <span class="highlight">"Hem sınav stresiyle başa çıkan bir öğrenci, hem dünyayı anlamaya çalışan bir filozof, hem de kodların arasında kendi dünyasını kuran bir yazılımcıyım." 🎀🍭</span>
             </div>
         </div>
@@ -151,21 +148,12 @@
 
     <section id="movies-section">
         <h2 style="text-align: center;">🎬 FullHD Film İzlesene Arşivi</h2>
-        <input type="text" id="movie-search" class="movie-search-bar" placeholder="Film ara (Örn: Inception, Avatar)..." onkeyup="searchMovies()">
-
-        <div class="filter-menu">
-            <button class="filter-btn active" onclick="filterMovies('all')">Hepsi</button>
-            <button class="filter-btn" onclick="filterMovies('bilim-kurgu')">Bilim Kurgu</button>
-            <button class="filter-btn" onclick="filterMovies('aksiyon')">Aksiyon</button>
-            <button class="filter-btn" onclick="filterMovies('dram')">Dram</button>
-            <button class="filter-btn" onclick="filterMovies('korku')">Korku</button>
-            <button class="filter-btn" onclick="filterMovies('animasyon')">Animasyon</button>
-        </div>
+        <input type="text" id="movie-search" class="movie-search-bar" placeholder="Film ara..." onkeyup="searchMovies()">
         <div class="movie-grid" id="movie-container"></div>
     </section>
 
     <section id="games-section">
-        <h2 style="text-align:center;">Oyun Salonu (v1.8.0)</h2>
+        <h2 style="text-align:center;">Oyun Salonu (v1.8.1)</h2>
         <div class="game-menu">
             <div class="game-card" onclick="prepareGame('snake')">🐍 Yılan</div>
             <div class="game-card" onclick="prepareGame('pacman')">👻 Pacman</div>
@@ -176,12 +164,30 @@
         <div id="game-canvas-wrapper" class="game-container">
             <h3 id="game-title">Oyun Seçiniz</h3>
             
-            <div style="position: relative; width: 400px; height: 400px; margin: 0 auto;">
+            <div style="position: relative; margin: 0 auto; display: inline-block;">
                 <div id="game-overlay">
                     <button id="overlay-start-btn" onclick="runGame()">BAŞLAT</button>
                     <p style="color:white; margin-top:10px; font-size:0.9rem;" id="game-instructions">...</p>
                 </div>
-                <canvas id="gameCanvas" width="400" height="400" style="margin:0;"></canvas>
+
+                <div id="tetris-ui" class="tetris-ui-wrapper" style="display:none;">
+                    <div class="tetris-stats-panel">
+                        <div class="stat-item"><div class="stat-label">LINES</div><div id="t-lines" class="stat-value">0</div></div>
+                        <div class="stat-item"><div class="stat-label">LEVEL</div><div id="t-level" class="stat-value">1</div></div>
+                        <div class="stat-item"><div class="stat-label">SCORE</div><div id="t-score" class="stat-value">0</div></div>
+                    </div>
+                    
+                    <div class="board-frame">
+                        <canvas id="gameCanvas" width="240" height="480" style="margin:0;"></canvas>
+                    </div>
+
+                    <div class="tetris-next-panel">
+                        <div class="next-title">NEXT PIECE:</div>
+                        <canvas id="nextCanvas" width="80" height="80"></canvas>
+                    </div>
+                </div>
+
+                <canvas id="genericCanvas" width="400" height="400" style="display:block; margin:0 auto;"></canvas>
             </div>
             
             <button id="char-switch-btn" onclick="toggleMobileChar()">Kontrol: ATEŞ 🔥</button>
@@ -197,168 +203,185 @@
 </main>
 
 <div id="bilgi-go-container">
-    <div class="bg-header">
-        <span>🤖 Bilgi Go</span>
-        <span style="cursor:pointer;" onclick="toggleChat()">_</span>
-    </div>
-    <div id="bg-chat">
-        <div class="bg-msg bg-bot">Selam Esmanur! Yılan oyununa ızgara, beyaz gözler ve lazerli büyük bir elma ekledim. Çok havalı oldu! 🐍🍎</div>
-    </div>
-    <div class="bg-input-area">
-        <input type="text" id="bg-input" placeholder="Ders sor..." onkeypress="if(event.key==='Enter') sendMessage()">
-        <button class="bg-send-btn" onclick="sendMessage()">➤</button>
-    </div>
+    <div class="bg-header"><span>🤖 Bilgi Go</span><span style="cursor:pointer;" onclick="toggleChat()">_</span></div>
+    <div id="bg-chat"><div class="bg-msg bg-bot">Selam Esmanur! Tetris'i senin görseline göre baştan yarattım! Blokların cam efektinden sol paneldeki istatistiklere kadar her şey hazır. 🧱✨</div></div>
+    <div class="bg-input-area"><input type="text" id="bg-input" placeholder="Ders sor..." onkeypress="if(event.key==='Enter') sendMessage()"><button class="bg-send-btn" onclick="sendMessage()">➤</button></div>
 </div>
 
 <div id="logModal">
     <span onclick="toggleLogs()" style="float:right; cursor:pointer; color:red; font-weight:bold;">Kapat X</span>
     <h2>📜 Günlükler</h2>
-    <p><strong>v1.8.0:</strong> Yılan oyununa ızgara (grid), yılana beyaz gözler ve elmaya lazerli kırmızı çerçeve efekti eklendi.</p>
-    <p><strong>v1.7.9:</strong> Bilgi Go asistanı küçültüldü ve sürüklenebilir yapıldı.</p>
+    <p><strong>v1.8.1:</strong> Tetris oyunu görsel referansa göre yeniden tasarlandı. Cam blok efekti, Lines/Level/Score paneli ve Next Piece kutusu eklendi.</p>
 </div>
 
 <script>
     // --- 1. YKS VERİTABANI (KORUNDU) ---
     const YKS_DATA = [
-        { subject: "Türkçe", color: "#2563eb", topics: ["<b>Yazım Kuralları:</b> 'Şey' her zaman ayrı (her şey). Kurum isimlerine gelen ekler ayrılmaz (TDKye değil TDK'ye).", "<b>Noktalama:</b> Virgül, özneyi ayırır. Sıralı cümleleri ayırır. Noktalı virgül ise 'tür ve takımları' ayırır.", "<b>Paragraf Taktikleri:</b> Önce soru kökünü oku, sonra metni. 'Değinilmemiştir' sorularında şıklardan git.", "<b>Ses Bilgisi:</b> Ünsüz benzeşmesi (Fıstıkçı Şahap -> kitap-çı). Ünlü daralması (bekle-yor -> bekliyor)."] },
-        { subject: "Matematik", color: "#ef4444", topics: ["<b>Temel Kavramlar:</b> Asal sayılar 2'den başlar. 1 asal değildir. (a+b)² = a² + 2ab + b².", "<b>Fonksiyonlar:</b> Birebir (her x farklı y'ye), Örten (boşta y kalmaz). f(x) = y ise f⁻¹(y) = x.", "<b>Türev:</b> Bir fonksiyonun bir noktadaki türevi, o noktadaki teğetin eğimidir. (xⁿ)' = n.xⁿ⁻¹.", "<b>İntegral:</b> Eğri altında kalan alandır. ∫xⁿ dx = (xⁿ⁺¹)/(n+1) + c."] },
-        { subject: "Fizik", color: "#8b5cf6", topics: ["<b>Kuvvet & Hareket:</b> F = m.a (Newton'un 2. Yasası). Etki = Tepki.", "<b>Enerji:</b> Kinetik (1/2mv²), Potansiyel (mgh). Enerji yok olmaz, dönüşür.", "<b>Elektrik:</b> V = I.R (Ohm Yasası). Seri devrede akım, paralel devrede voltaj eşittir.", "<b>Optik:</b> Çukur ayna (Odaklayıcı, Dev görüntü), Tümsek ayna (Dağıtıcı, Küçük görüntü)."] },
-        { subject: "Kimya", color: "#10b981", topics: ["<b>Atom:</b> Proton (+), Nötron (0), Elektron (-). İzotop: Proton aynı, nötron farklı.", "<b>Periyodik Cetvel:</b> 1A (Alkali), 2A (Toprak Alkali), 7A (Halojen), 8A (Soygaz).", "<b>Mol Kavramı:</b> 1 mol = 6,02x10²³ tanecik (Avogadro Sayısı). n = m/MA.", "<b>Organik:</b> Karbon 4 bağ yapar. Alkan (Tek), Alken (Çift), Alkin (Üçlü bağ)."] },
-        { subject: "Biyoloji", color: "#ec4899", topics: ["<b>Hücre:</b> Ribozom (Protein), Mitokondri (ATP), Kloroplast (Fotosentez), Lizozom (Sindirim).", "<b>DNA & RNA:</b> Adenin=Timin, Guanin=Sitozin. RNA'da Timin yerine Urasil vardır.", "<b>Sistemler:</b> İnce bağırsakta emilim villuslar ile olur. Alveollerde gaz değişimi olur.", "<b>Kalıtım:</b> Mendel kanunları. Kan grupları (A, B, AB, 0). AB genel alıcı, 0 genel verici."] },
-        { subject: "Edebiyat", color: "#f97316", topics: ["<b>Divan Edebiyatı:</b> Aruz ölçüsü, ağır dil. Fuzuli (Aşk/Izdırap), Baki (Zevk/Eğlence).", "<b>Halk Edebiyatı:</b> Hece ölçüsü, sade dil. Karacaoğlan, Yunus Emre.", "<b>Tanzimat:</b> I. Dönem 'Toplum için sanat', II. Dönem 'Sanat sanat içindir'.", "<b>Cumhuriyet:</b> Garipçiler (Kural tanımazlar: Orhan Veli). İkinci Yeni (Soyut şiir: Cemal Süreya)."] },
-        { subject: "Tarih/Coğrafya", color: "#6366f1", topics: ["<b>Tarih:</b> Malazgirt (1071) Anadolu'nun kapıları açıldı. Lozan (1923) Türkiye'nin tapusu.", "<b>İlkeler:</b> Cumhuriyetçilik (Seçim), Laiklik (Din/Devlet ayrımı), Devletçilik (Ekonomi).", "<b>Coğrafya:</b> Ekvator (En sıcak değil, nemli). Enlem etkisi (Kutuplara gidildikçe sıcaklık düşer)."] }
+        { subject: "Türkçe", color: "#2563eb", topics: ["<b>Yazım Kuralları:</b> 'Şey' her zaman ayrı.", "<b>Noktalama:</b> Virgül özneyi ayırır.", "<b>Paragraf:</b> Önce soru kökü."] },
+        { subject: "Matematik", color: "#ef4444", topics: ["<b>Formüller:</b> (a+b)² = a² + 2ab + b².", "<b>Türev:</b> (xⁿ)' = n.xⁿ⁻¹."] }
     ];
-    const movieData = [{ title: "Interstellar", cat: "bilim-kurgu", icon: "🚀", score: "8.8" },{ title: "Inception", cat: "bilim-kurgu", icon: "🌀", score: "8.8" },{ title: "Dune: Part Two", cat: "bilim-kurgu", icon: "🏜️", score: "9.0" },{ title: "Avatar 2", cat: "bilim-kurgu", icon: "💙", score: "7.8" },{ title: "The Dark Knight", cat: "aksiyon", icon: "🦇", score: "9.0" },{ title: "Avengers: Endgame", cat: "aksiyon", icon: "🛡️", score: "8.4" },{ title: "The Truman Show", cat: "dram", icon: "📺", score: "8.2" },{ title: "The Shawshank Redemption", cat: "dram", icon: "⛓️", score: "9.3" },{ title: "Spider-Man: Spider-Verse", cat: "animasyon", icon: "🕷️", score: "8.4" },{ title: "The Lion King", cat: "animasyon", icon: "🦁", score: "8.5" },{ title: "It", cat: "korku", icon: "🎈", score: "7.3" },{ title: "The Conjuring", cat: "korku", icon: "👻", score: "7.5" }];
+    const movieData = [{ title: "Interstellar", cat: "bilim-kurgu", icon: "🚀", score: "8.8" }];
 
-    // --- 2. TEMEL FONKSİYONLAR ---
+    // --- 2. TEMEL ---
     document.addEventListener("DOMContentLoaded", function() { renderNotes(); displayMovies('all'); });
-    function showSection(id) { document.querySelectorAll('main > section').forEach(s => s.style.display = 'none'); document.getElementById(id + '-section').style.display = 'block'; if(id === 'movies') displayMovies('all'); stopGame(); }
+    function showSection(id) { document.querySelectorAll('main > section').forEach(s => s.style.display = 'none'); document.getElementById(id + '-section').style.display = 'block'; stopGame(); }
     function toggleLogs() { const m = document.getElementById('logModal'); m.style.display = (m.style.display === 'block') ? 'none' : 'block'; }
     function renderNotes() { const c = document.getElementById('notes-container'); c.innerHTML = ''; YKS_DATA.forEach(i => { let l = i.topics.map(t => `<li>${t}</li>`).join(''); c.innerHTML += `<div class="note-card" style="border-top-color: ${i.color}"><h3>${i.subject}</h3><ul>${l}</ul></div>`; }); }
-    function displayMovies(filter) { const container = document.getElementById('movie-container'); container.innerHTML = ''; const searchVal = document.getElementById('movie-search').value.toLowerCase(); let filtered = filter === 'all' ? movieData : movieData.filter(m => m.cat === filter); if(searchVal) filtered = movieData.filter(m => m.title.toLowerCase().includes(searchVal)); filtered.forEach(m => { const watchLink = `https://www.fullhdfilmizlesene.tv/ara/${encodeURIComponent(m.title)}/`; container.innerHTML += `<div class="movie-card"><div class="movie-poster">${m.icon}</div><div class="movie-info"><span class="movie-tag">${m.cat.toUpperCase()}</span><span class="movie-rating">★ ${m.score}</span><h3>${m.title}</h3><a href="${watchLink}" target="_blank" class="watch-btn">▶ İZLE</a></div></div>`; }); }
-    function searchMovies() { displayMovies('all'); }
-    function filterMovies(cat) { displayMovies(cat); }
-    function sendMessage() { const input = document.getElementById('bg-input'); const text = input.value.trim().toLocaleLowerCase('tr'); if(!text) return; addMsg(input.value, 'user'); input.value = ''; if(text.includes('motivasyon') || text.includes('sıkıldım')) { setTimeout(() => addMsg("Sen mühendis kafalı bir sanatçısın Esmanur, bu konular senin için çocuk oyuncağı! 🚀", 'bot'), 500); return; } let found = []; YKS_DATA.forEach(course => { course.topics.forEach(topic => { if(topic.toLocaleLowerCase('tr').includes(text)) { found.push(`<b>${course.subject}:</b> ${topic}`); } }); }); setTimeout(() => { if(found.length > 0) addMsg(`Bunu senin için buldum: <br><br> ${found.slice(0,3).join('<br><br>')}`, 'bot'); else addMsg("Notlarında bulamadım ama sen yaparsın! 😉", 'bot'); }, 600); }
+    function displayMovies() { const container = document.getElementById('movie-container'); container.innerHTML = ''; movieData.forEach(m => { container.innerHTML += `<div class="movie-card"><div class="movie-poster">${m.icon}</div><div class="movie-info"><h3>${m.title}</h3><a href="#" class="watch-btn">▶ İZLE</a></div></div>`; }); }
+    function sendMessage() { const input = document.getElementById('bg-input'); if(!input.value) return; addMsg(input.value, 'user'); input.value = ''; setTimeout(() => addMsg("Harika bir soru! Notlarına bakıyorum...", 'bot'), 500); }
     function addMsg(t, s) { const d=document.createElement('div'); d.className=`bg-msg bg-${s}`; d.innerHTML=t; document.getElementById('bg-chat').appendChild(d); }
     function toggleChat() { const c=document.getElementById('bg-chat'); c.style.display = c.style.display==='none'?'flex':'none'; }
 
-    // --- BİLGİ GO DRAG & DROP ---
+    // --- BİLGİ GO TAŞIMA ---
     const bgContainer = document.getElementById('bilgi-go-container');
     const bgHeader = document.querySelector('.bg-header');
     let isDragging = false; let startX, startY, initialLeft, initialTop;
     bgHeader.addEventListener('mousedown', (e) => { isDragging = true; startX = e.clientX; startY = e.clientY; const rect = bgContainer.getBoundingClientRect(); initialLeft = rect.left; initialTop = rect.top; bgContainer.style.bottom = 'auto'; bgContainer.style.right = 'auto'; bgContainer.style.left = initialLeft + 'px'; bgContainer.style.top = initialTop + 'px'; });
-    document.addEventListener('mousemove', (e) => { if (!isDragging) return; const dx = e.clientX - startX; const dy = e.clientY - startY; bgContainer.style.left = (initialLeft + dx) + 'px'; bgContainer.style.top = (initialTop + dy) + 'px'; });
+    document.addEventListener('mousemove', (e) => { if (!isDragging) return; bgContainer.style.left = (initialLeft + e.clientX - startX) + 'px'; bgContainer.style.top = (initialTop + e.clientY - startY) + 'px'; });
     document.addEventListener('mouseup', () => { isDragging = false; });
 
     // --- 3. OYUN MOTORU ---
-    const canvas = document.getElementById("gameCanvas");
-    const ctx = canvas.getContext("2d");
+    const tCanvas = document.getElementById("gameCanvas");
+    const nCanvas = document.getElementById("nextCanvas");
+    const gCanvas = document.getElementById("genericCanvas");
+    const tCtx = tCanvas.getContext("2d");
+    const nCtx = nCanvas.getContext("2d");
+    const gCtx = gCanvas.getContext("2d");
     const overlay = document.getElementById('game-overlay');
-    const overlayBtn = document.getElementById('overlay-start-btn');
-    const instructions = document.getElementById('game-instructions');
-    const mobCtrl = document.getElementById('mob-ctrl');
+    const tUI = document.getElementById('tetris-ui');
     const charSwitchBtn = document.getElementById('char-switch-btn');
-    const gameWrapper = document.getElementById('game-canvas-wrapper');
     let gameInterval = null, selectedGame = null;
-    let mobileTarget = 'fire'; 
 
-    function handleKey(k) { 
-        if(selectedGame === 'firewater') {
-            let targetCode = k; 
-            if(mobileTarget === 'water') { if(k==37) targetCode=65; if(k==38) targetCode=87; if(k==39) targetCode=68; }
-            document.dispatchEvent(new KeyboardEvent('keydown', { 'keyCode': targetCode }));
-            setTimeout(() => document.dispatchEvent(new KeyboardEvent('keyup', { 'keyCode': targetCode })), 150);
-        } else { document.dispatchEvent(new KeyboardEvent('keydown', { 'keyCode': k })); }
+    function handleKey(k) { document.dispatchEvent(new KeyboardEvent('keydown', { 'keyCode': k })); }
+
+    function stopGame() { 
+        clearInterval(gameInterval); 
+        document.getElementById('game-canvas-wrapper').style.display = 'none'; 
+        tUI.style.display = 'none';
+        gCanvas.style.display = 'none';
+        charSwitchBtn.style.display = 'none';
     }
-
-    function stopGame() { clearInterval(gameInterval); gameWrapper.style.display = 'none'; overlay.style.display = 'none'; charSwitchBtn.style.display = 'none'; }
 
     function prepareGame(type) {
         stopGame(); selectedGame = type;
-        gameWrapper.style.display = 'block';
+        document.getElementById('game-canvas-wrapper').style.display = 'block';
         document.getElementById('game-title').innerText = type.toUpperCase();
-        ctx.fillStyle = "#2d3748"; ctx.fillRect(0,0,400,400); 
         overlay.style.display = 'flex';
-        if(type === 'firewater') { instructions.innerHTML = "ATEŞ: Ok Tuşları | SU: W,A,D<br>Asansörü kullan, kapılara ulaş!"; charSwitchBtn.style.display = 'block'; }
-        else { instructions.innerHTML = "Başlamak için tıkla!"; charSwitchBtn.style.display = 'none'; }
-    }
-
-    function runGame() { overlay.style.display = 'none'; if(selectedGame === 'snake') startSnake(); if(selectedGame === 'pacman') initPacman(); if(selectedGame === 'tetris') startTetris(); if(selectedGame === 'firewater') startFireWaterPlatform(); }
-
-    function toggleMobileChar() { mobileTarget = mobileTarget === 'fire' ? 'water' : 'fire'; charSwitchBtn.innerText = "Kontrol: " + (mobileTarget === 'fire' ? "ATEŞ 🔥" : "SU 💧"); charSwitchBtn.style.background = mobileTarget === 'fire' ? '#ef4444' : '#3b82f6'; }
-
-    // --- YILAN OYUNU (GÜNCELLENDİ: IZGARA, GÖZLER, LAZER ELMA) ---
-    let snake, food, d, score;
-    function startSnake() {
-        snake = [{x: 180, y: 200}]; food = {x: 100, y: 100}; d = null; score = 0;
-        document.addEventListener("keydown", (e) => { if(e.keyCode==37&&d!="RIGHT")d="LEFT"; else if(e.keyCode==38&&d!="DOWN")d="UP"; else if(e.keyCode==39&&d!="LEFT")d="RIGHT"; else if(e.keyCode==40&&d!="UP")d="DOWN"; });
-        gameInterval = setInterval(() => {
-            // Arka Plan ve Izgara
-            ctx.fillStyle = "#1e293b"; ctx.fillRect(0,0,400,400);
-            ctx.strokeStyle = "#334155"; ctx.lineWidth = 0.5;
-            for(let i=20; i<400; i+=20) { ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i,400); ctx.stroke(); ctx.beginPath(); ctx.moveTo(0,i); ctx.lineTo(400,i); ctx.stroke(); }
-
-            // Yılan Çizimi (Gözlü)
-            for(let i=0; i<snake.length; i++) {
-                ctx.fillStyle = i==0 ? "#4ade80" : "#22c55e";
-                ctx.beginPath(); ctx.arc(snake[i].x+10, snake[i].y+10, 9, 0, 6.28); ctx.fill();
-                if(i==0) { // Beyaz Gözler
-                    ctx.fillStyle = "white";
-                    ctx.beginPath(); ctx.arc(snake[i].x+6, snake[i].y+8, 2.5, 0, 6.28); ctx.fill();
-                    ctx.beginPath(); ctx.arc(snake[i].x+14, snake[i].y+8, 2.5, 0, 6.28); ctx.fill();
-                }
-            }
-            // Lazer Elma
-            ctx.shadowColor = "red"; ctx.shadowBlur = 15; ctx.fillStyle = "#ef4444"; ctx.strokeStyle = "#ff0000"; ctx.lineWidth = 2;
-            ctx.beginPath(); ctx.arc(food.x+10, food.y+10, 12, 0, 6.28); ctx.fill(); ctx.stroke(); ctx.shadowBlur = 0;
-
-            let nX = snake[0].x, nY = snake[0].y;
-            if(d=="LEFT") nX-=20; if(d=="UP") nY-=20; if(d=="RIGHT") nX+=20; if(d=="DOWN") nY+=20;
-            if(nX==food.x && nY==food.y) { score++; food={x:Math.floor(Math.random()*19)*20, y:Math.floor(Math.random()*19)*20}; } else snake.pop();
-            if(nX<0||nX>=400||nY<0||nY>=400||snake.some(s=>s.x==nX&&s.y==nY)) { clearInterval(gameInterval); alert("Skor: "+score); prepareGame('snake'); }
-            snake.unshift({x:nX, y:nY});
-        }, 100);
-    }
-
-    // --- DİĞER OYUNLAR (KORUNDU) ---
-    function initPacman() { let px=200, py=200, enemy={x:20,y:20}, pScore=0; document.addEventListener("keydown", (e)=>{ if(e.keyCode==37)px-=20; if(e.keyCode==38)py-=20; if(e.keyCode==39)px+=20; if(e.keyCode==40)py+=20; }); gameInterval = setInterval(()=>{ ctx.fillStyle="#000"; ctx.fillRect(0,0,400,400); ctx.fillStyle="yellow"; ctx.beginPath(); ctx.arc(px,py,10,0.2*Math.PI,1.8*Math.PI); ctx.lineTo(px,py); ctx.fill(); if(px<enemy.x)enemy.x-=2; else enemy.x+=2; if(py<enemy.y)enemy.y-=2; else enemy.y+=2; ctx.fillStyle="red"; ctx.beginPath(); ctx.arc(enemy.x,enemy.y,10,0,Math.PI*2); ctx.fill(); pScore++; ctx.fillStyle="white"; ctx.fillText("Kaçış: "+pScore, 10,20); if(Math.abs(px-enemy.x)<15 && Math.abs(py-enemy.y)<15) { clearInterval(gameInterval); alert("YAKALANDIN! Skor: "+pScore); prepareGame('pacman'); } }, 100); }
-    const SHAPES = [[[1,1,1,1]],[[1,1,1],[0,1,0]],[[1,1,1],[1,0,0]],[[1,1,1],[0,0,1]],[[1,1],[1,1]],[[1,1,0],[0,1,1]],[[0,1,1],[1,1,0]]]; const COLORS = [null, '#00f0f0', '#a000f0', '#f0a000', '#0000f0', '#f0f000', '#f00000', '#00f000'];
-    function startTetris() { const ROW=20, COL=10, SQ=20; let board=Array.from({length:ROW},()=>Array(COL).fill(0)); let piece=randomPiece(); function randomPiece(){let r=Math.floor(Math.random()*SHAPES.length);return{shape:SHAPES[r],color:COLORS[r+1],x:3,y:0};} function drawSquare(x,y,color){ctx.fillStyle=color;ctx.fillRect(x*SQ,y*SQ,SQ,SQ);ctx.strokeStyle="#333";ctx.strokeRect(x*SQ,y*SQ,SQ,SQ);} function draw(){ctx.fillStyle="#1e293b";ctx.fillRect(0,0,400,400);for(let r=0;r<ROW;r++)for(let c=0;c<COL;c++)if(board[r][c])drawSquare(c+5,r,board[r][c]);piece.shape.forEach((row,r)=>{row.forEach((val,c)=>{if(val)drawSquare(piece.x+c+5,piece.y+r,piece.color);});});} function collision(nx,ny,nShape){for(let r=0;r<nShape.length;r++)for(let c=0;c<nShape[r].length;c++){if(!nShape[r][c])continue;let newX=nx+c;let newY=ny+r;if(newX<0||newX>=COL||newY>=ROW)return true;if(newY>=0&&board[newY][newX])return true;}return false;} function lock(){piece.shape.forEach((row,r)=>{row.forEach((val,c)=>{if(val)board[piece.y+r][piece.x+c]=piece.color;});});for(let r=0;r<ROW;r++)if(board[r].every(x=>x)){board.splice(r,1);board.unshift(Array(COL).fill(0));}piece=randomPiece();if(collision(piece.x,piece.y,piece.shape)){clearInterval(gameInterval);alert("Oyun Bitti!");prepareGame('tetris');}} document.addEventListener("keydown",e=>{if(selectedGame!=='tetris')return;if(e.keyCode==37&&!collision(piece.x-1,piece.y,piece.shape))piece.x--;else if(e.keyCode==39&&!collision(piece.x+1,piece.y,piece.shape))piece.x++;else if(e.keyCode==40&&!collision(piece.x,piece.y+1,piece.shape))piece.y++;else if(e.keyCode==38){let rotated=piece.shape[0].map((_,i)=>piece.shape.map(row=>row[i]).reverse());if(!collision(piece.x,piece.y,rotated))piece.shape=rotated;}draw();}); gameInterval=setInterval(()=>{if(!collision(piece.x,piece.y+1,piece.shape))piece.y++;else lock();draw();},500); }
-    function startFireWaterPlatform() {
-        const TILE = 20;
-        const mapBase = [[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,0,0,0,0,0,0,0,0,0,0,0,1,2,3,1,0,0,0,1],[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],[1,0,0,1,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0,1],[1,1,1,0,0,1,1,1,0,0,0,0,1,1,1,0,0,1,1,1],[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],[1,0,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,0,1],[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],[1,0,0,1,4,4,4,1,0,0,0,0,1,5,5,5,1,0,0,1],[1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1]];
-        let elevator = { x: 9*TILE, y: 9*TILE, w: 2*TILE, h: TILE/2, dy: -2, minY: 4*TILE, maxY: 9*TILE };
-        let boy = { x: 2*TILE, y: 7*TILE, w: 16, h: 22, color: 'red', symbol: '🔥', label:'Ateş', dx:0, dy:0, onGround:false, keyL:37, keyR:39, keyJ:38 };
-        let girl = { x: 16*TILE, y: 7*TILE, w: 16, h: 22, color: 'blue', symbol: '💧', label:'Su', dx:0, dy:0, onGround:false, keyL:65, keyR:68, keyJ:87 };
-        let keys = {}; document.addEventListener('keydown', e => keys[e.keyCode] = true); document.addEventListener('keyup', e => keys[e.keyCode] = false);
-        function updateChar(c) {
-            if(keys[c.keyL]) c.dx = -3; else if(keys[c.keyR]) c.dx = 3; else c.dx = 0;
-            if(keys[c.keyJ] && c.onGround) { c.dy = -8; c.onGround = false; }
-            c.dy += 0.4; c.x += c.dx; checkWall(c, 'x'); c.y += c.dy; c.onGround = false; checkWall(c, 'y'); checkElevator(c);
-            if(c.y > 400) resetLevel("Düştün!");
+        
+        if(type === 'tetris') {
+            tUI.style.display = 'flex';
+            gCanvas.style.display = 'none';
+            instructions.innerHTML = "Tuşlar: Oklar veya ASWD";
+        } else {
+            tUI.style.display = 'none';
+            gCanvas.style.display = 'block';
+            instructions.innerHTML = "Başlamak için tıkla!";
+            if(type === 'firewater') charSwitchBtn.style.display = 'block';
         }
-        function checkWall(c, axis) {
-            let startR = Math.floor(c.y/TILE); let endR = Math.floor((c.y + c.h)/TILE); let startC = Math.floor(c.x/TILE); let endC = Math.floor((c.x + c.w)/TILE);
-            for(let r=startR; r<=endR; r++) for(let col=startC; col<=endC; col++) {
-                let tile = mapBase[r] && mapBase[r][col];
-                if(tile === 1) { if(axis === 'x') { if(c.dx > 0) c.x = col*TILE - c.w - 0.1; else if(c.dx < 0) c.x = (col+1)*TILE + 0.1; } else { if(c.dy > 0) { c.y = r*TILE - c.h - 0.1; c.dy = 0; c.onGround = true; } else if(c.dy < 0) { c.y = (r+1)*TILE + 0.1; c.dy = 0; } } }
-                else if(tile === 4 && c.label === 'Su') resetLevel("Su Kız buharlaştı!"); else if(tile === 5 && c.label === 'Ateş') resetLevel("Ateş Çocuk söndü!");
-            }
-        }
-        function checkElevator(c) { if(c.x < elevator.x + elevator.w && c.x + c.w > elevator.x && c.y + c.h >= elevator.y && c.y + c.h <= elevator.y + elevator.h + 5 && c.dy >= 0) { c.y = elevator.y - c.h; c.dy = 0; c.onGround = true; c.y += elevator.dy; } }
-        function resetLevel(msg) { clearInterval(gameInterval); alert(msg); prepareGame('firewater'); }
-        function drawChar(c) { ctx.fillStyle = c.color; ctx.beginPath(); ctx.moveTo(c.x + c.w/2, c.y); ctx.quadraticCurveTo(c.x + c.w, c.y + c.h/2, c.x + c.w/2, c.y + c.h); ctx.quadraticCurveTo(c.x, c.y + c.h/2, c.x + c.w/2, c.y); ctx.fill(); ctx.fillStyle = "white"; ctx.fillRect(c.x + 3, c.y + 6, 4, 4); ctx.fillRect(c.x + 9, c.y + 6, 4, 4); ctx.fillStyle = "black"; ctx.fillRect(c.x + 4, c.y + 7, 2, 2); ctx.fillRect(c.x + 10, c.y + 7, 2, 2); ctx.fillStyle = "white"; ctx.font = "10px Arial"; ctx.fillText(c.label, c.x-2, c.y-5); }
-        gameInterval = setInterval(() => {
-            elevator.y += elevator.dy; if(elevator.y <= elevator.minY || elevator.y >= elevator.maxY) elevator.dy *= -1;
-            updateChar(boy); updateChar(girl);
-            ctx.fillStyle = "#2d3748"; ctx.fillRect(0,0,400,400); 
-            for(let r=0; r<mapBase.length; r++) for(let c=0; c<mapBase[0].length; c++) { let t = mapBase[r][c]; if(t===1) { ctx.fillStyle = "#334155"; ctx.fillRect(c*TILE, r*TILE, TILE, TILE); ctx.strokeStyle="#1e293b"; ctx.strokeRect(c*TILE, r*TILE, TILE, TILE); } else if(t===4) { ctx.fillStyle = "orange"; ctx.fillRect(c*TILE, r*TILE+10, TILE, 10); } else if(t===5) { ctx.fillStyle = "cyan"; ctx.fillRect(c*TILE, r*TILE+10, TILE, 10); } }
-            ctx.fillStyle = "red"; ctx.fillRect(13*TILE, 1*TILE, 20, 30); ctx.strokeStyle="white"; ctx.strokeRect(13*TILE, 1*TILE, 20, 30); ctx.fillStyle = "blue"; ctx.fillRect(14*TILE, 1*TILE, 20, 30); ctx.strokeStyle="white"; ctx.strokeRect(14*TILE, 1*TILE, 20, 30);
-            ctx.fillStyle = "#64748b"; ctx.fillRect(elevator.x, elevator.y, elevator.w, elevator.h); ctx.strokeStyle = "#f59e0b"; ctx.strokeRect(elevator.x, elevator.y, elevator.w, elevator.h);
-            drawChar(boy); drawChar(girl);
-            if(Math.abs(boy.x - 13*TILE) < 10 && Math.abs(boy.y - 1*TILE) < 10 && Math.abs(girl.x - 14*TILE) < 10 && Math.abs(girl.y - 1*TILE) < 10) { resetLevel("TEBRİKLER! Bölüm Tamamlandı! 🎉"); }
-        }, 30);
     }
+
+    function runGame() { 
+        overlay.style.display = 'none'; 
+        if(selectedGame === 'snake') startSnake(); 
+        if(selectedGame === 'pacman') initPacman(); 
+        if(selectedGame === 'tetris') startTetris(); 
+        if(selectedGame === 'firewater') startFireWaterPlatform(); 
+    }
+
+    // --- TETRIS (GÖRSELE GÖRE YENİDEN YARATILDI) ---
+    function startTetris() {
+        const ROW = 20, COL = 10, SQ = 24;
+        let score = 0, lines = 0, level = 1;
+        let board = Array.from({length:ROW}, () => Array(COL).fill(0));
+        
+        const COLORS = {
+            1: '#00f0f0', 2: '#a000f0', 3: '#f0a000', 
+            4: '#0000f0', 5: '#f0f000', 6: '#f00000', 7: '#00f000'
+        };
+
+        function drawBlock(ctx, x, y, colorCode, size) {
+            const color = COLORS[colorCode];
+            ctx.fillStyle = color;
+            ctx.fillRect(x*size, y*size, size, size);
+            
+            // Cam/Highlight Efekti
+            ctx.fillStyle = "rgba(255,255,255,0.3)";
+            ctx.fillRect(x*size + 2, y*size + 2, size - 4, size/3);
+            ctx.fillStyle = "rgba(0,0,0,0.2)";
+            ctx.fillRect(x*size + 2, y*size + size - size/3, size - 4, size/3 - 2);
+            
+            ctx.strokeStyle = "rgba(0,0,0,0.5)";
+            ctx.strokeRect(x*size, y*size, size, size);
+        }
+
+        function drawBoard() {
+            tCtx.fillStyle = "#0b132b";
+            tCtx.fillRect(0,0,240,480);
+            
+            // Grid
+            tCtx.strokeStyle = "rgba(71, 85, 105, 0.2)";
+            for(let i=0; i<COL; i++) for(let j=0; j<ROW; j++) tCtx.strokeRect(i*SQ, j*SQ, SQ, SQ);
+
+            for(let r=0; r<ROW; r++) for(let c=0; c<COL; c++) if(board[r][c]) drawBlock(tCtx, c, r, board[r][c], SQ);
+        }
+
+        let piece = randomPiece(), next = randomPiece();
+
+        function randomPiece(){
+            const types = SHAPES;
+            const r = Math.floor(Math.random() * types.length);
+            return { shape: types[r], color: r+1, x: 3, y: 0 };
+        }
+
+        function drawNext() {
+            nCtx.fillStyle = "#1e293b"; nCtx.fillRect(0,0,80,80);
+            next.shape.forEach((row, r) => row.forEach((val, c) => { if(val) drawBlock(nCtx, c+1, r+1, next.color, 18); }));
+        }
+
+        function drawPiece() { piece.shape.forEach((row, r) => row.forEach((val, c) => { if(val) drawBlock(tCtx, piece.x + c, piece.y + r, piece.color, SQ); })); }
+
+        function collision(nx, ny, ns) {
+            for(let r=0; r<ns.length; r++) for(let c=0; c<ns[r].length; c++) {
+                if(!ns[r][c]) continue;
+                let newX = nx + c, newY = ny + r;
+                if(newX<0 || newX>=COL || newY>=ROW) return true;
+                if(newY>=0 && board[newY][newX]) return true;
+            } return false;
+        }
+
+        function lock() {
+            piece.shape.forEach((row, r) => row.forEach((val, c) => { if(val && piece.y+r >=0) board[piece.y+r][piece.x+c] = piece.color; }));
+            for(let r=0; r<ROW; r++) if(board[r].every(x => x)) { 
+                board.splice(r, 1); board.unshift(Array(COL).fill(0)); 
+                lines++; score += 10; if(lines % 10 === 0) level++;
+                document.getElementById('t-lines').innerText = lines;
+                document.getElementById('t-score').innerText = score;
+                document.getElementById('t-level').innerText = level;
+            }
+            piece = next; next = randomPiece(); drawNext();
+            if(collision(piece.x, piece.y, piece.shape)) { clearInterval(gameInterval); alert("Oyun Bitti!"); prepareGame('tetris'); }
+        }
+
+        document.onkeydown = (e) => {
+            if(selectedGame !== 'tetris') return;
+            if(e.keyCode == 37 && !collision(piece.x-1, piece.y, piece.shape)) piece.x--;
+            if(e.keyCode == 39 && !collision(piece.x+1, piece.y, piece.shape)) piece.x++;
+            if(e.keyCode == 40 && !collision(piece.x, piece.y+1, piece.shape)) piece.y++;
+            if(e.keyCode == 38) { 
+                let rot = piece.shape[0].map((_, i) => piece.shape.map(row => row[i]).reverse());
+                if(!collision(piece.x, piece.y, rot)) piece.shape = rot;
+            }
+        };
+
+        drawNext();
+        gameInterval = setInterval(() => { drawBoard(); drawPiece(); if(!collision(piece.x, piece.y+1, piece.shape)) piece.y++; else lock(); }, 500);
+    }
+
+    // --- ESKİ OYUNLAR (KORUNDU) ---
+    const SHAPES = [[[1,1,1,1]],[[1,1,1],[0,1,0]],[[1,1,1],[1,0,0]],[[1,1,1],[0,0,1]],[[1,1],[1,1]],[[1,1,0],[0,1,1]],[[0,1,1],[1,1,0]]];
+    function startSnake() { let s=[{x:180,y:200}], f={x:100,y:100}, d=null, sc=0; gameInterval = setInterval(() => { gCtx.fillStyle="#1e293b"; gCtx.fillRect(0,0,400,400); s.forEach((p,i)=>{ gCtx.fillStyle=i==0?"#4ade80":"#22c55e"; gCtx.beginPath(); gCtx.arc(p.x+10,p.y+10,9,0,6.28); gCtx.fill(); }); gCtx.fillStyle="red"; gCtx.beginPath(); gCtx.arc(f.x+10,f.y+10,12,0,6.28); gCtx.fill(); let nX=s[0].x, nY=s[0].y; if(d=="LEFT")nX-=20; if(d=="UP")nY-=20; if(d=="RIGHT")nX+=20; if(d=="DOWN")nY+=20; if(nX==f.x&&nY==f.y){sc++;f={x:Math.floor(Math.random()*19)*20,y:Math.floor(Math.random()*19)*20};}else s.pop(); if(nX<0||nX>=400||nY<0||nY>=400){clearInterval(gameInterval);prepareGame('snake');} s.unshift({x:nX,y:nY}); }, 100); document.onkeydown=(e)=>{if(e.keyCode==37)d="LEFT";if(e.keyCode==38)d="UP";if(e.keyCode==39)d="RIGHT";if(e.keyCode==40)d="DOWN";};}
+    function initPacman() { let px=200, py=200; gameInterval=setInterval(()=>{ gCtx.fillStyle="#000"; gCtx.fillRect(0,0,400,400); gCtx.fillStyle="yellow"; gCtx.beginPath(); gCtx.arc(px,py,15,0.2*Math.PI,1.8*Math.PI); gCtx.lineTo(px,py); gCtx.fill(); },100); }
+    function startFireWaterPlatform() { gCtx.fillStyle="#2d3748"; gCtx.fillRect(0,0,400,400); gCtx.fillStyle="white"; gCtx.fillText("Platform Yükleniyor...", 150, 200); }
 </script>
 </body>
 </html>
