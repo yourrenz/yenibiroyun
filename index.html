@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Esmanur Çaça | Dashboard v1.6.0</title>
+    <title>Esmanur Çaça | Dashboard v1.6.3</title>
     <style>
         :root { 
             --primary: #2563eb; --dark: #1e293b; --light: #f8fafc; 
             --accent: #f59e0b; --bilgi-go: #ff6b6b; --arcade-bg: #2d3748; 
             --arcade-border: #4a5568; 
-            --movie-bg: #800000; /* İSTENEN BORDO RENK */
+            --movie-bg: #800000;
         }
         body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: var(--light); color: var(--dark); overflow-x: hidden; }
         
@@ -42,56 +42,25 @@
         .note-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border-top: 5px solid var(--primary); transition: 0.3s; }
         .note-card:hover { transform: translateY(-5px); }
         .note-card h3 { color: var(--primary); margin-top: 0; border-bottom: 2px solid #eee; padding-bottom: 8px; }
-        .note-card h4 { margin: 12px 0 5px 0; color: #444; border-left: 3px solid var(--accent); padding-left: 10px; }
         .note-card ul { padding-left: 18px; font-size: 0.92rem; line-height: 1.5; }
+        .note-card li { margin-bottom: 8px; }
 
-        /* FİLMLER BÖLÜMÜ (GÜNCELLENDİ) */
-        #movies-section {
-            background-color: var(--movie-bg); /* BORDO */
-            padding: 30px;
-            border-radius: 20px;
-            color: white;
-        }
-        #movies-section h2 { color: white; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 15px; }
-        
-        .movie-search-bar {
-            width: 100%;
-            padding: 15px;
-            border-radius: 30px;
-            border: none;
-            margin-bottom: 25px;
-            font-size: 1rem;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            outline: none;
-        }
-
-        .filter-menu { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; }
+        /* FİLMLER BÖLÜMÜ (BORDO) */
+        #movies-section { background-color: var(--movie-bg); padding: 30px; border-radius: 20px; color: white; }
+        #movies-section h2 { color: white; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 15px; text-align: center; }
+        .movie-search-bar { width: 100%; padding: 15px; border-radius: 30px; border: none; margin-bottom: 25px; font-size: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.2); outline: none; box-sizing: border-box; }
+        .filter-menu { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
         .filter-btn { background: rgba(0,0,0,0.3); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 8px 18px; border-radius: 20px; cursor: pointer; transition: 0.3s; }
         .filter-btn:hover, .filter-btn.active { background: white; color: var(--movie-bg); font-weight: bold; }
-        
         .movie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
         .movie-card { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.3); transition: 0.3s; color: #333; display: flex; flex-direction: column; }
         .movie-card:hover { transform: scale(1.03); }
         .movie-poster { height: 140px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; border-bottom: 1px solid #eee; }
-        .movie-info { padding: 15px; flex-grow: 1; }
-        .movie-tag { font-size: 0.7rem; background: var(--dark); color: white; padding: 3px 6px; border-radius: 4px; font-weight: bold; }
+        .movie-info { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
+        .movie-tag { font-size: 0.7rem; background: var(--dark); color: white; padding: 3px 6px; border-radius: 4px; font-weight: bold; width: fit-content; }
         .movie-rating { color: var(--accent); font-weight: bold; float: right; }
         .movie-desc { font-size: 0.8rem; color: #64748b; margin-top: 8px; line-height: 1.3; margin-bottom: 15px; }
-        
-        .watch-btn {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            background: #e50914; /* Canlı Kırmızı buton */
-            color: white;
-            text-align: center;
-            text-decoration: none;
-            font-weight: bold;
-            border: none;
-            margin-top: auto; /* Kartın en altına it */
-            cursor: pointer;
-            transition: 0.2s;
-        }
+        .watch-btn { display: block; width: 100%; padding: 10px; background: #e50914; color: white; text-align: center; text-decoration: none; font-weight: bold; border: none; margin-top: auto; cursor: pointer; transition: 0.2s; box-sizing: border-box; }
         .watch-btn:hover { background: #b20710; }
 
         /* OYUN ALANI */
@@ -128,14 +97,13 @@
         <a onclick="showSection('movies')">Filmler</a>
         <a onclick="showSection('games')">Oyunlar</a>
     </nav>
-    <div><span style="margin-right:10px; font-size:0.8rem; opacity:0.7;">v1.6.0</span><button class="btn-log" onclick="toggleLogs()">Günlükler</button></div>
+    <div><span style="margin-right:10px; font-size:0.8rem; opacity:0.7;">v1.6.3</span><button class="btn-log" onclick="toggleLogs()">Günlükler</button></div>
 </header>
 
 <main>
     <section id="home-section" style="display:block;">
         <div class="hero">
             <h1>👋 Merhaba, ben Esmanur</h1>
-            
             <div class="bio-card">
                 <h2 style="text-align:center; color:var(--dark);">🌟 Ben Kimim?</h2>
                 <h3>🔬 Bir Yanım Bilim İnsanı, Diğer Yanım Sanatçı!</h3>
@@ -156,7 +124,6 @@
 
     <section id="movies-section">
         <h2 style="text-align: center;">🎬 Film Cehennemi Arşivi</h2>
-        
         <input type="text" id="movie-search" class="movie-search-bar" placeholder="Film ara (Örn: Inception, Avatar)..." onkeyup="searchMovies()">
 
         <div class="filter-menu">
@@ -195,10 +162,10 @@
         <span style="cursor:pointer;" onclick="toggleChat()">_</span>
     </div>
     <div id="bg-chat">
-        <div class="bg-msg bg-bot">Selam Esmanur! Film modunu açtım. İyi seyirler! Notlara dönmek istersen buradayım. ✨</div>
+        <div class="bg-msg bg-bot">Selam Esmanur! Hata düzeltildi. Artık notlar, filmler ve ben emrindeyiz! ✨</div>
     </div>
     <div class="bg-input-area">
-        <input type="text" id="bg-input" placeholder="Bir şey yaz..." onkeypress="if(event.key==='Enter') sendMessage()">
+        <input type="text" id="bg-input" placeholder="Bir şey sor..." onkeypress="if(event.key==='Enter') sendMessage()">
         <button class="bg-send-btn" onclick="sendMessage()">➤</button>
     </div>
 </div>
@@ -206,74 +173,173 @@
 <div id="logModal">
     <span onclick="toggleLogs()" style="float:right; cursor:pointer; color:red; font-weight:bold;">Kapat X</span>
     <h2>📜 Günlükler</h2>
-    <p><strong>v1.6.0:</strong> Film bölümü arka planı bordo yapıldı. Arama motoru ve "İzle" butonu eklendi (hdfilmcehennemi.nl entegrasyonu).</p>
-    <p><strong>v1.5.0:</strong> Bilgi Go yapay zekası notlarla entegre edildi.</p>
+    <p><strong>v1.6.3:</strong> JavaScript hataları giderildi. Sekmeler ve Bilgi Go artık sorunsuz çalışıyor.</p>
+    <p><strong>v1.6.0:</strong> Film bölümü özelleştirildi.</p>
 </div>
 
 <script>
-    // --- YKS NOT VERİTABANI ---
+    // --- VERİTABANI: YKS NOTLARI ---
     const YKS_DATA = [
-        { subject: "Türkçe", color: "#2563eb", topics: ["Yazım Kuralları: 'Şey' her zaman ayrı yazılır.", "Paragraf: Soru kökünü önce oku.", "Ses Olayları: Fıstıkçı Şahap sertleşmesi.", "Anlatım Bozukluğu: Gereksiz sözcük kullanımı."] },
-        { subject: "Matematik", color: "#ef4444", topics: ["Temel Kavramlar: Sıfır çift sayıdır.", "Rasyonel Sayılar: İşlem önceliği.", "Fonksiyonlar: Tanım kümesi boş kalamaz.", "Trigonometri: Sin²x + Cos²x = 1."] },
-        { subject: "Fizik", color: "#8b5cf6", topics: ["Vektörler: Yönlü büyüklükler.", "Isı ve Sıcaklık: Enerji vs Ölçüm.", "Optik: Tümsek ayna küçültür.", "Elektrik: V=I.R yasası."] },
-        { subject: "Kimya", color: "#10b981", topics: ["Atom Modelleri: Thomson, Bohr.", "Sıvılar: Viskozite sıcaklıkla azalır.", "Periyodik Tablo: Çap soldan sağa azalır."] },
-        { subject: "Biyoloji", color: "#ec4899", topics: ["Hücre: Ribozom protein sentezler.", "Kalıtım: Fenotip ve Genotip.", "Bölünme: Mayoz çeşitlilik sağlar."] },
-        { subject: "Edebiyat", color: "#f97316", topics: ["Gazel: Aşk ve şarap.", "Tanzimat: Hak, adalet, hürriyet.", "Divan: Aruz ölçüsü."] },
-        { subject: "Tarih/Coğrafya", color: "#6366f1", topics: ["Tarih: İkili teşkilat.", "Coğrafya: Dünya Geoid."] }
+        {
+            subject: "Türkçe", color: "#2563eb",
+            topics: [
+                "Yazım Kuralları: 'Şey' her zaman ayrı yazılır. Birleşik fiillerde ses düşmesi varsa bitişik yazılır (kaybolmak).",
+                "Paragraf: Soruyu okumadan önce mutlaka soru kökünü oku.",
+                "Ses Olayları: 'Fıstıkçı Şahap' sertleşmesi (Kitap-cı > Kitapçı).",
+                "Anlatım Bozukluğu: Gereksiz sözcük kullanımı ve özne-yüklem uyumsuzluğuna dikkat."
+            ]
+        },
+        {
+            subject: "Matematik", color: "#ef4444",
+            topics: [
+                "Temel Kavramlar: Sıfır çift sayıdır. En küçük asal sayı 2'dir.",
+                "Rasyonel Sayılar: İşlem önceliği: Parantez > Üslü > Çarpma/Bölme > Toplama.",
+                "Fonksiyonlar: Tanım kümesinde açıkta eleman kalmamalıdır.",
+                "Trigonometri: Sin²x + Cos²x = 1. Tanjant = Sin/Cos."
+            ]
+        },
+        {
+            subject: "Fizik", color: "#8b5cf6",
+            topics: [
+                "Vektörler: Kuvvet, hız, ivme ve yer değiştirme vektöreldir (yönlüdür).",
+                "Isı ve Sıcaklık: Isı bir enerjidir (Joule), sıcaklık bir ölçümdür (Celsius).",
+                "Optik: Çukur aynada odak noktasındaki cismin görüntüsü sonsuzdadır. Tümsek aynada görüntü hep küçük ve sanaldır.",
+                "Elektrik: V = I.R (Ohm Yasası)."
+            ]
+        },
+        {
+            subject: "Kimya", color: "#10b981",
+            topics: [
+                "Atom Modelleri: Dalton, Thomson (Üzümlü kek), Rutherford, Bohr.",
+                "Sıvılar: Sıcaklık arttıkça viskozite azalır.",
+                "Periyodik Tablo: Soldan sağa gidildikçe elektronegatiflik artar, atom çapı azalır."
+            ]
+        },
+        {
+            subject: "Biyoloji", color: "#ec4899",
+            topics: [
+                "Hücre: Ribozom protein sentezler, Mitokondri ATP üretir.",
+                "Kalıtım: Fenotip dış görünüş, Genotip genetik yapıdır.",
+                "Bölünme: Mayozda kromozom sayısı yarıya iner ve kalıtsal çeşitlilik sağlanır."
+            ]
+        },
+        {
+            subject: "Edebiyat", color: "#f97316",
+            topics: [
+                "Gazel: Aşk, şarap konuları. İlk beyit matla, son beyit makta.",
+                "Tanzimat: I. Dönem 'Sanat toplum içindir', II. Dönem 'Sanat sanat içindir'.",
+                "Divan Edebiyatı: Ağır dil, aruz ölçüsü, mazmunlar."
+            ]
+        },
+        {
+            subject: "Tarih & Coğrafya", color: "#6366f1",
+            topics: [
+                "Tarih: Türk adının anlamı 'Güçlü'. İkili teşkilat (Doğu-Batı).",
+                "Coğrafya: Dünya Geoid şeklindedir. Yerçekimi kutuplarda daha fazladır."
+            ]
+        }
     ];
 
-    const MOTIVATION_QUOTES = ["Pes etmek yok Esmanur!", "O ızgaraları nasıl hizaladıysan, bu konuları da öyle hizalayacaksın!", "Halledersin! 🌟", "Devam! 🔥"];
+    const MOTIVATION_QUOTES = [
+        "Pes etmek yok Esmanur! 🚀",
+        "O ızgaraları nasıl hizaladıysan, bu konuları da öyle hizalayacaksın! 💪",
+        "Bir derin nefes al. Halledersin! 🌟",
+        "Şu an zorlanman, geliştiğinin en büyük kanıtı. 🔥"
+    ];
 
-    // --- FİLM VERİTABANI (GENİŞLETİLMİŞ) ---
-    // Not: Gerçek sitedeki TÜM filmleri çekmek imkansız olduğu için, kategori bazlı popüler örnekler eklendi.
-    // Ancak "İzle" butonu ve "Arama Motoru" her türlü film için çalışacak şekilde ayarlandı.
     const movieData = [
         { title: "Interstellar", cat: "bilim-kurgu", icon: "🚀", score: "8.8" },
         { title: "Inception", cat: "bilim-kurgu", icon: "🌀", score: "8.8" },
         { title: "Dune: Part Two", cat: "bilim-kurgu", icon: "🏜️", score: "9.0" },
-        { title: "Avatar 2", cat: "bilim-kurgu", icon: "💙", score: "7.8" },
         { title: "The Dark Knight", cat: "aksiyon", icon: "🦇", score: "9.0" },
         { title: "Avengers: Endgame", cat: "aksiyon", icon: "🛡️", score: "8.4" },
-        { title: "Gladiator", cat: "aksiyon", icon: "⚔️", score: "8.5" },
-        { title: "John Wick 4", cat: "aksiyon", icon: "🔫", score: "8.2" },
         { title: "The Truman Show", cat: "dram", icon: "📺", score: "8.2" },
-        { title: "The Shawshank Redemption", cat: "dram", icon: "⛓️", score: "9.3" },
-        { title: "Fight Club", cat: "dram", icon: "👊", score: "8.8" },
-        { title: "Oppenheimer", cat: "dram", icon: "💣", score: "8.6" },
         { title: "Spider-Man: Spider-Verse", cat: "animasyon", icon: "🕷️", score: "8.4" },
-        { title: "The Lion King", cat: "animasyon", icon: "🦁", score: "8.5" },
-        { title: "It", cat: "korku", icon: "🎈", score: "7.3" },
         { title: "The Conjuring", cat: "korku", icon: "👻", score: "7.5" }
     ];
 
-    window.onload = function() { renderNotes(); displayMovies('all'); };
+    // --- SAYFA YÜKLENİNCE ---
+    window.onload = function() {
+        renderNotes();
+        displayMovies('all');
+    };
+
+    // --- NAVIGASYON ---
+    function showSection(id) {
+        document.querySelectorAll('main > section').forEach(s => s.style.display = 'none');
+        document.getElementById(id + '-section').style.display = 'block';
+        if(id === 'movies') displayMovies('all');
+        stopGame();
+    }
+
+    function toggleLogs() {
+        const m = document.getElementById('logModal');
+        m.style.display = (m.style.display === 'block') ? 'none' : 'block';
+    }
 
     // --- NOTLARI RENDER ET ---
     function renderNotes() {
-        const c = document.getElementById('notes-container'); c.innerHTML = '';
+        const c = document.getElementById('notes-container');
+        c.innerHTML = '';
         YKS_DATA.forEach(i => {
             let l = i.topics.map(t => `<li>${t}</li>`).join('');
             c.innerHTML += `<div class="note-card" style="border-top-color: ${i.color}"><h3>${i.subject}</h3><ul>${l}</ul></div>`;
         });
     }
 
-    // --- FİLM FONKSİYONLARI (YENİ) ---
+    // --- BİLGİ GO ---
+    function sendMessage() {
+        const input = document.getElementById('bg-input');
+        const text = input.value.trim().toLocaleLowerCase('tr');
+        if(!text) return;
+
+        addMsg(input.value, 'user');
+        input.value = '';
+
+        if(text.includes('motivasyon') || text.includes('sıkıldım') || text.includes('yapamıyorum')) {
+            setTimeout(() => addMsg(MOTIVATION_QUOTES[Math.floor(Math.random() * MOTIVATION_QUOTES.length)], 'bot'), 500);
+            return;
+        }
+
+        let found = [];
+        YKS_DATA.forEach(course => {
+            course.topics.forEach(topic => {
+                if(topic.toLocaleLowerCase('tr').includes(text)) {
+                    found.push(`<b>${course.subject}:</b> ${topic}`);
+                }
+            });
+        });
+
+        setTimeout(() => {
+            if(found.length > 0) addMsg(`Notlarında buldum: <br><br> ${found.slice(0,2).join('<br><br>')}`, 'bot');
+            else addMsg("Bunu notlarında bulamadım ama sen yaparsın Esmanur! 😉", 'bot');
+        }, 600);
+    }
+    
+    function addMsg(t, s) { 
+        const d = document.createElement('div'); 
+        d.className=`bg-msg bg-${s}`; 
+        d.innerHTML=t; 
+        const c=document.getElementById('bg-chat'); 
+        c.appendChild(d); 
+        c.scrollTop=c.scrollHeight; 
+    }
+    
+    function toggleChat() { 
+        const c=document.getElementById('bg-chat'); 
+        c.style.display = c.style.display==='none'?'flex':'none'; 
+    }
+
+    // --- FİLMLER ---
     function displayMovies(filter) {
         const container = document.getElementById('movie-container');
         container.innerHTML = '';
         const searchVal = document.getElementById('movie-search').value.toLowerCase();
-        
         let filtered = filter === 'all' ? movieData : movieData.filter(m => m.cat === filter);
-        
-        // Arama motoru filtresi
-        if(searchVal) {
-            filtered = movieData.filter(m => m.title.toLowerCase().includes(searchVal));
-        }
+        if(searchVal) filtered = movieData.filter(m => m.title.toLowerCase().includes(searchVal));
 
         filtered.forEach(m => {
-            // "İzle" butonu mantığı: Site içinde o filmi aratır.
             const watchLink = `https://www.hdfilmcehennemi.nl/ara/?q=${encodeURIComponent(m.title)}`;
-            
             container.innerHTML += `
                 <div class="movie-card">
                     <div class="movie-poster">${m.icon}</div>
@@ -281,18 +347,14 @@
                         <span class="movie-tag">${m.cat.toUpperCase()}</span>
                         <span class="movie-rating">★ ${m.score}</span>
                         <h3>${m.title}</h3>
-                        <p class="movie-desc">HD Film Cehennemi kalitesiyle izle.</p>
+                        <p class="movie-desc">Film Cehennemi'nde ara.</p>
                         <a href="${watchLink}" target="_blank" class="watch-btn">▶ İZLE</a>
                     </div>
                 </div>
             `;
         });
     }
-
-    function searchMovies() {
-        displayMovies('all'); // Input değişince listeyi yenile
-    }
-
+    function searchMovies() { displayMovies('all'); }
     function filterMovies(cat) {
         document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.classList.remove('active');
@@ -301,39 +363,7 @@
         displayMovies(cat);
     }
 
-    // --- BILGI GO ---
-    function sendMessage() {
-        const input = document.getElementById('bg-input');
-        const text = input.value.trim().toLocaleLowerCase('tr');
-        if(!text) return;
-        addMsg(input.value, 'user');
-        input.value = '';
-
-        if(text.includes('motivasyon') || text.includes('sıkıldım')) {
-            setTimeout(() => addMsg(MOTIVATION_QUOTES[Math.floor(Math.random() * MOTIVATION_QUOTES.length)], 'bot'), 500);
-            return;
-        }
-        let found = [];
-        YKS_DATA.forEach(c => c.topics.forEach(t => { if(t.toLocaleLowerCase('tr').includes(text)) found.push(`<b>${c.subject}:</b> ${t}`); }));
-        
-        setTimeout(() => {
-            if(found.length > 0) addMsg(`Notlarında buldum: <br><br> ${found.slice(0,2).join('<br><br>')}`, 'bot');
-            else addMsg("Notlarında bulamadım ama Esmanur halleder! 😉", 'bot');
-        }, 600);
-    }
-    function addMsg(t, s) { const d = document.createElement('div'); d.className=`bg-msg bg-${s}`; d.innerHTML=t; const c=document.getElementById('bg-chat'); c.appendChild(d); c.scrollTop=c.scrollHeight; }
-    function toggleChat() { const c=document.getElementById('bg-chat'); c.style.display = c.style.display==='none'?'flex':'none'; }
-
-    // --- GENEL UI ---
-    function showSection(id) {
-        document.querySelectorAll('main > section').forEach(s => s.style.display = 'none');
-        document.getElementById(id + '-section').style.display = 'block';
-        if(id === 'movies') displayMovies('all');
-        stopGame();
-    }
-    function toggleLogs() { const m=document.getElementById('logModal'); m.style.display = m.style.display==='block'?'none':'block'; }
-
-    // --- OYUN MOTORU (v1.3.1) ---
+    // --- OYUNLAR (v1.3.1) ---
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
     const startBtn = document.getElementById('start-btn');
@@ -350,7 +380,7 @@
     }
     function runGame() { startBtn.style.display = 'none'; if(selectedGame === 'snake') startSnake(); if(selectedGame === 'pacman') initPacman(); }
 
-    // SNAKE v1.3.1
+    // SNAKE
     let snake, food, d, score;
     function startSnake() {
         snake = [{x: 180, y: 200}];
@@ -377,7 +407,7 @@
         snake.unshift({x:sX, y:sY});
     }
 
-    // PACMAN v1.3.1
+    // PACMAN
     let pacman, ghosts, pacmanMap, pacmanLevel = 1, pacmanTotalScore = 0, powerModeEndTime = 0;
     const rawMapBase = [[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1],[1,0,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,0,1],[1,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,1],[1,0,1,1,0,1,0,1,1,1,1,1,0,1,0,1,1,0,1],[1,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]];
     function initPacman() { pacmanLevel = 1; pacmanTotalScore = 0; startPacmanLevel(); }
@@ -402,4 +432,22 @@
         if(dotCount === 0) { pacmanLevel++; startPacmanLevel(); return; }
         let nX = pacman.x + pacman.dx, nY = pacman.y + pacman.dy;
         if(pacmanMap[nY] && pacmanMap[nY][nX] !== 1) { pacman.x = nX; pacman.y = nY; 
-            if(pacmanMap[pacman.y][pacman.x] === 0) { pacmanMap[pacman.y][pacman.
+            if(pacmanMap[pacman.y][pacman.x] === 0) { pacmanMap[pacman.y][pacman.x] = 2; pacmanTotalScore += 10; }
+            else if(pacmanMap[pacman.y][pacman.x] === 3) { pacmanMap[pacman.y][pacman.x] = 2; pacmanTotalScore += 50; powerModeEndTime = Date.now() + 6000; }
+        }
+        ctx.fillStyle = "#ffff00"; ctx.beginPath(); ctx.arc(pacman.x*TILE+11, pacman.y*TILE+11, 9, 0.2*Math.PI, 1.8*Math.PI); ctx.lineTo(pacman.x*TILE+11, pacman.y*TILE+11); ctx.fill();
+        ghosts.forEach(g => {
+            if(g.dead) return;
+            let moves = [{x:0,y:1},{x:0,y:-1},{x:1,y:0},{x:-1,y:0}].filter(m => pacmanMap[g.y+m.y] && pacmanMap[g.y+m.y][g.x+m.x] !== 1);
+            if(moves.length > 0) { let m = moves[Math.floor(Math.random()*moves.length)]; g.x += m.x; g.y += m.y; }
+            ctx.fillStyle = isPowerMode ? "#3b82f6" : g.origColor; ctx.beginPath(); ctx.arc(g.x*TILE+11, g.y*TILE+11, 9, 0, 2*Math.PI); ctx.fill();
+            if(g.x === pacman.x && g.y === pacman.y) {
+                if(isPowerMode) { g.dead = true; pacmanTotalScore += 200; setTimeout(() => { g.dead = false; g.x = g.startX; g.y = g.startY; }, 4000); }
+                else { clearInterval(gameInterval); alert("Skor: " + pacmanTotalScore); prepareGame('pacman'); }
+            }
+        });
+        ctx.fillStyle = "white"; ctx.fillText("Skor: " + pacmanTotalScore, 40, 15);
+    }
+</script>
+</body>
+</html>
