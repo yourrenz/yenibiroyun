@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Esmanur Çaça | Dashboard v1.6.5</title>
+    <title>Esmanur Çaça | Dashboard v1.6.6</title>
     <style>
         :root { 
             --primary: #2563eb; --dark: #1e293b; --light: #f8fafc; 
@@ -97,7 +97,7 @@
         <a onclick="showSection('movies')">Filmler</a>
         <a onclick="showSection('games')">Oyunlar</a>
     </nav>
-    <div><span style="margin-right:10px; font-size:0.8rem; opacity:0.7;">v1.6.5</span><button class="btn-log" onclick="toggleLogs()">Günlükler</button></div>
+    <div><span style="margin-right:10px; font-size:0.8rem; opacity:0.7;">v1.6.6</span><button class="btn-log" onclick="toggleLogs()">Günlükler</button></div>
 </header>
 
 <main>
@@ -162,7 +162,7 @@
         <span style="cursor:pointer;" onclick="toggleChat()">_</span>
     </div>
     <div id="bg-chat">
-        <div class="bg-msg bg-bot">Selam Esmanur! Hata düzeltildi. Notlar, filmler ve ben emrindeyiz! ✨</div>
+        <div class="bg-msg bg-bot">Selam Esmanur! Film linklerini sitenin kendi arama motoruna bağladım. Artık 404 hatası almayacaksın! ✨</div>
     </div>
     <div class="bg-input-area">
         <input type="text" id="bg-input" placeholder="Bir şey sor..." onkeypress="if(event.key==='Enter') sendMessage()">
@@ -173,8 +173,8 @@
 <div id="logModal">
     <span onclick="toggleLogs()" style="float:right; cursor:pointer; color:red; font-weight:bold;">Kapat X</span>
     <h2>📜 Günlükler</h2>
-    <p><strong>v1.6.5:</strong> Kritik hata düzeltmesi. Butonlar ve sekmeler (Notlar, Filmler) artık sorunsuz açılıyor.</p>
-    <p><strong>v1.6.4:</strong> Film izleme butonu Google Arama ile güncellendi.</p>
+    <p><strong>v1.6.6:</strong> Film arama linki düzeltildi. Artık "hdfilmcehennemi.nl" sitesinin kendi iç arama motoruna doğrudan sorgu gönderiliyor (raw DLE query).</p>
+    <p><strong>v1.6.5:</strong> JavaScript hataları giderildi.</p>
 </div>
 
 <script>
@@ -240,7 +240,8 @@
         if(searchVal) filtered = movieData.filter(m => m.title.toLowerCase().includes(searchVal));
 
         filtered.forEach(m => {
-            const watchLink = `https://www.google.com/search?q=${encodeURIComponent(m.title + " izle hdfilmcehennemi")}`;
+            // BURASI DEĞİŞTİ: Artık sitenin kendi iç arama parametresi kullanılıyor.
+            const watchLink = `https://www.hdfilmcehennemi.nl/index.php?do=search&subaction=search&story=${encodeURIComponent(m.title)}`;
             container.innerHTML += `
                 <div class="movie-card">
                     <div class="movie-poster">${m.icon}</div>
@@ -248,8 +249,8 @@
                         <span class="movie-tag">${m.cat.toUpperCase()}</span>
                         <span class="movie-rating">★ ${m.score}</span>
                         <h3>${m.title}</h3>
-                        <p class="movie-desc">Google ile ara ve izle.</p>
-                        <a href="${watchLink}" target="_blank" class="watch-btn">▶ İZLE (Google)</a>
+                        <p class="movie-desc">HDFilmCehennemi'nde ara.</p>
+                        <a href="${watchLink}" target="_blank" class="watch-btn">▶ İZLE</a>
                     </div>
                 </div>
             `;
