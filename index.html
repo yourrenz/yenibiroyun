@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Esmanur Çaça | Dashboard v1.6.4</title>
+    <title>Esmanur Çaça | Dashboard v1.6.5</title>
     <style>
         :root { 
             --primary: #2563eb; --dark: #1e293b; --light: #f8fafc; 
@@ -97,7 +97,7 @@
         <a onclick="showSection('movies')">Filmler</a>
         <a onclick="showSection('games')">Oyunlar</a>
     </nav>
-    <div><span style="margin-right:10px; font-size:0.8rem; opacity:0.7;">v1.6.4</span><button class="btn-log" onclick="toggleLogs()">Günlükler</button></div>
+    <div><span style="margin-right:10px; font-size:0.8rem; opacity:0.7;">v1.6.5</span><button class="btn-log" onclick="toggleLogs()">Günlükler</button></div>
 </header>
 
 <main>
@@ -162,7 +162,7 @@
         <span style="cursor:pointer;" onclick="toggleChat()">_</span>
     </div>
     <div id="bg-chat">
-        <div class="bg-msg bg-bot">Selam Esmanur! Film linklerini güncelledim. Artık Google üzerinden en doğru adresi bulacaksın! 404 hatası yok! ✨</div>
+        <div class="bg-msg bg-bot">Selam Esmanur! Hata düzeltildi. Notlar, filmler ve ben emrindeyiz! ✨</div>
     </div>
     <div class="bg-input-area">
         <input type="text" id="bg-input" placeholder="Bir şey sor..." onkeypress="if(event.key==='Enter') sendMessage()">
@@ -173,78 +173,20 @@
 <div id="logModal">
     <span onclick="toggleLogs()" style="float:right; cursor:pointer; color:red; font-weight:bold;">Kapat X</span>
     <h2>📜 Günlükler</h2>
-    <p><strong>v1.6.4:</strong> 404 Hata düzeltmesi yapıldı. Film izleme butonu artık Google araması ile çalışıyor, böylece site adresi değişse bile film bulunabiliyor.</p>
-    <p><strong>v1.6.3:</strong> JavaScript hataları giderildi.</p>
+    <p><strong>v1.6.5:</strong> Kritik hata düzeltmesi. Butonlar ve sekmeler (Notlar, Filmler) artık sorunsuz açılıyor.</p>
+    <p><strong>v1.6.4:</strong> Film izleme butonu Google Arama ile güncellendi.</p>
 </div>
 
 <script>
-    // --- VERİTABANI: YKS NOTLARI ---
+    // --- 1. VERİLERİ TANIMLA ---
     const YKS_DATA = [
-        {
-            subject: "Türkçe", color: "#2563eb",
-            topics: [
-                "Yazım Kuralları: 'Şey' her zaman ayrı yazılır. Birleşik fiillerde ses düşmesi varsa bitişik yazılır (kaybolmak).",
-                "Paragraf: Soruyu okumadan önce mutlaka soru kökünü oku.",
-                "Ses Olayları: 'Fıstıkçı Şahap' sertleşmesi (Kitap-cı > Kitapçı).",
-                "Anlatım Bozukluğu: Gereksiz sözcük kullanımı ve özne-yüklem uyumsuzluğuna dikkat."
-            ]
-        },
-        {
-            subject: "Matematik", color: "#ef4444",
-            topics: [
-                "Temel Kavramlar: Sıfır çift sayıdır. En küçük asal sayı 2'dir.",
-                "Rasyonel Sayılar: İşlem önceliği: Parantez > Üslü > Çarpma/Bölme > Toplama.",
-                "Fonksiyonlar: Tanım kümesinde açıkta eleman kalmamalıdır.",
-                "Trigonometri: Sin²x + Cos²x = 1. Tanjant = Sin/Cos."
-            ]
-        },
-        {
-            subject: "Fizik", color: "#8b5cf6",
-            topics: [
-                "Vektörler: Kuvvet, hız, ivme ve yer değiştirme vektöreldir (yönlüdür).",
-                "Isı ve Sıcaklık: Isı bir enerjidir (Joule), sıcaklık bir ölçümdür (Celsius).",
-                "Optik: Çukur aynada odak noktasındaki cismin görüntüsü sonsuzdadır. Tümsek aynada görüntü hep küçük ve sanaldır.",
-                "Elektrik: V = I.R (Ohm Yasası)."
-            ]
-        },
-        {
-            subject: "Kimya", color: "#10b981",
-            topics: [
-                "Atom Modelleri: Dalton, Thomson (Üzümlü kek), Rutherford, Bohr.",
-                "Sıvılar: Sıcaklık arttıkça viskozite azalır.",
-                "Periyodik Tablo: Soldan sağa gidildikçe elektronegatiflik artar, atom çapı azalır."
-            ]
-        },
-        {
-            subject: "Biyoloji", color: "#ec4899",
-            topics: [
-                "Hücre: Ribozom protein sentezler, Mitokondri ATP üretir.",
-                "Kalıtım: Fenotip dış görünüş, Genotip genetik yapıdır.",
-                "Bölünme: Mayozda kromozom sayısı yarıya iner ve kalıtsal çeşitlilik sağlanır."
-            ]
-        },
-        {
-            subject: "Edebiyat", color: "#f97316",
-            topics: [
-                "Gazel: Aşk, şarap konuları. İlk beyit matla, son beyit makta.",
-                "Tanzimat: I. Dönem 'Sanat toplum içindir', II. Dönem 'Sanat sanat içindir'.",
-                "Divan Edebiyatı: Ağır dil, aruz ölçüsü, mazmunlar."
-            ]
-        },
-        {
-            subject: "Tarih & Coğrafya", color: "#6366f1",
-            topics: [
-                "Tarih: Türk adının anlamı 'Güçlü'. İkili teşkilat (Doğu-Batı).",
-                "Coğrafya: Dünya Geoid şeklindedir. Yerçekimi kutuplarda daha fazladır."
-            ]
-        }
-    ];
-
-    const MOTIVATION_QUOTES = [
-        "Pes etmek yok Esmanur! 🚀",
-        "O ızgaraları nasıl hizaladıysan, bu konuları da öyle hizalayacaksın! 💪",
-        "Bir derin nefes al. Halledersin! 🌟",
-        "Şu an zorlanman, geliştiğinin en büyük kanıtı. 🔥"
+        { subject: "Türkçe", color: "#2563eb", topics: ["Yazım Kuralları: 'Şey' ayrı yazılır.", "Paragraf: Soru kökünü önce oku.", "Ses Olayları: Fıstıkçı Şahap.", "Anlatım Bozukluğu: Gereksiz sözcük kullanımı."] },
+        { subject: "Matematik", color: "#ef4444", topics: ["Sıfır çift sayıdır.", "İşlem önceliği: Parantez > Üslü > Çarpma.", "Fonksiyonlar: Tanım kümesi boş kalamaz.", "Trigonometri: Sin²x + Cos²x = 1."] },
+        { subject: "Fizik", color: "#8b5cf6", topics: ["Vektörler: Hız, ivme, kuvvet.", "Isı ve Sıcaklık farkı.", "Optik: Tümsek ayna küçültür."] },
+        { subject: "Kimya", color: "#10b981", topics: ["Atom Modelleri: Thomson, Bohr.", "Sıvılar: Viskozite sıcaklıkla azalır.", "Periyodik Tablo: Soldan sağa çap azalır."] },
+        { subject: "Biyoloji", color: "#ec4899", topics: ["Ribozom: Protein sentezi.", "Mitokondri: ATP.", "Mayoz: Kalıtsal çeşitlilik."] },
+        { subject: "Edebiyat", color: "#f97316", topics: ["Gazel: Aşk, şarap.", "Tanzimat Dönemleri.", "Divan Edebiyatı: Aruz ölçüsü."] },
+        { subject: "Tarih/Coğrafya", color: "#6366f1", topics: ["Tarih: İkili teşkilat.", "Coğrafya: Dünya Geoid."] }
     ];
 
     const movieData = [
@@ -258,13 +200,16 @@
         { title: "The Conjuring", cat: "korku", icon: "👻", score: "7.5" }
     ];
 
-    // --- SAYFA YÜKLENİNCE ---
-    window.onload = function() {
+    const MOTIVATION_QUOTES = ["Pes etmek yok Esmanur! 🚀", "Halledersin! 🌟", "Devam! 🔥"];
+
+    // --- 2. TEMEL FONKSİYONLAR ---
+    // Sayfa Yüklendiğinde
+    document.addEventListener("DOMContentLoaded", function() {
         renderNotes();
         displayMovies('all');
-    };
+    });
 
-    // --- NAVIGASYON ---
+    // Sekme Değiştirme
     function showSection(id) {
         document.querySelectorAll('main > section').forEach(s => s.style.display = 'none');
         document.getElementById(id + '-section').style.display = 'block';
@@ -277,7 +222,7 @@
         m.style.display = (m.style.display === 'block') ? 'none' : 'block';
     }
 
-    // --- NOTLARI RENDER ET ---
+    // --- 3. NOTLAR VE FİLMLER ---
     function renderNotes() {
         const c = document.getElementById('notes-container');
         c.innerHTML = '';
@@ -287,50 +232,146 @@
         });
     }
 
-    // --- BİLGİ GO ---
+    function displayMovies(filter) {
+        const container = document.getElementById('movie-container');
+        container.innerHTML = '';
+        const searchVal = document.getElementById('movie-search').value.toLowerCase();
+        let filtered = filter === 'all' ? movieData : movieData.filter(m => m.cat === filter);
+        if(searchVal) filtered = movieData.filter(m => m.title.toLowerCase().includes(searchVal));
+
+        filtered.forEach(m => {
+            const watchLink = `https://www.google.com/search?q=${encodeURIComponent(m.title + " izle hdfilmcehennemi")}`;
+            container.innerHTML += `
+                <div class="movie-card">
+                    <div class="movie-poster">${m.icon}</div>
+                    <div class="movie-info">
+                        <span class="movie-tag">${m.cat.toUpperCase()}</span>
+                        <span class="movie-rating">★ ${m.score}</span>
+                        <h3>${m.title}</h3>
+                        <p class="movie-desc">Google ile ara ve izle.</p>
+                        <a href="${watchLink}" target="_blank" class="watch-btn">▶ İZLE (Google)</a>
+                    </div>
+                </div>
+            `;
+        });
+    }
+    function searchMovies() { displayMovies('all'); }
+    function filterMovies(cat) {
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if(btn.innerText.toLowerCase() === cat) btn.classList.add('active');
+        });
+        displayMovies(cat);
+    }
+
+    // --- 4. BİLGİ GO ---
     function sendMessage() {
         const input = document.getElementById('bg-input');
         const text = input.value.trim().toLocaleLowerCase('tr');
         if(!text) return;
-
         addMsg(input.value, 'user');
         input.value = '';
 
-        if(text.includes('motivasyon') || text.includes('sıkıldım') || text.includes('yapamıyorum')) {
+        if(text.includes('motivasyon') || text.includes('sıkıldım')) {
             setTimeout(() => addMsg(MOTIVATION_QUOTES[Math.floor(Math.random() * MOTIVATION_QUOTES.length)], 'bot'), 500);
             return;
         }
-
         let found = [];
-        YKS_DATA.forEach(course => {
-            course.topics.forEach(topic => {
-                if(topic.toLocaleLowerCase('tr').includes(text)) {
-                    found.push(`<b>${course.subject}:</b> ${topic}`);
-                }
-            });
-        });
-
+        YKS_DATA.forEach(c => c.topics.forEach(t => { if(t.toLocaleLowerCase('tr').includes(text)) found.push(`<b>${c.subject}:</b> ${t}`); }));
+        
         setTimeout(() => {
             if(found.length > 0) addMsg(`Notlarında buldum: <br><br> ${found.slice(0,2).join('<br><br>')}`, 'bot');
-            else addMsg("Bunu notlarında bulamadım ama sen yaparsın Esmanur! 😉", 'bot');
+            else addMsg("Bunu notlarında bulamadım ama sen yaparsın! 😉", 'bot');
         }, 600);
     }
-    
-    function addMsg(t, s) { 
-        const d = document.createElement('div'); 
-        d.className=`bg-msg bg-${s}`; 
-        d.innerHTML=t; 
-        const c=document.getElementById('bg-chat'); 
-        c.appendChild(d); 
-        c.scrollTop=c.scrollHeight; 
+    function addMsg(t, s) { const d=document.createElement('div'); d.className=`bg-msg bg-${s}`; d.innerHTML=t; const c=document.getElementById('bg-chat'); c.appendChild(d); c.scrollTop=c.scrollHeight; }
+    function toggleChat() { const c=document.getElementById('bg-chat'); c.style.display = c.style.display==='none'?'flex':'none'; }
+
+    // --- 5. OYUN MOTORU (v1.3.1) ---
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+    const startBtn = document.getElementById('start-btn');
+    let gameInterval = null, selectedGame = null;
+
+    function handleKey(k) { document.dispatchEvent(new KeyboardEvent('keydown', { 'keyCode': k })); }
+    function stopGame() { clearInterval(gameInterval); document.getElementById('game-canvas-wrapper').style.display = 'none'; }
+    function prepareGame(type) {
+        stopGame(); selectedGame = type;
+        document.getElementById('game-canvas-wrapper').style.display = 'block';
+        document.getElementById('game-title').innerText = type.toUpperCase();
+        ctx.fillStyle = "#000"; ctx.fillRect(0,0,400,400);
+        startBtn.style.display = 'inline-block';
     }
-    
-    function toggleChat() { 
-        const c=document.getElementById('bg-chat'); 
-        c.style.display = c.style.display==='none'?'flex':'none'; 
+    function runGame() { startBtn.style.display = 'none'; if(selectedGame === 'snake') startSnake(); if(selectedGame === 'pacman') initPacman(); }
+
+    // SNAKE
+    let snake, food, d, score;
+    function startSnake() {
+        snake = [{x: 180, y: 200}];
+        food = { x: Math.floor(Math.random()*19)*20, y: Math.floor(Math.random()*19)*20 };
+        d = null; score = 0;
+        document.addEventListener("keydown", snakeControl);
+        gameInterval = setInterval(drawSnakeGame, 100);
+    }
+    function snakeControl(e) { if(e.keyCode==37&&d!="RIGHT")d="LEFT"; else if(e.keyCode==38&&d!="DOWN")d="UP"; else if(e.keyCode==39&&d!="LEFT")d="RIGHT"; else if(e.keyCode==40&&d!="UP")d="DOWN"; }
+    function drawSnakeGame() {
+        const box = 20;
+        ctx.fillStyle = "#1e293b"; ctx.fillRect(0,0,400,400);
+        for(let i=0; i<snake.length; i++) {
+            if (i == 0) { ctx.font = "20px Arial"; ctx.textAlign = "left"; ctx.fillText("🐍", snake[i].x - 2, snake[i].y + box - 2); } 
+            else { ctx.fillStyle = "#4ade80"; ctx.beginPath(); ctx.arc(snake[i].x + box/2, snake[i].y + box/2, box/2 - 2, 0, Math.PI*2); ctx.fill(); }
+        }
+        ctx.font = "20px Arial"; ctx.fillText("🍎", food.x - 2, food.y + box - 2);
+        ctx.fillStyle = "white"; ctx.font = "bold 16px sans-serif"; ctx.fillText("Skor: " + score, 10, 25);
+        let sX = snake[0].x, sY = snake[0].y;
+        if(d == "LEFT") sX -= box; if(d == "UP") sY -= box; if(d == "RIGHT") sX += box; if(d == "DOWN") sY += box;
+        if(sX == food.x && sY == food.y) { score++; food = { x: Math.floor(Math.random()*19)*box, y: Math.floor(Math.random()*19)*box }; } 
+        else { snake.pop(); }
+        if(sX < 0 || sX >= 400 || sY < 0 || sY >= 400 || snake.some((s,i) => i>0 && s.x === sX && s.y === sY)) { clearInterval(gameInterval); alert("Skor: " + score); prepareGame('snake'); }
+        snake.unshift({x:sX, y:sY});
     }
 
-    // --- FİLMLER (GOOGLE ARAMA FİKSİ) ---
-    function displayMovies(filter) {
-        const container = document.getElementById('movie-container');
-        container.innerHTML = '';
+    // PACMAN
+    let pacman, ghosts, pacmanMap, pacmanLevel = 1, pacmanTotalScore = 0, powerModeEndTime = 0;
+    const rawMapBase = [[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1],[1,0,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,0,1],[1,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,1],[1,0,1,1,0,1,0,1,1,1,1,1,0,1,0,1,1,0,1],[1,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]];
+    function initPacman() { pacmanLevel = 1; pacmanTotalScore = 0; startPacmanLevel(); }
+    function startPacmanLevel() {
+        pacmanMap = JSON.parse(JSON.stringify(rawMapBase));
+        const TILE = 22; canvas.width = 19*TILE; canvas.height = 7*TILE;
+        pacman = { x: 1, y: 1, dx: 0, dy: 0 };
+        ghosts = [{ x: 9, y: 3, color: 'red', origColor: 'red', dead: false, startX: 9, startY: 3 }, { x: 1, y: 5, color: 'pink', origColor: 'pink', dead: false, startX: 1, startY: 5 }];
+        document.addEventListener("keydown", pacmanControl);
+        gameInterval = setInterval(() => drawPacmanGame(TILE), 150);
+    }
+    function pacmanControl(e) { if(e.keyCode==37){pacman.dx=-1;pacman.dy=0;}else if(e.keyCode==38){pacman.dx=0;pacman.dy=-1;}else if(e.keyCode==39){pacman.dx=1;pacman.dy=0;}else if(e.keyCode==40){pacman.dx=0;pacman.dy=1;}}
+    function drawPacmanGame(TILE) {
+        ctx.fillStyle = "#000"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        let dotCount = 0; let isPowerMode = Date.now() < powerModeEndTime;
+        for(let r=0; r<pacmanMap.length; r++) for(let c=0; c<pacmanMap[0].length; c++) {
+            let cell = pacmanMap[r][c];
+            if(cell === 1) { ctx.fillStyle = "#1e40af"; ctx.fillRect(c*TILE, r*TILE, TILE-1, TILE-1); }
+            else if(cell === 0) { dotCount++; ctx.fillStyle = "#fba"; ctx.beginPath(); ctx.arc(c*TILE+11, r*TILE+11, 3, 0, Math.PI*2); ctx.fill(); }
+            else if(cell === 3) { dotCount++; ctx.fillStyle = "#a855f7"; ctx.beginPath(); ctx.arc(c*TILE+11, r*TILE+11, 7, 0, Math.PI*2); ctx.fill(); }
+        }
+        if(dotCount === 0) { pacmanLevel++; startPacmanLevel(); return; }
+        let nX = pacman.x + pacman.dx, nY = pacman.y + pacman.dy;
+        if(pacmanMap[nY] && pacmanMap[nY][nX] !== 1) { pacman.x = nX; pacman.y = nY; 
+            if(pacmanMap[pacman.y][pacman.x] === 0) { pacmanMap[pacman.y][pacman.x] = 2; pacmanTotalScore += 10; }
+            else if(pacmanMap[pacman.y][pacman.x] === 3) { pacmanMap[pacman.y][pacman.x] = 2; pacmanTotalScore += 50; powerModeEndTime = Date.now() + 6000; }
+        }
+        ctx.fillStyle = "#ffff00"; ctx.beginPath(); ctx.arc(pacman.x*TILE+11, pacman.y*TILE+11, 9, 0.2*Math.PI, 1.8*Math.PI); ctx.lineTo(pacman.x*TILE+11, pacman.y*TILE+11); ctx.fill();
+        ghosts.forEach(g => {
+            if(g.dead) return;
+            let moves = [{x:0,y:1},{x:0,y:-1},{x:1,y:0},{x:-1,y:0}].filter(m => pacmanMap[g.y+m.y] && pacmanMap[g.y+m.y][g.x+m.x] !== 1);
+            if(moves.length > 0) { let m = moves[Math.floor(Math.random()*moves.length)]; g.x += m.x; g.y += m.y; }
+            ctx.fillStyle = isPowerMode ? "#3b82f6" : g.origColor; ctx.beginPath(); ctx.arc(g.x*TILE+11, g.y*TILE+11, 9, 0, 2*Math.PI); ctx.fill();
+            if(g.x === pacman.x && g.y === pacman.y) {
+                if(isPowerMode) { g.dead = true; pacmanTotalScore += 200; setTimeout(() => { g.dead = false; g.x = g.startX; g.y = g.startY; }, 4000); }
+                else { clearInterval(gameInterval); alert("Skor: " + pacmanTotalScore); prepareGame('pacman'); }
+            }
+        });
+        ctx.fillStyle = "white"; ctx.fillText("Skor: " + pacmanTotalScore, 40, 15);
+    }
+</script>
+</body>
+</html>
